@@ -399,7 +399,7 @@ Screens:
                 Control: TypedDataCard@1.0.7
                 Variant: ClassicAllowedValuesStringEdit
                 Properties:
-                  AllowedValues: =DiasAssistência//DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
+                  AllowedValues: =DiasAssistência //DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
                   BorderColor: =RGBA(0, 89, 178, 1)
                   DataField: ="cr4f5_diasemana"
                   Default: =ThisItem.'Dia Semana'

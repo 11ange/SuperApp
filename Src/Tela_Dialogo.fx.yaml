@@ -389,7 +389,7 @@
                 ZIndex: =4
 
         Dia_Semana_DataCard7 As typedDataCard.allowedValuesStringEditCard:
-            AllowedValues: =DiasAssistência//DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
+            AllowedValues: =DiasAssistência //DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
             BorderColor: =RGBA(0, 89, 178, 1)
             BorderStyle: =BorderStyle.Solid
             DataField: ="cr4f5_diasemana"

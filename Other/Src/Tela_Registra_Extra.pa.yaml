@@ -223,7 +223,7 @@ Screens:
             BorderColor: =RGBA(0, 89, 178, 1)
             Fill: =RGBA(100, 118, 132, 0.6)
             Height: =Parent.Height - RectQuickActionBar3_12.Height
-            Visible: =PopupConfirmaExcedente
+            Visible: =PopupConfirmaExcedente//MostraPopUp Or PopupConfirmaEnvioDialogo Or PopupConfirmaExcedente //Or PopupDialogoSemanaQueVem
             Width: =Parent.Width
             Y: =88
       - Retangulo_Popup_Confirma_Excedente:
@@ -305,16 +305,16 @@ Screens:
                           {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)}),
                   AssistenciaExtra = "C1",
                   Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
+                          {C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),
                   AssistenciaExtra = "C2",
                   Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
+                          {C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),
                   AssistenciaExtra = "C3",
                   Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
+                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),
                   AssistenciaExtra = "A3/A1",
                   Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
                           {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
@@ -322,8 +322,8 @@ Screens:
                   AssistenciaExtra = "C3/C1",
                   Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
                           {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
-                           C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)*/}),
+                           C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),
                   AssistenciaExtra = "A3/A2",
                   Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
                           {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
@@ -331,8 +331,8 @@ Screens:
                   AssistenciaExtra = "C3/C2",
                   Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
                           {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
-                           C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)*/}),
+                           C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),
                   AssistenciaExtra = "A3/A2-Casa",
                   Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
                           {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)})

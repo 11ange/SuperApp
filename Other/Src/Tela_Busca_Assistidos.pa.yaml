@@ -31,8 +31,32 @@ Screens:
             Height: |-
               =//977
               Parent.Height - Self.Y
-            Items: |+
+            Items: |-
               =SortByColumns(
+                  If(
+                      IsBlank(Campo_Busca_Assistido.Text),
+                      // Se estiver vazio, traz apenas a lista filtrada
+                      Filter(
+                          Pessoas,
+                          Tarefeiro = "Não" && 'Em Assistência' = "Sim"
+                      ),
+                      // Se tiver texto, aciona o Search
+                      Search(
+                          Filter(
+                              Pessoas,
+                              Tarefeiro = "Não" && 'Em Assistência' = "Sim"
+                          ),
+                          Campo_Busca_Assistido.Text,
+                          'ID Pessoa Texto',
+                          'Nome Pessoa',
+                          'Nome Social'
+                      )
+                  ),
+                  "cr4f5_nomepessoa",
+                  If(Sort_Assistidos, SortOrder.Descending, SortOrder.Ascending)
+              )
+              /*
+              SortByColumns(
                   Search(
                       Filter(
                           Pessoas,
@@ -48,6 +72,7 @@ Screens:
                       Sort_Assistidos, SortOrder.Descending, SortOrder.Ascending
                   )
               )
+              */
             OnSelect: |-
               =Set(PessoaSelecionada, ThisItem.'ID Pessoa');
 
@@ -62,7 +87,7 @@ Screens:
                   }
               );
 
-              //Set(varRegistroOriginalPessoas,ThisItem);
+              Set(varRegistroOriginalPessoas,ThisItem);
 
               Navigate(Tela_Consulta_Assistidos, ScreenTransition.None)
             ShowScrollbar: =false
@@ -262,7 +287,6 @@ Screens:
             HoverBorderColor: =RGBA(0, 89, 178, 1)
             HoverFill: =RGBA(153, 205, 255, 1)
             PaddingLeft: =70
-            Reset: =true
             Size: =19
             Width: =Parent.Width
             Y: =RectQuickActionBar_Tela_Busca_Assistidos.Height

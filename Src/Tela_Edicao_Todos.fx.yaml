@@ -1,18 +1,28 @@
 "Tela_Edicao_Todos As screen.'phoneDetailEditLayout_ver3.0'":
     Fill: =RGBA(232, 232, 232, 1)
-    OnVisible: |
-        =
-        //Set(varRegistroOriginalPessoas, LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada));
+    OnVisible: |-
+        =//Set(Hora;Int(Text(Now();"hh")));;
+        //Set(DiaSemana;
+        //   Switch(
+        //       Weekday(Now());
+        //       1; "Domingo";
+        //       2; "Segunda";
+        //       3; "Terça";
+        //       4; "Quarta";
+        //       5; "Quinta";
+        //       6; "Sexta";
+        //       7; "Sabado"
+        //    )
+        //);;
+        //Set(Periodo;
+        //    If(Hora<12;"Manhã";
+        //        If(Hora<18;"Tarde";"Noite")
+        //    )
+        //);;
+        //Set(DiaComPeriodo;Concatenate(DiaSemana;"_";Periodo));;
         
-        Patch(
-            Logs,
-            Defaults(Logs),
-            {
-                DataeHora: Now(),
-                DeviceID: DeviceID,
-                Ação: "Editando Todos ID:" & PessoaSelecionada
-            }
-        )
+        //Define tolerancia de semanas que pode faltar na assistência:
+        //Set(tolerancia;2);;
 
     RectQuickActionBar3_7 As rectangle:
         BorderColor: =RGBA(0, 89, 178, 1)
@@ -97,8 +107,31 @@
         Height: =Parent.Height - RectQuickActionBar3_7.Height
         Item: =LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)
         OnSuccess: |-
-            =
-            //Set(varRegistroOriginalPessoas,Form_Edita_Todos.LastSubmit);
+            =LogAlteracaoCampos.Run(
+                Concatenate(
+                    "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
+                    "NomeSocial:", varRegistroOriginalPessoas.'Nome Social', "|",
+                    "Idade:", varRegistroOriginalPessoas.Idade, "|",
+                    "Cartao:", varRegistroOriginalPessoas.'Número Cartão', "|",
+                    "Ativo:", varRegistroOriginalPessoas.Ativo, "|",
+                    "EmAssistencia:", varRegistroOriginalPessoas.'Em Assistência', "|",
+                    "Tarefeiro:", varRegistroOriginalPessoas.Tarefeiro
+                ),
+                Concatenate(
+                    "Nomepessoa:", Form_Edita_Todos.LastSubmit.'Nome Pessoa', "|",
+                    "NomeSocial:", Form_Edita_Todos.LastSubmit.'Nome Social', "|",
+                    "Idade:", Form_Edita_Todos.LastSubmit.Idade, "|",
+                    "Cartao:", Form_Edita_Todos.LastSubmit.'Número Cartão', "|",
+                    "Ativo:", Form_Edita_Todos.LastSubmit.Ativo, "|",
+                    "EmAssistencia:", Form_Edita_Todos.LastSubmit.'Em Assistência', "|",
+                    "Tarefeiro:", Form_Edita_Todos.LastSubmit.Tarefeiro
+                ),
+                PessoaSelecionada,
+                DeviceID,
+                "Pessoas"
+            );
+            
+            Set(varRegistroOriginalPessoas,Form_Edita_Todos.LastSubmit);
             
             Back()
         Width: =Parent.Width

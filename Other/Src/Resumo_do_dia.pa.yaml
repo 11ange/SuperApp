@@ -11,6 +11,27 @@ Screens:
     Properties:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: |-
+        =//Clear(ResumoDiaOrientação);
+        //Clear(ResumoDiaAssistências);
+        //Clear(ResumoDiaAssistênciasEncerradasTemp);
+        //Clear(ResumoDiaAssistênciasEncerradas);
+        //Clear(ResumoDiaGeral);
+        //Clear(Colecao_So_Entrevistas);
+        //Clear(Colecao_So_Finalizadas);
+        //Clear(Total_Assistencias_Periodo);
+        //Clear(Total_Extra_Periodo);
+        /*UpdateContext(
+            {
+                Presencas: 0,
+                Dialogos: 0,
+                Encerradas: 0,
+                Orientações: 0,
+                EntrevistasNovas: 0
+            }
+        );*/
+
+        //UpdateContext({varDataFinalSelecionada: Data_Inicial.SelectedDate})
     Children:
       - Button3:
           Control: Classic/Button@2.2.0

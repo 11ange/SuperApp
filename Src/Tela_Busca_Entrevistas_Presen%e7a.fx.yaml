@@ -17,6 +17,18 @@
         Items: |-
             =SortByColumns(
                 Filter(
+                    Assistências,
+                    IsBlank(Campo_Busca_Entrevista_Presença.Text) || StartsWith('ID Pessoa Texto', Campo_Busca_Entrevista_Presença.Text),
+                    !Toggle_Dia.Value || 'Dia Semana' = DiaComPeriodo,
+                    !Toggle_Todas_Abertas.Value || 
+                    ( 'Ultimo Comparecimento' < Today() || 'Ultimo Comparecimento' >= DateAdd(Today(), 1, TimeUnit.Days) )
+                ),
+                "cr4f5_idpessoa",
+                If(Sort_Presenca, SortOrder.Descending, SortOrder.Ascending)
+            )
+            /*
+            SortByColumns(
+                Filter(
                     Search(
                         Assistências,
                         Campo_Busca_Entrevista_Presença.Text,
@@ -24,14 +36,11 @@
                     ),
                     //Finalizada = "Não" &&
                     ( !Toggle_Dia.Value || 'Dia Semana' = DiaComPeriodo ) &&
-                    ( 
-                        !Toggle_Todas_Abertas.Value || 
-                        ( 'Ultimo Comparecimento' < Today() || 'Ultimo Comparecimento' >= DateAdd(Today(), 1, TimeUnit.Days) ) 
-                    )
+                    ( !Toggle_Todas_Abertas.Value || DateValue('Ultimo Comparecimento') <> Today())
                 ),
                 "cr4f5_idpessoa",
                 If(Sort_Presenca, SortOrder.Descending, SortOrder.Ascending)
-            )
+            )*/
         Layout: =Layout.Vertical
         LoadingSpinner: =LoadingSpinner.Data
         OnSelect: |-

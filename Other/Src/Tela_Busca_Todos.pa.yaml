@@ -54,7 +54,7 @@ Screens:
                   }
               );
 
-              //Set(varRegistroOriginalPessoas,ThisItem);
+              Set(varRegistroOriginalPessoas,ThisItem);
 
               Navigate(Tela_Consulta_Todos, ScreenTransition.None)
             ShowScrollbar: =false
@@ -217,7 +217,6 @@ Screens:
             HoverBorderColor: =RGBA(0, 89, 178, 1)
             HoverFill: =RGBA(153, 205, 255, 1)
             PaddingLeft: =70
-            Reset: =true
             Width: =Parent.Width
             Y: =RectQuickActionBar1_5.Height
       - SearchIcon1_5:

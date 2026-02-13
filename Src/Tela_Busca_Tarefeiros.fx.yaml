@@ -48,7 +48,7 @@
                 }
             );
             
-            //Set(varRegistroOriginalPessoas,ThisItem);
+            Set(varRegistroOriginalPessoas,ThisItem);
             
             Navigate(Tela_Consulta_Tarefeiros, ScreenTransition.None)
         ShowScrollbar: =false
@@ -242,7 +242,6 @@
         HoverColor: =RGBA(0, 0, 0, 1)
         HoverFill: =RGBA(153, 205, 255, 1)
         PaddingLeft: =70
-        Reset: =true
         Size: =21
         Width: =Parent.Width
         Y: =RectQuickActionBar_Tela_Busca_Tarefeiros.Height

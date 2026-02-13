@@ -1,25 +1,9 @@
 "Tela_Edicao_Assistidos As screen.'phoneDetailEditLayout_ver3.0'":
     Fill: =RGBA(232, 232, 232, 1)
-    OnVisible: |-
+    OnVisible: |
         =UpdateContext({PopupInformaNumero: false});
-        /*
-        If(!CriaAssistido,
-            Patch(
-                Logs,
-                Defaults(Logs),
-                {
-                    DataeHora: Now(),
-                    DeviceID: DeviceID,
-                    Ação: "Editando Pessoa ID:" & PessoaSelecionada
-                }
-            )
-        );
-        */
-        If(!CriaAssistido,
-            // 1. CAPTURA OS DADOS ORIGINAIS AQUI:
-            //Set(varRegistroOriginalPessoas, LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada));
         
-            // 2. Mantém o log de tela que você já tinha:
+        If(!CriaAssistido,
             Patch(
                 Logs,
                 Defaults(Logs),
@@ -158,7 +142,33 @@
         OnSuccess: |
             =UpdateContext({UltimoID: Form_Edita_Assistidos.LastSubmit.id});
             
-            //Set(varRegistroOriginalPessoas,Form_Edita_Assistidos.LastSubmit);
+            LogAlteracaoCampos.Run(
+                Concatenate(
+                    "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
+                    "NomeSocial:", varRegistroOriginalPessoas.'Nome Social', "|",
+                    "Idade:", varRegistroOriginalPessoas.Idade, "|",
+                    "Cartao:", varRegistroOriginalPessoas.'Número Cartão', "|",
+                    "Ativo:", varRegistroOriginalPessoas.Ativo, "|",
+                    "EmAssistencia:", varRegistroOriginalPessoas.'Em Assistência', "|",
+                    "Tarefeiro:", varRegistroOriginalPessoas.Tarefeiro
+            
+                ),
+                Concatenate(
+                    "Nomepessoa:", Form_Edita_Assistidos.LastSubmit.'Nome Pessoa', "|",
+                    "NomeSocial:", Form_Edita_Assistidos.LastSubmit.'Nome Social', "|",
+                    "Idade:", Form_Edita_Assistidos.LastSubmit.Idade, "|",
+                    "Cartao:", Form_Edita_Assistidos.LastSubmit.'Número Cartão', "|",
+                    "Ativo:", Form_Edita_Assistidos.LastSubmit.Ativo, "|",
+                    "EmAssistencia:", Form_Edita_Assistidos.LastSubmit.'Em Assistência', "|",
+                    "Tarefeiro:", Form_Edita_Assistidos.LastSubmit.Tarefeiro
+                ),
+                PessoaSelecionada,
+                DeviceID,
+                "Pessoas"
+            );
+            
+            
+            Set(varRegistroOriginalPessoas,Form_Edita_Assistidos.LastSubmit);
             
             If(CriaAssistido, UpdateContext({PopupInformaNumero: true}), Back())
         Width: =Parent.Width

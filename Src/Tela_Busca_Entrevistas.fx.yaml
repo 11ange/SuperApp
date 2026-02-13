@@ -18,6 +18,16 @@
             Parent.Height - Self.Y
         Items: |-
             =SortByColumns(
+                Filter(
+                    Assistências,
+                    Finalizada = "Não",
+                    IsBlank(Campo_Busca_Entrevista.Text) Or StartsWith('ID Pessoa Texto', Campo_Busca_Entrevista.Text)
+                ),
+                "cr4f5_idpessoa",
+                If(Sort_Entrevista, SortOrder.Descending, SortOrder.Ascending)
+            )
+            /*
+            SortByColumns(
                 Search(
                     Filter(
                         Assistências,
@@ -30,7 +40,7 @@
                 If(
                     Sort_Entrevista, SortOrder.Descending, SortOrder.Ascending
                 )
-            )
+            )*/
         Layout: =Layout.Vertical
         LoadingSpinner: =LoadingSpinner.Data
         OnSelect: |+
@@ -38,7 +48,7 @@
             
             Set(PessoaSelecionada, ThisItem.'ID Pessoa');
             
-            //Set(varRegistroOriginalAssistencia,ThisItem);
+            Set(varRegistroOriginalAssistencia,ThisItem);
             
             Navigate(Tela_Consulta_Entrevista, ScreenTransition.None);
             

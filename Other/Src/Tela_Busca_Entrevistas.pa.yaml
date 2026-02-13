@@ -30,6 +30,16 @@ Screens:
               Parent.Height - Self.Y
             Items: |-
               =SortByColumns(
+                  Filter(
+                      Assistências,
+                      Finalizada = "Não",
+                      IsBlank(Campo_Busca_Entrevista.Text) Or StartsWith('ID Pessoa Texto', Campo_Busca_Entrevista.Text)
+                  ),
+                  "cr4f5_idpessoa",
+                  If(Sort_Entrevista, SortOrder.Descending, SortOrder.Ascending)
+              )
+              /*
+              SortByColumns(
                   Search(
                       Filter(
                           Assistências,
@@ -42,13 +52,13 @@ Screens:
                   If(
                       Sort_Entrevista, SortOrder.Descending, SortOrder.Ascending
                   )
-              )
+              )*/
             OnSelect: |+
               =Set(AssistenciaSelecionada, ThisItem.'ID Assistência');
 
               Set(PessoaSelecionada, ThisItem.'ID Pessoa');
 
-              //Set(varRegistroOriginalAssistencia,ThisItem);
+              Set(varRegistroOriginalAssistencia,ThisItem);
 
               Navigate(Tela_Consulta_Entrevista, ScreenTransition.None);
 

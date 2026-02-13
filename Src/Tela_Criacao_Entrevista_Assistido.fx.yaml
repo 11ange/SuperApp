@@ -315,13 +315,7 @@
                         "NomePessoa", // Coluna pela qual você quer ordenar
                         SortOrder.Ascending // Ordem alfabética (A-Z)
                     )
-                OnChange: |-
-                    =/*
-                    If(
-                        DataCardValue111.Selected.NomePessoa <> " ",
-                        UpdateContext({EntrevistadorOk: true}),
-                        UpdateContext({EntrevistadorOk: false})
-                    )*/
+                OnChange: =
                 PressedColor: =RGBA(255, 255, 255, 1)
                 PressedFill: =RGBA(0, 89, 178, 1)
                 SelectionFill: =RGBA(0, 51, 102, 1)
@@ -540,18 +534,17 @@
                 ZIndex: =4
 
         "'Dia Semana_DataCard4' As typedDataCard.allowedValuesStringEditCard":
-            AllowedValues: =DiasAssistência//DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
+            AllowedValues: =DiasAssistência //DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
             BorderColor: =RGBA(0, 89, 178, 1)
             BorderStyle: =BorderStyle.Solid
             DataField: ="cr4f5_diasemana"
             Default: =First(DiasAssistência).Value //Está definido no App / OnStart
             DisplayMode: =Parent.DisplayMode
-            DisplayName: ="Dia Semana"//DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Dia Semana')
+            DisplayName: ="Dia Semana Entrevista"//DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Dia Semana')
             Fill: =RGBA(0, 0, 0, 0)
             Height: =50
             Required: =true
             Update: =DataCardValue125.Selected.Value
-            Visible: =true
             Width: =Parent.Width /2
             X: =0
             Y: =4
@@ -588,14 +581,7 @@
                 HoverColor: =RGBA(0, 0, 0, 1)
                 HoverFill: =RGBA(153, 205, 255, 1)
                 Items: =DiasAssistência //Está definido no App / OnStart
-                OnChange: |-
-                    =/*
-                    If(
-                        DataCardValue10.Selected.Value <> " ",
-                        UpdateContext({DiaSemanaOk: true}),
-                        UpdateContext({DiaSemanaOk: false})
-                    )
-                    */
+                OnChange: =
                 PressedColor: =RGBA(255, 255, 255, 1)
                 PressedFill: =RGBA(0, 89, 178, 1)
                 SelectionFill: =RGBA(0, 51, 102, 1)
@@ -775,13 +761,7 @@
                 HoverColor: =RGBA(0, 0, 0, 1)
                 HoverFill: =RGBA(153, 205, 255, 1)
                 Items: =TiposAssistências //Está definido no App / OnStart
-                OnChange: |-
-                    =/*
-                    If(
-                        DataCardValue10.Selected.Value <> " ",
-                        UpdateContext({AssistenciaOk: true}),
-                        UpdateContext({AssistenciaOk: false})
-                    )*/
+                OnChange: =
                 PressedColor: =RGBA(255, 255, 255, 1)
                 PressedFill: =RGBA(0, 89, 178, 1)
                 SelectionFill: =RGBA(0, 51, 102, 1)

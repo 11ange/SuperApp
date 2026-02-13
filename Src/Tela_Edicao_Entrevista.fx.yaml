@@ -164,7 +164,39 @@
                 )
             );
             
-            //Set(varRegistroOriginalAssistencia,Form_Edita_Entrevista.LastSubmit);
+            LogAlteracaoCampos.Run(
+                Concatenate(
+                    "IDpessoa:", varRegistroOriginalAssistencia.'ID Pessoa', "|",
+                    "DataEntrevista:", varRegistroOriginalAssistencia.'Data Entrevista', "|",
+                    "TipoAssistencia:", varRegistroOriginalAssistencia.'Assistência (cr4f5_assistencia)', "|",
+                    "Entrevistador:", varRegistroOriginalAssistencia.Entrevistador, "|",
+                    "DiaSemana:", varRegistroOriginalAssistencia.'Dia Semana', "|",
+                    "Semana1:", varRegistroOriginalAssistencia.'Semana 1', "|",
+                    "Semana2:", varRegistroOriginalAssistencia.'Semana 2', "|",
+                    "Semana3:", varRegistroOriginalAssistencia.'Semana 3', "|",
+                    "Semana4:", varRegistroOriginalAssistencia.'Semana 4', "|",
+                    "Finalizada:", varRegistroOriginalAssistencia.Finalizada, "|",
+                    "Extra:", varRegistroOriginalAssistencia.Extra, "|"
+                ),
+                Concatenate(
+                    "IDpessoa:", Form_Edita_Entrevista.LastSubmit.'ID Pessoa', "|",
+                    "DataEntrevista:", Form_Edita_Entrevista.LastSubmit.'Data Entrevista', "|",
+                    "TipoAssistencia:", Form_Edita_Entrevista.LastSubmit.'Assistência (cr4f5_assistencia)', "|",
+                    "Entrevistador:", Form_Edita_Entrevista.LastSubmit.Entrevistador, "|",
+                    "DiaSemana:", Form_Edita_Entrevista.LastSubmit.'Dia Semana', "|",
+                    "Semana1:", Form_Edita_Entrevista.LastSubmit.'Semana 1', "|",
+                    "Semana2:", Form_Edita_Entrevista.LastSubmit.'Semana 2', "|",
+                    "Semana3:", Form_Edita_Entrevista.LastSubmit.'Semana 3', "|",
+                    "Semana4:", Form_Edita_Entrevista.LastSubmit.'Semana 4', "|",
+                    "Finalizada:", Form_Edita_Entrevista.LastSubmit.Finalizada, "|",
+                    "Extra:", Form_Edita_Entrevista.LastSubmit.Extra, "|"
+                ),
+                AssistenciaSelecionada,
+                DeviceID,
+                "Assistencia"
+            );
+            
+            Set(varRegistroOriginalAssistencia,Form_Edita_Entrevista.LastSubmit);
             
             Back()
         Width: =Parent.Width
@@ -536,7 +568,7 @@
                 ZIndex: =4
 
         "'Dia Semana_DataCard6' As typedDataCard.allowedValuesStringEditCard":
-            AllowedValues: =DiasAssistência//DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
+            AllowedValues: =DiasAssistência //DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
             BorderColor: =RGBA(0, 89, 178, 1)
             BorderStyle: =BorderStyle.Solid
             DataField: ="cr4f5_diasemana"

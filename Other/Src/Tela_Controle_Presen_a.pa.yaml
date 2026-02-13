@@ -17,7 +17,6 @@ Screens:
         Set(Assist_fora_dia,   false);
         Set(Assist_fora_prazo, false);
         Set(Assist_mesmo_dia,  false);
-        UpdateContext({ varPisca: false });
 
         //Valida se assistência está encerrada - o filtro da tela anterior deve ter restringido
         If(LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).Finalizada="Sim",
@@ -98,17 +97,6 @@ Screens:
             BorderThickness: =2
             Color: =RGBA(0, 89, 178, 1)
             DisabledBorderColor: =RGBA(56, 56, 56, 1)
-            Fill: |-
-              =If(
-                  AssistenciaAtual in ["C3", "C3/C2"],
-                  If(varPisca, Color.Yellow, RGBA(255,255,0,0.3)),
-                  RGBA(255,255,255,0)
-              )
-              /*If(
-                  AssistenciaAtual in ["C3", "C3/C2"],
-                  Color.Yellow,
-                  RGBA(255, 255, 255, 0)
-              )*/
             Font: =Font.'Open Sans'
             Height: =60
             HtmlText: |+
@@ -1116,112 +1104,7 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: |-
-              =//------------------------------------------------------------------------------------------
-              //Incrementa excedente do assistido
-              Set(Qtde_Nova,LookUp(Assistências,'ID Pessoa'= PessoaSelecionada,Extra)+1);
-
-              Patch(Assistências,
-                  LookUp(Assistências,'ID Pessoa'= PessoaSelecionada),
-                  {Extra: Qtde_Nova}
-              );
-              //------------------------------------------------------------------------------------------
-
-              //------------------------------------------------------------------------------------------
-              // Log
-              Patch(
-                  Logs,
-                  Defaults(Logs),
-                  {
-                      DataeHora: Now(),
-                      DeviceID: DeviceID,
-                      Ação: "Registrado Excedente ID:" & PessoaSelecionada & " - " & AssistenciaAtual
-                  }
-              );
-              //------------------------------------------------------------------------------------------
-
-              //------------------------------------------------------------------------------------------
-              // Registra na tabela Presenças_Excedentes um excedente na data atual e na assistência
-              // Verificar se a data atual já existe na tabela Presenças_Excedentes
-              Set(Hoje, Text(Today(), "[$-pt-BR]dd/mm/yyyy"));
-
-              Set(ExistingRecord, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo));
-
-              // Se não existir, criar um novo registro
-              If(
-                  IsBlank(ExistingRecord),
-                  Patch(Excedentes, Defaults(Excedentes), {Data: Hoje, PeriodoDia: Periodo})
-              );
-
-              If(
-                  AssistenciaAtual = "A1",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),
-                  AssistenciaAtual = "A2",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),
-                  AssistenciaAtual = "A3",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)}),
-                  AssistenciaAtual = "C1",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
-                  AssistenciaAtual = "C2",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
-                  AssistenciaAtual = "C3",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
-                  AssistenciaAtual = "A3/A1",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
-                           A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),
-                  AssistenciaAtual = "C3/C1",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
-                           C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)*/}),
-                  AssistenciaAtual = "A3/A2",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
-                           A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),
-                  AssistenciaAtual = "C3/C2",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
-                           C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)*/}),
-                  AssistenciaAtual = "A3/A2-Casa",
-                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
-                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)})
-              );
-              //------------------------------------------------------------------------------------------
-
-              //------------------------------------------------------------------------------------------
-              //Salva na tabela Pessoas a data atual na coluna 'Ultima Assistência' (para poder fazer a
-              //limpeza por tempo que não comparece à assistência.
-              Patch(
-                  Pessoas,
-                  LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada),
-                  {'Ultima Assistência': Today()}
-              );
-              //------------------------------------------------------------------------------------------
-
-              //------------------------------------------------------------------------------------------
-              //Salva na tabela Assistências a data atual na coluna 'Ultimo Comparecimento' (para poder
-              //fazer a limpeza por tempo que não comparece à assistência.
-              Patch(
-                  Assistências,
-                  LookUp(Assistências, 'ID Assistência' = AssistenciaSelecionada),
-                  {'Ultimo Comparecimento': Today()}
-              );
-              //------------------------------------------------------------------------------------------
-
-              UpdateContext({PopupConfirmaExcedente: false});
-
-              Back();
+            OnSelect: "=//------------------------------------------------------------------------------------------\r\n//Incrementa excedente do assistido\r\nSet(Qtde_Nova,LookUp(Assistências,'ID Pessoa'= PessoaSelecionada,Extra)+1);\r\n\r\nPatch(Assistências,\r\n    LookUp(Assistências,'ID Pessoa'= PessoaSelecionada),\r\n    {Extra: Qtde_Nova}\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\n//------------------------------------------------------------------------------------------\r\n// Log\r\nPatch(\r\n    Logs,\r\n    Defaults(Logs),\r\n    {\r\n        DataeHora: Now(),\r\n        DeviceID: DeviceID,\r\n        Ação: \"Registrado Excedente ID:\" & PessoaSelecionada & \" - \" & AssistenciaAtual\r\n    }\r\n);\r\n//------------------------------------------------------------------------------------------\r\n// 1. Variáveis Iniciais\r\nSet(Hoje, Text(Today(), \"[$-pt-BR]dd/mm/yyyy\"));\r\n\r\n// 2. Trazemos os dados para a memória APENAS PARA LEITURA\r\nSet(RegExcedenteAtual, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo));\r\n\r\n// 3. Se o registro para hoje e esse período ainda não existe, criamos a linha vazia\r\nIf(\r\n    IsBlank(RegExcedenteAtual),\r\n    Patch(Excedentes, Defaults(Excedentes), {Data: Hoje, PeriodoDia: Periodo});\r\n    \r\n    // Agora que criamos a linha, atualizamos a nossa variável para enxergar ela\r\n    Set(RegExcedenteAtual, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo))\r\n);\r\n\r\n// 4. Fazemos a soma e atualizamos o banco.\r\n// NOTA: No 2º argumento usamos o LookUp (evita o erro do Dataverse).\r\n// No 3º argumento usamos a Variável + Value() (Deixa muito rápido e dispensa dezenas de IsBlanks).\r\nSwitch(\r\n    AssistenciaAtual,\r\n    \"A1\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {A1: Value(RegExcedenteAtual.A1) + 1}),\r\n    \"A2\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {A2: Value(RegExcedenteAtual.A2) + 1}),\r\n    \"A3\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {A3: Value(RegExcedenteAtual.A3) + 1}),\r\n    \"C1\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {C1: Value(RegExcedenteAtual.C1) + 1}),\r\n    \"C2\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {C2: Value(RegExcedenteAtual.C2) + 1}),\r\n    \"C3\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {C3: Value(RegExcedenteAtual.C3) + 1}),\r\n    \r\n    // Casos Duplos\r\n    \"A3/A1\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        A3: Value(RegExcedenteAtual.A3) + 1,\r\n        A1: Value(RegExcedenteAtual.A1) + 1\r\n    }),\r\n    \"C3/C1\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        C3: Value(RegExcedenteAtual.C3) + 1,\r\n        C1: Value(RegExcedenteAtual.C1) + 1\r\n    }),\r\n    \"A3/A2\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        A3: Value(RegExcedenteAtual.A3) + 1,\r\n        A2: Value(RegExcedenteAtual.A2) + 1\r\n    }),\r\n    \"C3/C2\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        C3: Value(RegExcedenteAtual.C3) + 1,\r\n        C2: Value(RegExcedenteAtual.C2) + 1\r\n    }),\r\n    \"A3/A2-Casa\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        A3: Value(RegExcedenteAtual.A3) + 1\r\n    })\r\n);\r\n/*\r\n//------------------------------------------------------------------------------------------\r\n// Registra na tabela Presenças_Excedentes um excedente na data atual e na assistência\r\n// Verificar se a data atual já existe na tabela Presenças_Excedentes\r\nSet(Hoje, Text(Today(), \"[$-pt-BR]dd/mm/yyyy\"));\r\n\r\nSet(ExistingRecord, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo));\r\n\r\n// Se não existir, criar um novo registro\r\nIf(\r\n    IsBlank(ExistingRecord),\r\n    Patch(Excedentes, Defaults(Excedentes), {Data: Hoje, PeriodoDia: Periodo})\r\n);\r\n\r\nIf(\r\n    AssistenciaAtual = \"A1\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),\r\n    AssistenciaAtual = \"A2\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),\r\n    AssistenciaAtual = \"A3\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)}),\r\n    AssistenciaAtual = \"C1\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\r\n    AssistenciaAtual = \"C2\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\r\n    AssistenciaAtual = \"C3\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\r\n    AssistenciaAtual = \"A3/A1\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),\r\n             A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),\r\n    AssistenciaAtual = \"C3/C1\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\r\n             C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),\r\n    AssistenciaAtual = \"A3/A2\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),\r\n             A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),\r\n    AssistenciaAtual = \"C3/C2\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\r\n             C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),\r\n    AssistenciaAtual = \"A3/A2-Casa\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)})\r\n);\r\n//------------------------------------------------------------------------------------------\r\n*/\r\n//------------------------------------------------------------------------------------------\r\n//Salva na tabela Pessoas a data atual na coluna 'Ultima Assistência' (para poder fazer a\r\n//limpeza por tempo que não comparece à assistência.\r\nPatch(\r\n    Pessoas,\r\n    LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada),\r\n    {'Ultima Assistência': Today()}\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\n//------------------------------------------------------------------------------------------\r\n//Salva na tabela Assistências a data atual na coluna 'Ultimo Comparecimento' (para poder\r\n//fazer a limpeza por tempo que não comparece à assistência.\r\nPatch(\r\n    Assistências,\r\n    LookUp(Assistências, 'ID Assistência' = AssistenciaSelecionada),\r\n    {'Ultimo Comparecimento': Today()}\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\nUpdateContext({PopupConfirmaExcedente: false});\r\n\r\nBack();"
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
@@ -1393,135 +1276,7 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: |
-              =SubmitForm(Form_Controle);
-              Patch(
-                  Logs,
-                  Defaults(Logs),
-                  {
-                      DataeHora: Now(),
-                      DeviceID: DeviceID,
-                      Ação: "Confirmada Presença ID:" & PessoaSelecionada & " - " & AssistenciaAtual
-                  }
-              );
-              If(Semana1,
-                  Patch(Assistências,
-                      LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),
-                      {
-                          'Semana 1': Today()
-                      }
-                  )
-              );
-              If(Semana2,
-                  Patch(Assistências,
-                      LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),
-                      {
-                          'Semana 2': Today()
-                      }
-                  )
-              );
-              If(Semana3,
-                  Patch(Assistências,
-                      LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),
-                      {
-                          'Semana 3': Today()
-                      }
-                  )
-              );
-              If(Semana4,
-                  Patch(Assistências,
-                      LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),
-                      {
-                          'Semana 4': Today()
-                      }
-                  )
-              );
-
-              // Registra na tabela Presenças na data e assistência atual
-              // Verificar se a data atual já existe na tabela Presenças
-              Set(Hoje, Text(Today(), "[$-pt-BR]dd/mm/yyyy"));
-
-              Set(ExistingRecord, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo));
-
-              // Se não existir, criar um novo registro
-              If(
-                  IsBlank(ExistingRecord),
-                  Patch(Presenças, Defaults(Presenças), {Data: Hoje, PeriodoDia: Periodo})
-              );
-
-              If(
-                  AssistenciaAtual = "A1",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {A1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),
-                  AssistenciaAtual = "A2",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {A2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),
-                  AssistenciaAtual = "A3",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1)}),
-                  AssistenciaAtual = "C1",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {C1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
-                  AssistenciaAtual = "C2",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {C2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
-                  AssistenciaAtual = "C3",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {C3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
-                  AssistenciaAtual = "A3/A1",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
-                           A1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),
-                  AssistenciaAtual = "C3/C1",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {C3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
-                          C1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)*/}),
-                  AssistenciaAtual = "A3/A2",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
-                           A2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),
-                  AssistenciaAtual = "C3/C2",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {C3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
-                          C2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2 + 1)/*,
-                          'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)*/}),
-                  AssistenciaAtual = "A3/A2-Casa",
-                  Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), 
-                          {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1)})
-              );
-
-              //Salva na tabela Pessoas a data atual na coluna 'Ultima Assistência' (para poder fazer a
-              //limpeza por tempo que não comparece à assistência.
-              Patch(
-                  Pessoas,
-                  LookUp(
-                      Pessoas,
-                      'ID Pessoa' = PessoaSelecionada
-                  ),
-                  {'Ultima Assistência': Today()}
-              );
-
-              //Salva na tabela Assistências a data atual na coluna 'Ultimo Comparecimento' (para poder
-              //fazer a limpeza por tempo que não comparece à assistência.
-              Patch(
-                  Assistências,
-                  LookUp(
-                      Assistências,
-                      'ID Assistência' = AssistenciaSelecionada
-                  ),
-                  {'Ultimo Comparecimento': Today()}
-              );
-
-              UpdateContext({PopUpConfirmaPresença: false});
-              If(
-                  Semana4,
-                  UpdateContext({PopupDialogoSemanaQueVem: true}),
-                  UpdateContext({PopupDialogoSemanaQueVem: false}) && Back()
-              );
+            OnSelect: "=SubmitForm(Form_Controle);\nPatch(\n    Logs,\n    Defaults(Logs),\n    {\n        DataeHora: Now(),\n        DeviceID: DeviceID,\n        Ação: \"Confirmada Presença ID:\" & PessoaSelecionada & \" - \" & AssistenciaAtual\n    }\n);\nIf(Semana1,\n    Patch(Assistências,\n        LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),\n        {\n            'Semana 1': Today()\n        }\n    )\n);\nIf(Semana2,\n    Patch(Assistências,\n        LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),\n        {\n            'Semana 2': Today()\n        }\n    )\n);\nIf(Semana3,\n    Patch(Assistências,\n        LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),\n        {\n            'Semana 3': Today()\n        }\n    )\n);\nIf(Semana4,\n    Patch(Assistências,\n        LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),\n        {\n            'Semana 4': Today()\n        }\n    )\n);\n// 1. Variáveis Iniciais\nSet(Hoje, Text(Today(), \"[$-pt-BR]dd/mm/yyyy\"));\n\n// 2. Trazemos os dados para a memória APENAS PARA LEITURA\nSet(RegPresençaAtual, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo));\n\n// 3. Se o registro para hoje e esse período ainda não existe, criamos a linha vazia\nIf(\n    IsBlank(RegPresençaAtual),\n    Patch(Presenças, Defaults(Presenças), {Data: Hoje, PeriodoDia: Periodo});\n    \n    // Agora que criamos a linha, atualizamos a nossa variável para enxergar ela\n    Set(RegPresençaAtual, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo))\n);\n\n// 4. Fazemos a soma e atualizamos o banco.\n// NOTA: No 2º argumento usamos o LookUp (evita o erro do Dataverse).\n// No 3º argumento usamos a Variável + Value() (Deixa muito rápido e dispensa dezenas de IsBlanks).\nSwitch(\n    AssistenciaAtual,\n    \"A1\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {A1: Value(RegPresençaAtual.A1) + 1}),\n    \"A2\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {A2: Value(RegPresençaAtual.A2) + 1}),\n    \"A3\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {A3: Value(RegPresençaAtual.A3) + 1}),\n    \"C1\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {C1: Value(RegPresençaAtual.C1) + 1}),\n    \"C2\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {C2: Value(RegPresençaAtual.C2) + 1}),\n    \"C3\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {C3: Value(RegPresençaAtual.C3) + 1}),\n    \n    // Casos Duplos\n    \"A3/A1\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        A3: Value(RegPresençaAtual.A3) + 1,\n        A1: Value(RegPresençaAtual.A1) + 1\n    }),\n    \"C3/C1\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        C3: Value(RegPresençaAtual.C3) + 1,\n        C1: Value(RegPresençaAtual.C1) + 1\n    }),\n    \"A3/A2\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        A3: Value(RegPresençaAtual.A3) + 1,\n        A2: Value(RegPresençaAtual.A2) + 1\n    }),\n    \"C3/C2\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        C3: Value(RegPresençaAtual.C3) + 1,\n        C2: Value(RegPresençaAtual.C2) + 1\n    }),\n    \"A3/A2-Casa\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        A3: Value(RegPresençaAtual.A3) + 1\n    })\n);\n/*\n// Registra na tabela Presenças na data e assistência atual\n// Verificar se a data atual já existe na tabela Presenças\nSet(Hoje, Text(Today(), \"[$-pt-BR]dd/mm/yyyy\"));\n\nSet(ExistingRecord, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo));\n\n// Se não existir, criar um novo registro\nIf(\n    IsBlank(ExistingRecord),\n    Patch(Presenças, Defaults(Presenças), {Data: Hoje, PeriodoDia: Periodo})\n);\n\nIf(\n    AssistenciaAtual = \"A1\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),\n    AssistenciaAtual = \"A2\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),\n    AssistenciaAtual = \"A3\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1)}),\n    AssistenciaAtual = \"C1\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\n    AssistenciaAtual = \"C2\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\n    AssistenciaAtual = \"C3\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\n    AssistenciaAtual = \"A3/A1\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1),\n             A1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),\n    AssistenciaAtual = \"C3/C1\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\n            C1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),\n    AssistenciaAtual = \"A3/A2\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1),\n             A2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),\n    AssistenciaAtual = \"C3/C2\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\n            C2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),\n    AssistenciaAtual = \"A3/A2-Casa\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1)})\n);\n*/\n//Salva na tabela Pessoas a data atual na coluna 'Ultima Assistência' (para poder fazer a\n//limpeza por tempo que não comparece à assistência.\nPatch(\n    Pessoas,\n    LookUp(\n        Pessoas,\n        'ID Pessoa' = PessoaSelecionada\n    ),\n    {'Ultima Assistência': Today()}\n);\n\n//Salva na tabela Assistências a data atual na coluna 'Ultimo Comparecimento' (para poder\n//fazer a limpeza por tempo que não comparece à assistência.\nPatch(\n    Assistências,\n    LookUp(\n        Assistências,\n        'ID Assistência' = AssistenciaSelecionada\n    ),\n    {'Ultimo Comparecimento': Today()}\n);\n\nUpdateContext({PopUpConfirmaPresença: false});\nIf(\n    Semana4,\n    UpdateContext({PopupDialogoSemanaQueVem: true}),\n    UpdateContext({PopupDialogoSemanaQueVem: false}) && Back()\n);\n"
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
@@ -1621,28 +1376,3 @@ Screens:
               //Parent.Width/2 - Self.Width/2
               Retangulo_Popup_Mesmo_Dia.X + (Retangulo_Popup_Mesmo_Dia.Width/2 - Self.Width/2)
             Y: =650
-      - Timer1:
-          Control: Timer@2.1.0
-          Properties:
-            AutoStart: =true
-            BorderColor: =ColorFade(Self.Fill, -15%)
-            Color: =RGBA(255, 255, 255, 1)
-            DisabledBorderColor: =ColorFade(Self.BorderColor, 70%)
-            DisabledColor: =ColorFade(Self.Fill, 90%)
-            DisabledFill: =ColorFade(Self.Fill, 70%)
-            Duration: =600
-            Fill: =RGBA(0, 51, 102, 1)
-            Font: =Font.'Open Sans'
-            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
-            HoverColor: =RGBA(255, 255, 255, 1)
-            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnTimerEnd: |-
-              =UpdateContext({ varPisca: !varPisca })
-            PressedBorderColor: =Self.Fill
-            PressedColor: =Self.Fill
-            PressedFill: =Self.Color
-            Repeat: =true
-            Start: =true //AssistenciaAtual in ["C3", "C3/C2"]
-            Visible: =false
-            Width: =135
-            Y: =1376
