@@ -38,7 +38,7 @@
             
             Set(PessoaSelecionada, ThisItem.'ID Pessoa');
             
-            Set(varRegistroOriginalAssistencia,ThisItem);
+            //Set(varRegistroOriginalAssistencia,ThisItem);
             
             Navigate(Tela_Consulta_Entrevista, ScreenTransition.None);
             

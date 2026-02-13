@@ -58,7 +58,7 @@ Screens:
                   }
               );
 
-              Set(varRegistroOriginalPessoas,ThisItem);
+              //Set(varRegistroOriginalPessoas,ThisItem);
 
               Navigate(Tela_Consulta_Tarefeiros, ScreenTransition.None)
             ShowScrollbar: =false

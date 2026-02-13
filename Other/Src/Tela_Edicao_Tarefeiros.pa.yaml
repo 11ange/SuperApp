@@ -11,74 +11,22 @@ Screens:
     Properties:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
-      OnVisible: |-
-        =/*Clear(TempMaiorIDPessoas);
-        Clear(TempMaiorID);
+      OnVisible: |+
+        =If(!CriaTarefeiro,
+            // 1. CAPTURA OS DADOS ORIGINAIS AQUI:
+            //Set(varRegistroOriginalPessoas, LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada));
 
-        // Inicializa o TempMaiorID com 0
-        ClearCollect(TempMaiorID, Table({ID: 0}));
-
-        // Define o tamanho do bloco de leitura
-        Set(TamanhoBloco, 1000);
-
-        Set(MaiorIDAtual, 0);
-        Set(MaiorIDPessoaAtual, 0);
-
-        // Número máximo de blocos a serem buscados
-        Set(MaxBlocos, RoundUp(CountIf(Pessoas, true) / TamanhoBloco, 0));
-
-        // Itera sobre os blocos e armazena os maiores valores
-        ForAll(
-            Sequence(MaxBlocos),
-            Collect(
-                TempMaiorID,
+            // 2. Mantém o log de tela que você já tinha:
+            Patch(
+                Logs,
+                Defaults(Logs),
                 {
-                    ID: Max(
-                        Filter(
-                            FirstN(
-                                Sort(Pessoas, id, SortOrder.Descending),
-                                Value(ThisRecord.Value) * TamanhoBloco
-                            ),
-                            !IsBlank(id) // Ignora IDs vazios
-                        ),
-                        id
-                    )
+                    DataeHora: Now(),
+                    DeviceID: DeviceID,
+                    Ação: "Editando Tarefeiro ID:" & PessoaSelecionada
                 }
             )
         );
-
-        // Define o maior ID após coletar os valores
-        Set(MaiorIDAtual, Max(TempMaiorID, ID));
-
-        // Define o próximo ID como MaiorIDAtual + 1
-        Set(NovoID, MaiorIDAtual + 1);
-
-        // Itera sobre os blocos e armazena os maiores valores
-        ForAll(
-            Sequence(MaxBlocos),
-            Collect(
-                TempMaiorIDPessoas,
-                {
-                    ID: Max(
-                        Filter(
-                            FirstN(
-                                Sort(Pessoas, 'ID Pessoa', SortOrder.Descending),
-                                Value(ThisRecord.Value) * TamanhoBloco
-                            ),
-                            !IsBlank('ID Pessoa') // Ignora IDs vazios
-                        ),
-                        'ID Pessoa'
-                    )
-                }
-            )
-        );
-
-        // Define o maior ID após coletar os valores
-        Set(MaiorIDPessoaAtual, Max(TempMaiorIDPessoas, ID));
-
-        // Define o próximo ID como MaiorIDAtual + 1
-        Set(NovoIDPessoa, MaiorIDPessoaAtual + 1);
-        */
     Children:
       - RectQuickActionBar3_4:
           Control: Rectangle@2.3.0
@@ -187,34 +135,7 @@ Screens:
             OnSuccess: |-
               =UpdateContext({UltimoID: Form_Edita_Tarefeiros.LastSubmit.id});
 
-              Set(
-                  varResultadoLog,
-                  LogAlteracaoCampos.Run(
-                      Concatenate(
-                          "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
-                          "NomeSocial:", varRegistroOriginalPessoas.'Nome Social', "|",
-                          "Idade:", varRegistroOriginalPessoas.Idade, "|",
-                          "Cartao:", varRegistroOriginalPessoas.'Número Cartão', "|",
-                          "Ativo:", varRegistroOriginalPessoas.Ativo, "|",
-                          "EmAssistencia:", varRegistroOriginalPessoas.'Em Assistência', "|",
-                          "Tarefeiro:", varRegistroOriginalPessoas.Tarefeiro
-                      ),
-                      Concatenate(
-                          "Nomepessoa:", Form_Edita_Tarefeiros.LastSubmit.'Nome Pessoa', "|",
-                          "NomeSocial:", Form_Edita_Tarefeiros.LastSubmit.'Nome Social', "|",
-                          "Idade:", Form_Edita_Tarefeiros.LastSubmit.Idade, "|",
-                          "Cartao:", Form_Edita_Tarefeiros.LastSubmit.'Número Cartão', "|",
-                          "Ativo:", Form_Edita_Tarefeiros.LastSubmit.Ativo, "|",
-                          "EmAssistencia:", Form_Edita_Tarefeiros.LastSubmit.'Em Assistência', "|",
-                          "Tarefeiro:", Form_Edita_Tarefeiros.LastSubmit.Tarefeiro
-                      ),
-                      PessoaSelecionada,
-                      DeviceID,
-                      "Pessoas"
-                  )
-              );
-
-              Set(varRegistroOriginalPessoas,Form_Edita_Tarefeiros.LastSubmit);
+              //Set(varRegistroOriginalPessoas,Form_Edita_Tarefeiros.LastSubmit);
 
               If(CriaTarefeiro, UpdateContext({PopupInformaNumero: true}), Back())
             Width: =Parent.Width
@@ -1303,7 +1224,7 @@ Screens:
           Properties:
             BorderColor: =RGBA(0, 89, 178, 1)
             Fill: =RGBA(100, 118, 132, 0.6)
-            Height: =Parent.Height - RectQuickActionBar_Tela_Edicao_Assistidos.Height
+            Height: =Parent.Height - RectQuickActionBar3_4.Height
             Visible: =PopupInformaNumero
             Width: =Parent.Width
             Y: =88

@@ -62,7 +62,7 @@ Screens:
                   }
               );
 
-              Set(varRegistroOriginalPessoas,ThisItem);
+              //Set(varRegistroOriginalPessoas,ThisItem);
 
               Navigate(Tela_Consulta_Assistidos, ScreenTransition.None)
             ShowScrollbar: =false

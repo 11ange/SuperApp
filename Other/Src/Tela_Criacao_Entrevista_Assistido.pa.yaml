@@ -12,7 +12,7 @@ Screens:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
       OnVisible: |-
-        =UpdateContext({DiaDiferente: false, Selecionado: false, Salvando: false})
+        =UpdateContext({Salvando: false})
     Children:
       - RectQuickActionBar3_6:
           Control: Rectangle@2.3.0
@@ -321,11 +321,12 @@ Screens:
                           )
                         Items.Value: =NomePessoa
                         OnChange: |-
-                          =If(
+                          =/*
+                          If(
                               DataCardValue111.Selected.NomePessoa <> " ",
                               UpdateContext({EntrevistadorOk: true}),
                               UpdateContext({EntrevistadorOk: false})
-                          )
+                          )*/
                         PressedColor: =RGBA(255, 255, 255, 1)
                         PressedFill: =RGBA(0, 89, 178, 1)
                         SelectionColor: =RGBA(255, 255, 255, 1)
@@ -543,11 +544,11 @@ Screens:
                 Control: TypedDataCard@1.0.7
                 Variant: ClassicAllowedValuesStringEdit
                 Properties:
-                  AllowedValues: =DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
+                  AllowedValues: =DiasAssistência//DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
                   BorderColor: =RGBA(0, 89, 178, 1)
                   DataField: ="cr4f5_diasemana"
                   Default: =First(DiasAssistência).Value //Está definido no App / OnStart
-                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Dia Semana')
+                  DisplayName: ="Dia Semana"//DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Dia Semana')
                   Required: =true
                   Update: =DataCardValue125.Selected.Value
                   Width: =Parent.Width /2
@@ -586,11 +587,13 @@ Screens:
                         Items: =DiasAssistência //Está definido no App / OnStart
                         Items.Value: =Value
                         OnChange: |-
-                          =If(
+                          =/*
+                          If(
                               DataCardValue10.Selected.Value <> " ",
                               UpdateContext({DiaSemanaOk: true}),
                               UpdateContext({DiaSemanaOk: false})
                           )
+                          */
                         PressedColor: =RGBA(255, 255, 255, 1)
                         PressedFill: =RGBA(0, 89, 178, 1)
                         SelectionColor: =RGBA(255, 255, 255, 1)
@@ -769,11 +772,12 @@ Screens:
                         Items: =TiposAssistências //Está definido no App / OnStart
                         Items.Value: =Value
                         OnChange: |-
-                          =If(
+                          =/*
+                          If(
                               DataCardValue10.Selected.Value <> " ",
                               UpdateContext({AssistenciaOk: true}),
                               UpdateContext({AssistenciaOk: false})
-                          )
+                          )*/
                         PressedColor: =RGBA(255, 255, 255, 1)
                         PressedFill: =RGBA(0, 89, 178, 1)
                         SelectionColor: =RGBA(255, 255, 255, 1)

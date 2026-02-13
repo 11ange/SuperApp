@@ -865,7 +865,7 @@ Screens:
                   VerticalAlign: =VerticalAlign.Top
                   Width: =Parent.TemplateWidth - 86
                   X: =16
-                  Y: =(Parent.TemplateHeight - (Self.Size * 1.8 + Subtitle4.Size * 1.8)) / 2
+                  Y: =(Parent.TemplateHeight - (Self.Size * 1.8 + Subtitle4_1.Size * 1.8)) / 2
             - Subtitle4_1:
                 Control: Label@2.5.1
                 Properties:

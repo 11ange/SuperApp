@@ -132,7 +132,7 @@ Screens:
               Set(DataDialogo_Salvo, FormDialogo.LastSubmit.'Data Diálogo');
               Set(Dialogador_Salvo, FormDialogo.LastSubmit.Dialogador);
               Set(AnotacoesDialogo_Salvo, FormDialogo.LastSubmit.'Anotações Diálogo');
-              Set(EntrevistaNova, "Não");
+              //Set(EntrevistaNova, "Não");
               //------------------------------------------------------------------------------------------
 
               //------------------------------------------------------------------------------------------
@@ -399,11 +399,11 @@ Screens:
                 Control: TypedDataCard@1.0.7
                 Variant: ClassicAllowedValuesStringEdit
                 Properties:
-                  AllowedValues: =DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
+                  AllowedValues: =DiasAssistência//DataSourceInfo([@Assistências], DataSourceInfo.AllowedValues, 'Dia Semana')
                   BorderColor: =RGBA(0, 89, 178, 1)
                   DataField: ="cr4f5_diasemana"
                   Default: =ThisItem.'Dia Semana'
-                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Dia Semana')
+                  DisplayName: ="Dia Semana"//DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Dia Semana')
                   Required: =true
                   Update: =DataCardValue30.Selected.Value
                   Visible: =false
@@ -1536,7 +1536,7 @@ Screens:
           Properties:
             BorderColor: =RGBA(0, 89, 178, 1)
             Fill: =RGBA(100, 118, 132, 0.6)
-            Height: =Parent.Height - RectQuickActionBar3_3.Height
+            Height: =Parent.Height - RectQuickActionBar3_2.Height
             Visible: =MostraPopUp
             Width: =Parent.Width
             Y: =88

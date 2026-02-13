@@ -129,7 +129,7 @@
     Fundo_Popup_2 As rectangle:
         BorderColor: =RGBA(0, 89, 178, 1)
         Fill: =RGBA(100, 118, 132, 0.6)
-        Height: =Parent.Height - RectQuickActionBar3_3.Height
+        Height: =Parent.Height - Lbl_Titulo_5.Height
         Visible: =MostraPopUp
         Width: =Parent.Width
         Y: =88

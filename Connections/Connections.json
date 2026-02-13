@@ -1,52 +1,4 @@
 {
-  "35cfe2ae-d57a-48aa-b3d0-15414564ac0b": {
-    "appActions": [
-      "Run"
-    ],
-    "connectionRef": {
-      "apiTier": "Standard",
-      "displayName": "Logic flows",
-      "iconUri": "https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/v1.0.1774/1.0.1774.4397/logicflows/icon.png",
-      "id": "/providers/microsoft.powerapps/apis/shared_logicflows",
-      "parameterHints": {
-        "46c2fd56-48e2-4169-944a-3b8a133fc284": {
-          "value": "shared_commondataserviceforapps"
-        },
-        "workflowDisplayName": {
-          "value": "LogAlteracaoCampos"
-        },
-        "workflowEntityId": {
-          "value": "123047f1-d5e0-f011-8406-6045bd3afadd"
-        },
-        "workflowName": {
-          "value": "3d8b11cb-714a-8ad6-0bf4-f8cd987c466d"
-        }
-      },
-      "parameterHintsV2": {
-        "shared_commondataserviceforapps": {
-          "value": "46c2fd56-48e2-4169-944a-3b8a133fc284"
-        },
-        "workflowDisplayName": {
-          "value": "LogAlteracaoCampos"
-        },
-        "workflowEntityId": {
-          "value": "123047f1-d5e0-f011-8406-6045bd3afadd"
-        },
-        "workflowName": {
-          "value": "3d8b11cb-714a-8ad6-0bf4-f8cd987c466d"
-        }
-      }
-    },
-    "datasets": {},
-    "dataSources": [
-      "LogAlteracaoCampos"
-    ],
-    "dependencies": {
-      "shared_commondataserviceforapps": "46c2fd56-48e2-4169-944a-3b8a133fc284"
-    },
-    "dependents": [],
-    "id": "35cfe2ae-d57a-48aa-b3d0-15414564ac0b"
-  },
   "46c2fd56-48e2-4169-944a-3b8a133fc284": {
     "appActions": [],
     "connectionRef": {
@@ -62,8 +14,7 @@
     "dataSources": [],
     "dependencies": {},
     "dependents": [
-      "aca76616-a3eb-4383-b165-eba9d6b0c700",
-      "35cfe2ae-d57a-48aa-b3d0-15414564ac0b"
+      "aca76616-a3eb-4383-b165-eba9d6b0c700"
     ],
     "id": "46c2fd56-48e2-4169-944a-3b8a133fc284"
   },
@@ -173,7 +124,7 @@
       "executionRestrictions": {
         "apiId": "unknown",
         "appVer": "3.26014.7",
-        "modifiedOn": "2026-02-13 14:07:21",
+        "modifiedOn": "2026-02-13 17:55:05",
         "policy": "{\"type\":\"unused\"}",
         "version": 1
       },

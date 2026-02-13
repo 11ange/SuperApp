@@ -44,7 +44,7 @@
                 }
             );
             
-            Set(varRegistroOriginalPessoas,ThisItem);
+            //Set(varRegistroOriginalPessoas,ThisItem);
             
             Navigate(Tela_Consulta_Todos, ScreenTransition.None)
         ShowScrollbar: =false

@@ -24,7 +24,10 @@
                     ),
                     //Finalizada = "Não" &&
                     ( !Toggle_Dia.Value || 'Dia Semana' = DiaComPeriodo ) &&
-                    ( !Toggle_Todas_Abertas.Value || DateValue('Ultimo Comparecimento') <> Today())
+                    ( 
+                        !Toggle_Todas_Abertas.Value || 
+                        ( 'Ultimo Comparecimento' < Today() || 'Ultimo Comparecimento' >= DateAdd(Today(), 1, TimeUnit.Days) ) 
+                    )
                 ),
                 "cr4f5_idpessoa",
                 If(Sort_Presenca, SortOrder.Descending, SortOrder.Ascending)
