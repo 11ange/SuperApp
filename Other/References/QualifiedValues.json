@@ -1,0 +1,444 @@
+{
+  "QualifiedValues": [
+    {
+      "Kind": "default.cds_cr4f5_assistencia_forms",
+      "Namespace": "Assistências (Forms)",
+      "Values": {
+        "Informações": "45767531-3e1c-4633-b5f0-ea2d52e783e8"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_assistencias_encerradas_forms",
+      "Namespace": "Assistências_Encerradas (Forms)",
+      "Values": {
+        "Informações": "f9254f59-3dbc-40f5-8a78-bd9f960d7e49"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_pessoas_forms",
+      "Namespace": "Pessoas (Forms)",
+      "Values": {
+        "Informações": "8b20ce90-a836-448b-8b41-d31ade22a673"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_logs_forms",
+      "Namespace": "Logs (Forms)",
+      "Values": {
+        "Informações": "991b8fdc-6afd-4e25-a081-87f333256da3"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_tarefas_forms",
+      "Namespace": "Tarefas (Forms)",
+      "Values": {
+        "Informações": "a5c55c03-6211-465f-9cbd-c1387b356e2a"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_alocacoes_forms",
+      "Namespace": "Alocações (Forms)",
+      "Values": {
+        "Informações": "4e0c2cfb-19b7-424f-a14d-e4f8c24ceccc"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_presencas_forms",
+      "Namespace": "Presenças (Forms)",
+      "Values": {
+        "Informações": "5451b89b-7cce-4d3c-94fe-6e0080f31f17"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_excedentes_forms",
+      "Namespace": "Excedentes (Forms)",
+      "Values": {
+        "Informações": "89eb2d59-38a7-46e0-a33b-ea7ffb4a76e6"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_usuarios_forms",
+      "Namespace": "Usuarios (Forms)",
+      "Values": {
+        "Informações": "ac6b6f6a-9091-45c2-bcac-f395c8530a42"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_execucaoflow_forms",
+      "Namespace": "ExecuçãoFlow (Forms)",
+      "Values": {
+        "Informações": "cf0d83d2-fbf7-427a-9a21-e8e464e4f1c1"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_controleversoes_forms",
+      "Namespace": "ControleVersoes (Forms)",
+      "Values": {
+        "Informações": "e774f380-e3ec-4c60-8ac9-6fffbc1c6174"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_assistencia_forms",
+      "Namespace": "Assistências (Formulários)",
+      "Values": {
+        "Informações": "45767531-3e1c-4633-b5f0-ea2d52e783e8"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_assistencias_encerradas_forms",
+      "Namespace": "Assistências_Encerradas (Formulários)",
+      "Values": {
+        "Informações": "f9254f59-3dbc-40f5-8a78-bd9f960d7e49"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_pessoas_forms",
+      "Namespace": "Pessoas (Formulários)",
+      "Values": {
+        "Informações": "8b20ce90-a836-448b-8b41-d31ade22a673"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_logs_forms",
+      "Namespace": "Logs (Formulários)",
+      "Values": {
+        "Informações": "991b8fdc-6afd-4e25-a081-87f333256da3"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_tarefas_forms",
+      "Namespace": "Tarefas (Formulários)",
+      "Values": {
+        "Informações": "a5c55c03-6211-465f-9cbd-c1387b356e2a"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_alocacoes_forms",
+      "Namespace": "Alocações (Formulários)",
+      "Values": {
+        "Informações": "4e0c2cfb-19b7-424f-a14d-e4f8c24ceccc"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_presencas_forms",
+      "Namespace": "Presenças (Formulários)",
+      "Values": {
+        "Informações": "5451b89b-7cce-4d3c-94fe-6e0080f31f17"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_excedentes_forms",
+      "Namespace": "Excedentes (Formulários)",
+      "Values": {
+        "Informações": "89eb2d59-38a7-46e0-a33b-ea7ffb4a76e6"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_usuarios_forms",
+      "Namespace": "Usuarios (Formulários)",
+      "Values": {
+        "Informações": "ac6b6f6a-9091-45c2-bcac-f395c8530a42"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_execucaoflow_forms",
+      "Namespace": "ExecuçãoFlow (Formulários)",
+      "Values": {
+        "Informações": "cf0d83d2-fbf7-427a-9a21-e8e464e4f1c1"
+      }
+    },
+    {
+      "Kind": "beed0347-1e4f-eb2a-aec7-527b9b9d6deb_cre47_ceov_sistema_entrevista_forms",
+      "Namespace": "Ceov_Sistema_Entrevistas (Formulários)",
+      "Values": {
+        "Informações": "c02c1830-d3e7-4ea7-b363-60610b30c9df"
+      }
+    },
+    {
+      "Kind": "beed0347-1e4f-eb2a-aec7-527b9b9d6deb_cre47_ceov_tarefeiros_assistencia_forms",
+      "Namespace": "Ceov_Tarefeiros_Assistidos (Formulários)",
+      "Values": {
+        "Informações": "3aef7a24-184d-45ad-8ba2-b996402c7ce8"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_cre47_ceov_tarefeiros_assistencias3_forms",
+      "Namespace": "cre47_ceov_tarefeiros_assistencias 3s (Formulários)",
+      "Values": {
+        "Informações": "5a00c3af-6ba2-49fb-9c64-f0b94b527ed4"
+      }
+    },
+    {
+      "Kind": "default.cds_annotation_forms",
+      "Namespace": "Anotações (Formulários)",
+      "Values": {
+        "Formulário de Criação Rápida de Anotação": "56edcfe7-b4f3-4378-bab5-fc8f40db3af3",
+        "Informações": "69e5bd50-3d3e-47ca-aabc-d47bcbe59775"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_presencas_excedentes_forms",
+      "Namespace": "Presenças_Excedentes (Formulários)",
+      "Values": {
+        "Informações": "0a24ec32-d4f2-451b-b800-d60e9950874a"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_assistencia_forms",
+      "Namespace": "Assistência (Formulários)",
+      "Values": {
+        "Informações": "45767531-3e1c-4633-b5f0-ea2d52e783e8"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_dialogo_forms",
+      "Namespace": "Ceov_Sistema_Dialogos (Formulários)",
+      "Values": {
+        "Informações": "1ad51bc4-3578-4974-bf1e-ad44bb77ca15"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_entrevista_forms",
+      "Namespace": "Ceov_Sistema_Entrevistas (Formulários)1",
+      "Values": {
+        "Informações": "c02c1830-d3e7-4ea7-b363-60610b30c9df"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_tarefeiros_assistencia_forms",
+      "Namespace": "Ceov_Tarefeiros_Assistencia (Formulários)",
+      "Values": {
+        "Informações": "3aef7a24-184d-45ad-8ba2-b996402c7ce8"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_entrevistas_finalizadas_forms",
+      "Namespace": "Ceov_Sistema_Entrevistas_Finalizadas (Formulários)",
+      "Values": {
+        "Informações": "31939d30-86ef-4ddf-b64f-9c467737ec45"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_usuarios_forms",
+      "Namespace": "Usuarios (Formulários)1",
+      "Values": {
+        "Informações": "0d5f7ce1-821f-42eb-b4c4-e4a3e0c920a9"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_tarefas_forms",
+      "Namespace": "Ceov_Sistema_Tarefas (Formulários)",
+      "Values": {
+        "Informações": "a6709907-14fb-4542-be42-be593d144f7f"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_diasdasemana_forms",
+      "Namespace": "Ceov_Sistema_DiasdaSemana (Formulários)",
+      "Values": {
+        "Informações": "dd8adb24-450c-46f2-b9d6-53aca77caa31"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_peridododia_forms",
+      "Namespace": "Ceov_Sistema_PeridodoDia (Formulários)",
+      "Values": {
+        "Informações": "9d099378-bed8-44fa-b955-f92bbfb6927d"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_alocacoes_forms",
+      "Namespace": "Ceov_Sistema_Alocações (Formulários)",
+      "Values": {
+        "Informações": "bdc53780-2c29-40c7-81fe-f571ac3717d4"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_logs_forms",
+      "Namespace": "Logs (Formulários)1",
+      "Values": {
+        "Informações": "30819ecd-e80a-4536-bdf1-b890443152c3"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_presencas_excedentes_forms",
+      "Namespace": "Ceov_Sistema_Presenças_Excedentes (Formulários)",
+      "Values": {
+        "Informações": "69c24aa6-306f-4db2-8b3f-a6012d7a3997"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_entrevistas_excedentes_forms",
+      "Namespace": "Ceov_Entrevistas_Excedentes (Formulários)",
+      "Values": {
+        "Informações": "a0b3b190-d84e-44a1-8d0a-982b4d01d4ab"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_dialogo_forms",
+      "Namespace": "Ceov_Sistema_Dialogos (Forms)",
+      "Values": {
+        "Informações": "1ad51bc4-3578-4974-bf1e-ad44bb77ca15"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_entrevista_forms",
+      "Namespace": "Ceov_Sistema_Entrevistas (Forms)",
+      "Values": {
+        "Informações": "c02c1830-d3e7-4ea7-b363-60610b30c9df"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_tarefeiros_assistencia_forms",
+      "Namespace": "Ceov_Tarefeiros_Assistencia (Forms)",
+      "Values": {
+        "Informações": "3aef7a24-184d-45ad-8ba2-b996402c7ce8"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_entrevistas_finalizadas_forms",
+      "Namespace": "Ceov_Sistema_Entrevistas_Finalizadas (Forms)",
+      "Values": {
+        "Informações": "31939d30-86ef-4ddf-b64f-9c467737ec45"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_usuarios_forms",
+      "Namespace": "Usuarios (Forms)1",
+      "Values": {
+        "Informações": "0d5f7ce1-821f-42eb-b4c4-e4a3e0c920a9"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_entrevistas_excedentes_forms",
+      "Namespace": "Ceov_Entrevistas_Excedentes (Forms)",
+      "Values": {
+        "Informações": "a0b3b190-d84e-44a1-8d0a-982b4d01d4ab"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_novatabela_forms",
+      "Namespace": "Novas tabelas (Formulários)",
+      "Values": {
+        "Informações": "3c748361-1cc2-488b-9670-f5f99014ad3e"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_pessoa_forms",
+      "Namespace": "Ceov_Sistema_Pessoas (Formulários)",
+      "Values": {
+        "Informações": "3f47fd09-6f15-4bf7-9481-b571ebce4b26"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_dias_assistencias_forms",
+      "Namespace": "Ceov_Dias_Assistencias (Formulários)",
+      "Values": {
+        "Informações": "aa11b876-605a-468e-b4b7-ed63f4e1618a"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_controle_forms",
+      "Namespace": "Ceov_Sistema_Controle (Formulários)",
+      "Values": {
+        "Informações": "cf10a0f7-d56f-4532-977d-9e283e3bbd4a"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_entrevistadores_forms",
+      "Namespace": "Ceov_Entrevistadores (Formulários)",
+      "Values": {
+        "Informações": "eec66069-8b16-4af6-95ac-d586c7f5848b"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_pessoa_forms",
+      "Namespace": "Ceov_Sistema_Pessoas (Forms)",
+      "Values": {
+        "Informações": "3f47fd09-6f15-4bf7-9481-b571ebce4b26"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_sistema_controle_forms",
+      "Namespace": "Ceov_Sistema_Controle (Forms)",
+      "Values": {
+        "Informações": "cf10a0f7-d56f-4532-977d-9e283e3bbd4a"
+      }
+    },
+    {
+      "Kind": "default.cds_cre47_ceov_dialogadores_forms",
+      "Namespace": "Ceov_Dialogadores (Formulários)",
+      "Values": {
+        "Informações": "5ade0509-90a1-4126-9771-bd51d5f52f93"
+      }
+    },
+    {
+      "Kind": "default.cds_activitypointer_forms",
+      "Namespace": "Atividades (Formulários)",
+      "Values": {}
+    },
+    {
+      "Kind": "default.cds_account_forms",
+      "Namespace": "Contas (Formulários)",
+      "Values": {
+        "cartão da conta": "b028db32-3619-48a5-ac51-cf3f947b0ef3",
+        "Conta": "8448b78f-8f42-454e-8e2a-f8196b0419af",
+        "Conta de Experiência interativa": "a72c7955-442b-4ea4-9499-b10cd18b4256",
+        "Criação Rápida de Conta": "c9e7ec2d-efca-4e4c-b3e3-f63c4bba5e4b",
+        "Formulário Cartão de Conta": "cccff382-2b92-467e-bf1b-3db179512af8",
+        "Formulário de Bloco de Hierarquia de Contas": "69cff312-cfb6-4289-9631-249ab85d2c62",
+        "Informações": "b053a39a-041a-4356-acef-ddf00182762b",
+        "Painel de Referência de Contas": "098ae145-1567-41ec-8398-86dbaac70c9b",
+        "Perfis Sociais": "2205c86d-ed88-4a2f-a447-3b86a8781f2e"
+      }
+    },
+    {
+      "Kind": "default.cds_contact_forms",
+      "Namespace": "Contatos (Formulários)",
+      "Values": {
+        "Atualizar Contato": "26843818-6508-4afe-9342-5fae2ebf15ca",
+        "cartão de contato": "707fc57b-c5e6-471b-a180-e37ed28a38e2",
+        "cartão do contato da conta": "29de27bc-a257-4f29-99cf-bab4a84e688f",
+        "Contato": "1fed44d1-ae68-4a41-bd2b-f13acac4acfa",
+        "Criação Rápida de Contato": "661157fe-2fc9-4eaa-835f-5bfa2f7b64f7",
+        "Formulário Cartão de Contato": "bc0f68dd-a4b1-4a8f-bed3-c8f5db2f89cf",
+        "Formulário do Cartão de Persona Viva": "449faa0e-f471-48ec-87d0-4719909546d2",
+        "Formulário Rápido de Contato": "bdb0ae1c-32fa-4374-b637-8dafe107bc44",
+        "Informações": "894cc46a-b0cb-4ab0-8bf6-200544e46a2d",
+        "Invite Web Form": "d6190b35-9474-4098-9698-33f6627eb3bf",
+        "Ocorrências Recentes e Direitos": "f3b707fb-3b5f-45f9-9c6b-5e573bb5d19e",
+        "Painel de Referência de Contatos": "d880c3cf-80e2-42f3-82f9-24d040d09f17",
+        "Perfis Sociais": "7bb87dfd-ec3e-4ed9-8e3e-5725d3067295",
+        "Portal Contact (Enhanced)": "c1c97961-2d42-4103-abf8-2fe2bdf38224",
+        "Profile Web Form (Enhanced)": "bddc0100-0dbe-4562-aafe-31d08c8ab506",
+        "Profile Web Form (Enhanced) - Japanese": "01124dd8-9bff-4cc0-bb33-ea9d943c3f9f"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_logs_forms",
+      "Namespace": "Logs (Formulários)11",
+      "Values": {
+        "Informações": "991b8fdc-6afd-4e25-a081-87f333256da3"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_usuarios_forms",
+      "Namespace": "Usuarios (Formulários)11",
+      "Values": {}
+    },
+    {
+      "Kind": "beed0347-1e4f-eb2a-aec7-527b9b9d6deb_cre47_ceov_sistema_entrevista_forms",
+      "Namespace": "Ceov_Sistema_Entrevistas (Formulários)11",
+      "Values": {
+        "Informações": "c02c1830-d3e7-4ea7-b363-60610b30c9df"
+      }
+    },
+    {
+      "Kind": "beed0347-1e4f-eb2a-aec7-527b9b9d6deb_cre47_ceov_sistema_entrevista_forms",
+      "Namespace": "Ceov_Sistema_Entrevistas (Formulários)2",
+      "Values": {
+        "Informações": "c02c1830-d3e7-4ea7-b363-60610b30c9df"
+      }
+    }
+  ]
+}

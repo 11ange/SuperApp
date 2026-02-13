@@ -1,0 +1,105 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_excedenteses",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_excedentes",
+    "MaxGetRowsCount": 2000,
+    "Name": "Excedentes",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "cr4f5_a1": "A1",
+      "cr4f5_a2": "A2",
+      "cr4f5_a3": "A3",
+      "cr4f5_c1": "C1",
+      "cr4f5_c2": "C2",
+      "cr4f5_c3": "C3",
+      "cr4f5_data": "Data",
+      "cr4f5_excedentes_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_excedentes_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_excedentes_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_excedentes_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_excedentes_ProcessSession": "Sessões de Processo",
+      "cr4f5_excedentes_SyncErrors": "Erros de Sincronização",
+      "cr4f5_excedentesid": "Excedentes",
+      "cr4f5_id": "ID",
+      "cr4f5_periododia": "PeriodoDia",
+      "cr4f5_ps": "PS",
+      "cr4f5_pscriancas": "PS Crianças",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "Excedentes",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Excedentes (Modos de exibição)",
+    "Name": "_cr4f5_excedentes_views",
+    "RelatedEntityName": "Excedentes",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "07c773d7-724e-422d-afbd-03bc29e59e80": "Exibição de Consulta de Excedentes",
+      "5e74f747-8211-4f81-8665-08cf96f457f7": "Excedentes Inativos(as)",
+      "8d94c223-f886-4090-a327-b467ff4b4610": "Exibição de Localização Avançada de Excedentes",
+      "9f5970c3-bad3-4739-9867-f1822a4da095": "Excedentes Ativos(as)",
+      "d569efe1-92ba-426a-9872-489d6a29bee8": "Exibição Associada de Excedentes"
+    }
+  },
+  {
+    "DisplayName": "Status (Excedentes)",
+    "Name": "cr4f5_excedentes_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Excedentes"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Excedentes",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (Excedentes)",
+    "Name": "cr4f5_excedentes_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Excedentes"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Excedentes",
+    "Type": "OptionSetInfo"
+  }
+]

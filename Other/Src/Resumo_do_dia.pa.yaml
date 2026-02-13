@@ -1,0 +1,397 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  Resumo_do_dia:
+    Properties:
+      Fill: =RGBA(232, 232, 232, 1)
+      LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: |-
+        =//Clear(ResumoDiaOrientação);
+        //Clear(ResumoDiaAssistências);
+        //Clear(ResumoDiaAssistênciasEncerradasTemp);
+        //Clear(ResumoDiaAssistênciasEncerradas);
+        //Clear(ResumoDiaGeral);
+        //Clear(Colecao_So_Entrevistas);
+        //Clear(Colecao_So_Finalizadas);
+        //Clear(Total_Assistencias_Periodo);
+        //Clear(Total_Extra_Periodo);
+        UpdateContext(
+            {
+                Presencas: 0,
+                Dialogos: 0,
+                Encerradas: 0,
+                Orientações: 0,
+                EntrevistasNovas: 0
+            }
+        );
+
+        UpdateContext({varDataFinalSelecionada: Data_Inicial.SelectedDate})
+    Children:
+      - Button3:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: "=// Chama o fluxo, passa os parâmetros da tela e armazena a resposta completa\r\n// na variável 'varResultadoDoFlow'\r\nSet(\r\n    varResultadoDoFlow,\r\n    ResumoAssistenciasPorDia.Run(\r\n        Text(Data_Inicial.SelectedDate, \"yyyy-mm-dd\"),  // 1. Data Desejada\r\n        //Data_Inicial.SelectedDate,\r\n        Dropdown_Periodo_1.Selected.Value,              // 2. Período\r\n        17                                              // 3. limiteHoraTarde\r\n    )\r\n);\r\n\r\n// Limpa e recria a coleção 'dadosAgrupados' com os tipos de dados corretos\r\nClearCollect(\r\n    dadosAgrupados,\r\n    ForAll(\r\n        // 1. Itera sobre a tabela não tipada retornada pelo ParseJSON\r\n        Table(ParseJSON(varResultadoDoFlow.resultadofinal)),\r\n        \r\n        // 2. Para cada registro, cria um novo registro com colunas \"tipadas\"\r\n        {\r\n            // Converte a propriedade 'Tarefeiro' para o tipo Texto do Power Apps\r\n            Tarefeiro: Text(ThisRecord.Value.Tarefeiro),\r\n            Quantidade: Int(ThisRecord.Value.Quantidade),\r\n            // Converte a sub-matriz 'IDPessoas' para uma tabela Power Apps\r\n            // com uma coluna chamada \"ID\" do tipo Número\r\n            IDPessoas: ForAll(\r\n                Table(ThisRecord.Value.IDPessoas),\r\n                { ID: Value(ThisRecord.Value) }\r\n            )\r\n        }\r\n    )\r\n);\r\nClearCollect(\r\n    colResumo,\r\n    ForAll(\r\n        Table(ParseJSON(varResultadoDoFlow.resultadoresumido)),\r\n        {\r\n            Nome: Text(ThisRecord.Value.Nome),\r\n            Valor: Value(ThisRecord.Value.Valor)\r\n        }\r\n    )\r\n);\r\nUpdateContext({\r\n    varDialogos: LookUp(colResumo, Nome = \"Dialogos\").Valor,\r\n    varEntrevistas: LookUp(colResumo, Nome = \"Entrevistas\").Valor,\r\n    varEntrevistasFinalizadas: LookUp(colResumo, Nome = \"EntrevistasFinalizadas\").Valor,\r\n    varRetornos: LookUp(colResumo, Nome = \"Retornos\").Valor,\r\n    varOrientacao: LookUp(colResumo, Nome = \"Orientação\").Valor,\r\n    varNovosAssistidos: LookUp(colResumo, Nome = \"NovosAssistidos\").Valor,\r\n    varFinalizadas: LookUp(colResumo, Nome = \"Finalizadas\").Valor\r\n});\r\n\r\nIf(\r\n    Weekday(Data_Inicial.SelectedDate) = 5,\r\n\r\n    // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período\r\n    UpdateContext({\r\n        presençasSelecionado: LookUp(\r\n            Presenças,\r\n            Data = Text(Data_Inicial.SelectedDate, \"dd/mm/yyyy\") &&\r\n            PeriodoDia = Dropdown_Periodo_1.Selected.Value\r\n        )\r\n    }),\r\n\r\n    // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data\r\n    UpdateContext({\r\n        presençasSelecionado: LookUp(\r\n            Presenças,\r\n            Data = Text(Data_Inicial.SelectedDate, \"dd/mm/yyyy\")\r\n        )\r\n    })\r\n);\r\n\r\n// Verifica PRIMEIRO se é uma quinta-feira\r\nIf(\r\n    Weekday(Data_Inicial.SelectedDate) = 5,\r\n\r\n    // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período\r\n    UpdateContext({\r\n        extrasSelecionado: LookUp(\r\n            Excedentes,\r\n            Data = Text(Data_Inicial.SelectedDate, \"dd/mm/yyyy\") &&\r\n            PeriodoDia = Dropdown_Periodo_1.Selected.Value\r\n        )\r\n    }),\r\n\r\n    // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data\r\n    UpdateContext({\r\n        extrasSelecionado: LookUp(\r\n            Excedentes,\r\n            Data = Text(Data_Inicial.SelectedDate, \"dd/mm/yyyy\")\r\n        )\r\n    })\r\n);\r\n\r\nUpdateContext({\r\n    assistenciasSomadas: {\r\n        A1: Coalesce(presençasSelecionado.A1, 0) + Coalesce(extrasSelecionado.A1, 0),\r\n        A2: Coalesce(presençasSelecionado.A2, 0) + Coalesce(extrasSelecionado.A2, 0),\r\n        A3: Coalesce(presençasSelecionado.A3, 0) + Coalesce(extrasSelecionado.A3, 0),\r\n        C1: Coalesce(presençasSelecionado.C1, 0) + Coalesce(extrasSelecionado.C1, 0),\r\n        C2: Coalesce(presençasSelecionado.C2, 0) + Coalesce(extrasSelecionado.C2, 0),\r\n        C3: Coalesce(presençasSelecionado.C3, 0) + Coalesce(extrasSelecionado.C3, 0),\r\n        PS: Coalesce(presençasSelecionado.PS, 0) + Coalesce(extrasSelecionado.PS, 0),\r\n        PSC: Coalesce(presençasSelecionado.'PS Crianças', 0) + Coalesce(extrasSelecionado.'PS Crianças', 0)\r\n\r\n    }\r\n});\r\n\r\nSet(totalAssistencias,\r\n        assistenciasSomadas.A1 + assistenciasSomadas.A2 + assistenciasSomadas.A3 +\r\n        assistenciasSomadas.C1 + assistenciasSomadas.C2 + assistenciasSomadas.C3 +\r\n        assistenciasSomadas.PS + assistenciasSomadas.PSC\r\n);"
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Gerar Resumo"
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =Dropdown_Periodo_1.Y + Dropdown_Periodo_1.Height + 30
+      - Data_Inicial:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            IconBackground: =RGBA(0, 51, 102, 1)
+            IconFill: =RGBA(255, 255, 255, 1)
+            Width: =350
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =lbl_Data_Inicial.X + lbl_Data_Inicial.Height + 30
+      - lbl_Data_Inicial:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            Text: ="Data"
+            Visible: =false
+            Width: =180
+            X: =App.MinScreenWidth/4 - Self.Width/2 - 20
+            Y: =100
+      - RectQuickActionBar3_5:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Height: =88
+            Width: =Parent.Width
+      - Icone_Cancela_Controle_1:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =88
+            Icon: =Icon.CancelBadge
+            OnSelect: =Back()
+            PaddingBottom: =22
+            PaddingLeft: =22
+            PaddingRight: =22
+            PaddingTop: =22
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Cancel item"
+            Width: =88
+      - LblAppName3_4:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =RGBA(58, 58, 58, 0)
+            Font: =Font.'Open Sans'
+            Height: =88
+            Size: =27
+            Text: ="Resumo do Dia"
+            Width: =Parent.Width - Icone_Cancela_Controle_1.Width
+            Wrap: =false
+            X: =80
+      - Resumo Dia:
+          Control: DataTable@1.0.3
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            HeadingColor: =RGBA(255, 255, 255, 1)
+            HeadingFill: =RGBA(0, 51, 102, 1)
+            HeadingFont: =Font.'Open Sans'
+            HoverFill: =RGBA(153, 205, 255, .2)
+            Items: =dadosAgrupados//ResumoDiaGeral
+            SelectedFill: =RGBA(0, 51, 102, .2)
+            Width: =Parent.Width
+            Y: =HTML_Total_Geral.Y + HTML_Total_Geral.Height + 30
+          Children:
+            - Tarefeiro_Coluna1:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  AutoWidth: =false
+                  FieldDisplayName: ="Tarefeiro"
+                  FieldName: ="Tarefeiro"
+                  Order: =1
+                  Text: =ThisItem.Tarefeiro
+                  Width: =550
+            - Quantidade_Column1:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  FieldDisplayName: ="Total"
+                  FieldName: ="Quantidade"
+                  Order: =2
+                  Text: =ThisItem.Quantidade
+      - HTML_Total:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            DisabledBorderColor: =RGBA(56, 56, 56, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            HtmlText: |-
+              ="<div style='display: flex; justify-content: center; align-items: center;'>
+              Entrevistas:&nbsp;<b>" & varEntrevistas + varEntrevistasFinalizadas - varDialogos & "</b>&nbsp; /&nbsp; Dialogos:&nbsp;<b>" & varDialogos &
+              "</b></div>"
+            Width: =550
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =Button3.Y + Button3.Height + 30
+      - HTML_Encerradas:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            DisabledBorderColor: =RGBA(56, 56, 56, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            HtmlText: |-
+              ="<div style='display: flex; justify-content: center; align-items: center;'>
+              Orientações:&nbsp;<b>" & varOrientacao & "</b>&nbsp; /&nbsp; Encerrados:&nbsp;<b>" & varFinalizadas &
+              "</b></div>"
+            Width: =450
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =HTML_Total.Y + HTML_Total.Height + 5
+      - HTML_Orientações:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            DisabledBorderColor: =RGBA(56, 56, 56, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            HtmlText: |-
+              ="<div style='display: flex; justify-content: center; align-items: center;'>
+              Total do dia:&nbsp;<b>" & varEntrevistas + varEntrevistasFinalizadas + varOrientacao + varFinalizadas & "</b> </div>"
+            Width: =450
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =HTML_Encerradas.Y + HTML_Encerradas.Height + 5
+      - Label2:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =145
+            Text: |-
+              ="IDs Pessoas: " &
+              With(
+                  {
+                      // Cria uma variável temporária com a lista de IDs concatenados
+                      fullString: Concat('Resumo Dia'.Selected.IDPessoas,
+                      If(ID = 0, "Orientação", ID) & "; ")
+                  },
+                  // Usa a função Left para pegar todo o texto, exceto os últimos 2 caracteres ("; ")
+                  Left(fullString, Len(fullString) - 2)
+              )
+            X: =60
+            Y: =1300
+      - HTML_Detalhado_Assistencias_Adultos:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            DisabledBorderColor: =RGBA(56, 56, 56, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            HtmlText: |-
+              ="<div style='display: flex; justify-content: center; align-items: center;'>
+              A1:&nbsp;<b>" & assistenciasSomadas.A1 & 
+              "</b>&nbsp;| A2:&nbsp;<b>" & assistenciasSomadas.A2 & 
+              "</b>&nbsp;| A3:&nbsp;<b>" & assistenciasSomadas.A3 & 
+              "</b>&nbsp;| PS:&nbsp;<b>" & assistenciasSomadas.PS & 
+              "</b> </div>"
+            Width: =550
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =HTML_Total_Tarefeiros.Y + HTML_Total_Tarefeiros.Height + 10
+      - HTML_Detalhado_Assistencias_Crianças:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            DisabledBorderColor: =RGBA(56, 56, 56, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            HtmlText: |-
+              ="<div style='display: flex; justify-content: center; align-items: center;'>
+              C1:&nbsp;<b>" & assistenciasSomadas.C1 & 
+              "</b>&nbsp;| C2:&nbsp;<b>" & assistenciasSomadas.C2 & 
+              "</b>&nbsp;| C3:&nbsp;<b>" & assistenciasSomadas.C3 & 
+              "</b>&nbsp;| PS Crianças:&nbsp;<b>" & assistenciasSomadas.PSC & 
+              "</b> </div>"
+            Width: =HTML_Detalhado_Assistencias_Adultos.Width
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =HTML_Detalhado_Assistencias_Adultos.Y + HTML_Detalhado_Assistencias_Adultos.Height + 5
+      - Rectangle10:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderThickness: =4
+            Fill: =Color.Transparent
+            Height: =HTML_Total_Geral.Y -Self.Y + HTML_Total_Geral.Height
+            Width: =HTML_Detalhado_Assistencias_Adultos.Width - 20
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =HTML_Detalhado_Assistencias_Adultos.Y
+      - HTML_Total_Geral:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            DisabledBorderColor: =RGBA(56, 56, 56, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            HtmlText: |+
+              ="<div style='display: flex; justify-content: center; align-items: center;'>
+              Total Geral:&nbsp;<b>" & totalAssistencias & 
+              "</b> </div>"
+            Width: =360
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =768
+      - HTML_Total_Tarefeiros:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            DisabledBorderColor: =RGBA(56, 56, 56, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            HtmlText: |-
+              ="<div style='display: flex; justify-content: center; align-items: center;'>
+              Novos Assistidos:&nbsp;<b>" & varNovosAssistidos & "</b> </div>"
+            Width: =450
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =HTML_Orientações.Y + HTML_Orientações.Height + 5
+      - Dropdown_Periodo_1:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            ChevronBackground: =RGBA(0, 51, 102, 1)
+            ChevronFill: =RGBA(255, 255, 255, 1)
+            ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            ChevronHoverFill: =RGBA(255, 255, 255, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            HoverFill: =RGBA(153, 205, 255, 1)
+            Items: =["Tarde", "Noite"]
+            Items.Value: =Value
+            OnChange: |
+              =ClearCollect(
+                  ColecaoAssistenciasFiltradas,
+                  Filter(
+                      Assistências,
+                      'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                  )
+              );
+              Set(Assistencias, CountIf(ColecaoAssistenciasFiltradas, true));
+              //------
+              Clear(ColecaoAssistenciasFiltradas);
+
+              ClearCollect(
+                  ColecaoAssistenciasFiltradas,
+                  Filter(
+                      Assistências,
+                      Finalizada = "Sim",
+                      'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                  )
+              );
+              Set(AguardandoDialogos, CountIf(ColecaoAssistenciasFiltradas, true));
+              //------
+              Clear(ColecaoAssistenciasFiltradas);
+
+              ClearCollect(
+                  ColecaoAssistenciasFiltradas,
+                  Filter(
+                      Assistências,
+                      IsBlank('Semana 1'),
+                      'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                  )
+              );
+              Set(SoEntrevista, CountIf(ColecaoAssistenciasFiltradas, true));
+              //------
+              Clear(ColecaoAssistenciasFiltradas);
+
+              ClearCollect(
+                  ColecaoAssistenciasFiltradas,
+                  Filter(
+                      Assistências,
+                      'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                  )
+              );
+
+              ClearCollect(
+                  ColecaoAssistenciasFinal,
+                  Filter(
+                      ColecaoAssistenciasFiltradas,
+                      IsBlank('Semana 2') &&
+                      IsBlank('Semana 3') &&
+                      IsBlank('Semana 4') &&
+                      DateDiff('Semana 1', Now()) > tolerancia * 7
+                  )
+              );
+              Set(So1aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
+              //------
+              Clear(ColecaoAssistenciasFiltradas);
+
+              ClearCollect(
+                  ColecaoAssistenciasFiltradas,
+                  Filter(
+                      Assistências,
+                      'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                  )
+              );
+
+              ClearCollect(
+                  ColecaoAssistenciasFinal,
+                  Filter(
+                      ColecaoAssistenciasFiltradas,
+                      IsBlank('Semana 3') &&
+                      IsBlank('Semana 4') &&
+                      DateDiff('Semana 2', Now()) > tolerancia * 7
+                  )
+              );
+              Set(So2aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
+              //------
+              Clear(ColecaoAssistenciasFiltradas);
+
+              ClearCollect(
+                  ColecaoAssistenciasFiltradas,
+                  Filter(
+                      Assistências,
+                      'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                  )
+              );
+
+              ClearCollect(
+                  ColecaoAssistenciasFinal,
+                  Filter(
+                      ColecaoAssistenciasFiltradas,
+                      IsBlank('Semana 4') &&
+                      DateDiff('Semana 3', Now()) > tolerancia * 7
+                  )
+              );
+              Set(So3aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
+              //------
+
+              Set(ForaPrazo,
+                  SoEntrevista + So1aSemana + So2aSemana + So3aSemana
+              );
+              //------
+
+              Set(DentroPrazo,
+                  Assistencias - ForaPrazo
+              );
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =RGBA(0, 89, 178, 1)
+            SelectionColor: =RGBA(255, 255, 255, 1)
+            SelectionFill: =RGBA(0, 51, 102, 1)
+            Visible: =(Weekday(Data_Inicial.SelectedDate) = 5) //true
+            Width: =300
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =Data_Inicial.Y + Data_Inicial.Height + 30

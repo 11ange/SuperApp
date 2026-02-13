@@ -1,0 +1,100 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_execucaoflows",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_execucaoflow",
+    "MaxGetRowsCount": 2000,
+    "Name": "ExecuçãoFlow",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "cr4f5_assistencia": "Assistência",
+      "cr4f5_data_fim": "Data_Fim",
+      "cr4f5_data_inicio": "Data_Inicio",
+      "cr4f5_execucaoflow_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_execucaoflow_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_execucaoflow_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_execucaoflow_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_execucaoflow_ProcessSession": "Sessões de Processo",
+      "cr4f5_execucaoflow_SyncErrors": "Erros de Sincronização",
+      "cr4f5_execucaoflowid": "ExecuçãoFlow",
+      "cr4f5_fluxo": "Fluxo",
+      "cr4f5_id": "ID",
+      "cr4f5_status": "Status (cr4f5_status)",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status (statecode)",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "ExecuçãoFlow",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "ExecuçãoFlow (Modos de exibição)",
+    "Name": "_cr4f5_execucaoflow_views",
+    "RelatedEntityName": "ExecuçãoFlow",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "32ec6870-eb86-4846-ba8f-26de6e631c24": "ExecuçãoFlow Ativos(as)",
+      "7a4a39c5-23dd-424a-8aa5-15e8bcead57b": "ExecuçãoFlow Inativos(as)",
+      "98527b84-1181-4815-959f-4c3c2c213616": "Exibição de Consulta de ExecuçãoFlow",
+      "ae889df8-3987-48f4-90c9-1cde0fefb23f": "Exibição de Localização Avançada de ExecuçãoFlow",
+      "f3d17a2c-0b23-4ee7-a2f9-ad1d9b56047d": "Exibição Associada de ExecuçãoFlow"
+    }
+  },
+  {
+    "DisplayName": "Status (ExecuçãoFlow)",
+    "Name": "cr4f5_execucaoflow_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "ExecuçãoFlow"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "ExecuçãoFlow",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (ExecuçãoFlow)",
+    "Name": "cr4f5_execucaoflow_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "ExecuçãoFlow"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "ExecuçãoFlow",
+    "Type": "OptionSetInfo"
+  }
+]

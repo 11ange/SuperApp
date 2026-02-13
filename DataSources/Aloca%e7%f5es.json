@@ -1,0 +1,99 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_alocacoeses",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_alocacoes",
+    "MaxGetRowsCount": 2000,
+    "Name": "Alocações",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "cr4f5_aloc_dia": "Aloc_Dia",
+      "cr4f5_aloc_id": "Aloc_ID",
+      "cr4f5_aloc_periodo": "Aloc_Período",
+      "cr4f5_aloc_pessoa": "Aloc_Pessoa",
+      "cr4f5_aloc_tarefa": "Aloc_Tarefa",
+      "cr4f5_alocacoes_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_alocacoes_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_alocacoes_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_alocacoes_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_alocacoes_ProcessSession": "Sessões de Processo",
+      "cr4f5_alocacoes_SyncErrors": "Erros de Sincronização",
+      "cr4f5_alocacoesid": "Alocações",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "Alocações",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Alocações (Modos de exibição)",
+    "Name": "_cr4f5_alocacoes_views",
+    "RelatedEntityName": "Alocações",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "5a0f397c-9f8f-4fe8-b2ef-0145c2b6e7bf": "Alocações Ativos(as)",
+      "a846a135-a9e3-4f74-bc11-9b0fcf871d37": "Exibição de Localização Avançada de Alocações",
+      "b957eb11-e552-4274-8c8f-4fadafbdf0ea": "Alocações Inativos(as)",
+      "ddf2cddc-df6d-4d90-b889-63ce6d24a1c2": "Exibição de Consulta de Alocações",
+      "fb760c9c-ef7d-4c2f-a8cf-0d11740aed5f": "Exibição Associada de Alocações"
+    }
+  },
+  {
+    "DisplayName": "Status (Alocações)",
+    "Name": "cr4f5_alocacoes_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Alocações"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Alocações",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (Alocações)",
+    "Name": "cr4f5_alocacoes_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Alocações"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Alocações",
+    "Type": "OptionSetInfo"
+  }
+]

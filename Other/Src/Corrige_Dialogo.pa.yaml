@@ -1,0 +1,383 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  Corrige_Dialogo:
+    Properties:
+      Fill: =RGBA(232, 232, 232, 1)
+      LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: |-
+        =UpdateContext({MostraPopUp: false});
+        UpdateContext(
+            {
+                Tarefeiro: Dropdown_Tarefeiro.Selected.Value,
+                ID_A_Corrigir: Blank(),
+                Data_Dialogo: Today()
+            }
+        );
+    Children:
+      - Lbl_Titulo_7:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(241, 244, 249, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Font: =Font.'Open Sans'
+            Height: =88
+            Italic: =true
+            Size: =27
+            Text: ="Correção de Dialogo"
+            Width: =Parent.Width - Self.X
+            X: =80
+      - Icone_Voltar_Assistidos_5:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Height: =88
+            Icon: =Icon.BackArrow
+            OnSelect: =Navigate(Tela_Principal, ScreenTransition.CoverRight)
+            PaddingBottom: =24
+            PaddingLeft: =24
+            PaddingRight: =24
+            PaddingTop: =24
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Back to list"
+            Width: =88
+      - Lbl_Usuario_Logado_7:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(241, 244, 249, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =88
+            Italic: =true
+            Size: =28
+            Text: =Concatenate("   ",Usuario_Logado," - ",Perfil_Logado)
+            Width: =Parent.Width
+            Y: =Parent.Height-Self.Height
+      - Lbl_IDAssistido:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =60
+            Size: =27
+            Text: ="Selecione o ID do Assistido:"
+            Width: =550
+            X: '=(Parent.Width - Self.Width) / 2 '
+            Y: =Date_Dialogo.Y + Date_Dialogo.Height + 40
+      - Dropdown_Tarefeiro:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            ChevronBackground: =RGBA(0, 51, 102, 1)
+            ChevronFill: =RGBA(255, 255, 255, 1)
+            ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            ChevronHoverFill: =RGBA(255, 255, 255, 1)
+            Default: ="0"
+            Font: =Font.'Open Sans'
+            Height: =60
+            HoverFill: =RGBA(153, 205, 255, 1)
+            Items: |-
+              =SortByColumns( 
+                  Distinct( 
+                      Filter( 
+                          Pessoas, 
+                          'ID Pessoa' in  
+                          Distinct( 
+                              Filter(Alocações, Aloc_Tarefa = 24), 
+                              Aloc_Pessoa 
+                          ).Value 
+                      ), 
+                      'Nome Pessoa' 
+                  ), 
+                  "Value", // Ou "Result"
+                  SortOrder.Ascending 
+              )
+            Items.Value: =Value
+            OnChange: |-
+              =//false
+              UpdateContext({Tarefeiro: Dropdown_Tarefeiro.Selected.Value});
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =RGBA(0, 89, 178, 1)
+            SelectionColor: =RGBA(255, 255, 255, 1)
+            SelectionFill: =RGBA(0, 51, 102, 1)
+            Size: =24
+            Width: =550
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =lbl_Tarefeiro_Correto.Y + lbl_Tarefeiro_Correto.Height + 20
+      - Btn_Registra_Orientação_1:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            Height: =85
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |+
+              =//false
+              UpdateContext({MostraPopUp: true})
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Size: =27
+            Text: ="Confirma"
+            X: =(Parent.Width - Self.Width) / 2
+            Y: '=Dropdown_Tarefeiro.Y + Dropdown_Tarefeiro.Height + 50 '
+      - Fundo_Popup_4:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(100, 118, 132, 0.6)
+            Height: =Parent.Height - RectQuickActionBar3_3.Height
+            Visible: =MostraPopUp
+            Width: =Parent.Width
+            Y: =88
+      - lbl_Tarefeiro_Correto:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =60
+            Size: =27
+            Text: ="Selecione o Tarefeiro Correto:"
+            Width: =550
+            X: '=(Parent.Width - Self.Width) / 2 '
+            Y: =HtmlEntrevista.Y + HtmlEntrevista.Height + 20
+      - lbl_Data_Dialogo:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =60
+            Size: =27
+            Text: ="Escolha a data do Diálogo:"
+            Width: =550
+            X: '=(Parent.Width - Self.Width) / 2 '
+            Y: =90
+      - Date_Dialogo:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            DefaultDate: =Today()-2
+            Font: =Font.'Open Sans'
+            Height: =60
+            IconBackground: =RGBA(0, 51, 102, 1)
+            IconFill: =RGBA(255, 255, 255, 1)
+            OnChange: |-
+              =UpdateContext({Data_Dialogo: Date_Dialogo.SelectedDate});
+              UpdateContext(
+                  {
+                      ID_A_Corrigir: Drop_ID_a_Corrigir.SelectedText,
+                      Entrevista: LookUp(
+                          Assistências,
+                          // Filtro de data delegável
+                          'Data Entrevista' >= Date_Dialogo.SelectedDate &&
+                          'Data Entrevista' < DateAdd(Date_Dialogo.SelectedDate, 1, TimeUnit.Days) &&
+                          // Filtro de ID que já era delegável
+                          'ID Pessoa' = Drop_ID_a_Corrigir.Selected.Value
+                      ).Entrevistador,
+                      Dialogo: LookUp(
+                          Assistências_Encerradas,
+                          // Filtro de data delegável
+                          'Data Diálogo' >= Date_Dialogo.SelectedDate &&
+                          'Data Diálogo' < DateAdd(Date_Dialogo.SelectedDate, 1, TimeUnit.Days) &&
+                           // Filtro de ID que já era delegável
+                          'ID Pessoa' = Drop_ID_a_Corrigir.Selected.Value
+                      ).Dialogador
+                  }
+              )
+            Width: =300
+            X: '=(Parent.Width - Self.Width) / 2 '
+            Y: =lbl_Data_Dialogo.Y + lbl_Data_Dialogo.Height + 20
+      - Drop_ID_a_Corrigir:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            ChevronBackground: =RGBA(0, 51, 102, 1)
+            ChevronFill: =RGBA(255, 255, 255, 1)
+            ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            ChevronHoverFill: =RGBA(255, 255, 255, 1)
+            Font: =Font.'Open Sans'
+            Height: =60
+            HoverFill: =RGBA(153, 205, 255, 1)
+            Items: |-
+              =Sort(
+                  Distinct(
+                      Filter(
+                          Assistências_Encerradas,
+                          // --- INÍCIO DA CORREÇÃO ---
+                          // Compara a coluna de data/hora diretamente, sem usar a função Text()
+                          'Data Diálogo' >= Date_Dialogo.SelectedDate &&
+                          'Data Diálogo' < DateAdd(Date_Dialogo.SelectedDate, 1, TimeUnit.Days)
+                          // --- FIM DA CORREÇÃO ---
+                      ),
+                      'ID Pessoa'
+                  ),
+                  // A função Distinct retorna uma tabela com uma única coluna chamada "Result"
+                  Value,
+                  SortOrder.Ascending
+              )
+            Items.Value: =Value
+            OnChange: |-
+              =UpdateContext(
+                  {
+                      ID_A_Corrigir: Drop_ID_a_Corrigir.SelectedText,
+
+                      Entrevista: LookUp(
+                          Assistências,
+                          // Filtro de data delegável
+                          'Data Entrevista' >= Date_Dialogo.SelectedDate &&
+                          'Data Entrevista' < DateAdd(Date_Dialogo.SelectedDate, 1, TimeUnit.Days) &&
+                          // Filtro de ID que já era delegável
+                          'ID Pessoa' = Drop_ID_a_Corrigir.Selected.Value
+                      ).Entrevistador,
+
+                      Dialogo: LookUp(
+                          Assistências_Encerradas,
+                          // Filtro de data delegável
+                          'Data Diálogo' >= Date_Dialogo.SelectedDate &&
+                          'Data Diálogo' < DateAdd(Date_Dialogo.SelectedDate, 1, TimeUnit.Days) &&
+                           // Filtro de ID que já era delegável
+                          'ID Pessoa' = Drop_ID_a_Corrigir.Selected.Value
+                      ).Dialogador
+                  }
+              )
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =RGBA(0, 89, 178, 1)
+            SelectionColor: =RGBA(255, 255, 255, 1)
+            SelectionFill: =RGBA(0, 51, 102, 1)
+            Width: =180
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =Lbl_IDAssistido.Y + Lbl_IDAssistido.Height + 20
+      - HtmlEntrevista:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            Font: =Font.'Open Sans'
+            Height: =130
+            HtmlText: |-
+              ="<div style='text-align: center;'>
+                  Entrevistador: <br><b>" & Entrevista & "</b>
+              </div>"
+            Width: =300
+            X: =57
+            Y: =Drop_ID_a_Corrigir.Y + Drop_ID_a_Corrigir.Height + 20
+      - HtmlDialogo:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            Font: =Font.'Open Sans'
+            Height: =130
+            HtmlText: |-
+              ="<div style='text-align: center;'>
+                  Dialogador: <br><b>" & Dialogo & "</b>
+              </div>"
+            Width: =300
+            X: =372
+            Y: =HtmlEntrevista.Y
+      - Retangulo_Popup_Confirma_Envio_Dialogo_4:
+          Control: Rectangle@2.3.0
+          Group: Popup_Confirma_Orientação_1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =350
+            Visible: =MostraPopUp
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - lbl_Aviso_popup_Confirma_Envio_Dialogo_5:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Orientação_1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =Color.Red
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Text: ="Aviso"
+            Visible: =MostraPopUp
+            Width: =Retangulo_Popup_Confirma_Envio_Dialogo_4.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - Btn_Sim_Confirma_Orientação_1:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Orientação_1
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: "=//------------------------------------------------------------------------------------------\r\n// Log\r\nPatch(\r\n    Logs,\r\n    Defaults(Logs),\r\n    {\r\n        DataeHora: Now(),\r\n        DeviceID: DeviceID,\r\n        Ação: \"Registrado Alteração de Dialogador/Entrevistador para \" & ID_A_Corrigir.Value & \" na data de \" & Date_Dialogo.SelectedDate\r\n    }\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\nUpdateContext({\r\n    varRegistroEncerrado: LookUp(\r\n        Assistências_Encerradas,\r\n        'Data Diálogo' >= Date_Dialogo.SelectedDate &&\r\n        'Data Diálogo' < DateAdd(Date_Dialogo.SelectedDate, 1, TimeUnit.Days) &&\r\n        'ID Pessoa' = Drop_ID_a_Corrigir.Selected.Value\r\n    ),\r\n    varRegistroAssistencias: LookUp(\r\n        Assistências,\r\n        'Data Entrevista' >= Date_Dialogo.SelectedDate &&\r\n        'Data Entrevista' < DateAdd(Date_Dialogo.SelectedDate, 1, TimeUnit.Days) &&\r\n        'ID Pessoa' = Drop_ID_a_Corrigir.Selected.Value\r\n    )\r\n});\r\n\r\nUpdateContext({\r\n    MostraPopUp: false,\r\n    \r\n    // Atualiza o registro e captura o novo valor do campo 'Dialogador'\r\n    Dialogo: Patch(\r\n        Assistências_Encerradas,\r\n        varRegistroEncerrado, // Usa a variável encontrada na Etapa 1\r\n        { Dialogador: Dropdown_Tarefeiro.Selected.Value }\r\n    ).Dialogador,\r\n    \r\n    // Atualiza o segundo registro e captura o novo valor do campo 'Entrevistador'\r\n    Entrevista: Patch(\r\n        Assistências,\r\n        varRegistroAssistencias, // Usa a variável encontrada na Etapa 1\r\n        { Entrevistador: Dropdown_Tarefeiro.Selected.Value }\r\n    ).Entrevistador\r\n});"
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Sim"
+            Visible: =MostraPopUp
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_4.X + (Retangulo_Popup_Confirma_Envio_Dialogo_4.Width/4)*3 - Self.Width/2
+            Y: =710
+      - Btn_Nao_Confirma_Envio_Dialogo_2:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Orientação_1
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({MostraPopUp: false})
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Não"
+            Visible: =MostraPopUp
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_4.X + (Retangulo_Popup_Confirma_Envio_Dialogo_4.Width/4) - Self.Width/2
+            Y: =710
+      - HtmlText1_1:
+          Control: HtmlViewer@2.1.0
+          Group: Popup_Confirma_Orientação_1
+          Properties:
+            Font: =Font.'Open Sans'
+            Height: =200
+            HtmlText: |-
+              ="<div style='text-align: center;'>
+                  Confirma Alteração do <br>ID <b>" & ID_A_Corrigir.Value & "</b><br>na data de <b>" & Data_Dialogo & "</b><br> para 
+                  <b>" & Tarefeiro & " </b>
+              </div>"
+            Visible: =MostraPopUp
+            Width: =Retangulo_Popup_Confirma_Envio_Dialogo_4.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =505

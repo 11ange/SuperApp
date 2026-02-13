@@ -1,0 +1,107 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_presencases",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_presencas",
+    "MaxGetRowsCount": 2000,
+    "Name": "Presenças",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "cr4f5_a1": "A1",
+      "cr4f5_a2": "A2",
+      "cr4f5_a3": "A3",
+      "cr4f5_c1": "C1",
+      "cr4f5_c2": "C2",
+      "cr4f5_c3": "C3",
+      "cr4f5_data": "Data",
+      "cr4f5_dialogos": "Diálogos",
+      "cr4f5_entrevistas": "Entrevistas",
+      "cr4f5_id": "ID",
+      "cr4f5_periododia": "PeriodoDia",
+      "cr4f5_presencas_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_presencas_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_presencas_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_presencas_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_presencas_ProcessSession": "Sessões de Processo",
+      "cr4f5_presencas_SyncErrors": "Erros de Sincronização",
+      "cr4f5_presencasid": "Presenças",
+      "cr4f5_ps": "PS",
+      "cr4f5_pscriancas": "PS Crianças",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "Presenças",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Presenças (Modos de exibição)",
+    "Name": "_cr4f5_presencas_views",
+    "RelatedEntityName": "Presenças",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "10d40a83-a8dd-471c-ab5b-9210af4cf573": "Exibição Associada de Presenças",
+      "31c863f8-f7ca-486b-bd8a-57b89fc8c37f": "Exibição de Consulta de Presenças",
+      "597f0208-624b-4e34-8919-498e491a23c4": "Presenças Inativos(as)",
+      "e8ee4167-a770-4d3e-9dd0-58ab38df0356": "Exibição de Localização Avançada de Presenças",
+      "f15319d6-fe7a-4c5a-ad9a-3190f5ca162d": "Presenças Ativos(as)"
+    }
+  },
+  {
+    "DisplayName": "Status (Presenças)",
+    "Name": "cr4f5_presencas_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Presenças"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Presenças",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (Presenças)",
+    "Name": "cr4f5_presencas_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Presenças"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Presenças",
+    "Type": "OptionSetInfo"
+  }
+]

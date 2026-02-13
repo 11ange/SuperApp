@@ -1,0 +1,121 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_assistencias_encerradases",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_assistencias_encerradas",
+    "MaxGetRowsCount": 2000,
+    "Name": "Assistências_Encerradas",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "cr4f5_abandonou": "Abandonou",
+      "cr4f5_anotacoesdialogo": "Anotações Diálogo",
+      "cr4f5_anotacoesentrevista": "Anotações Entrevista",
+      "cr4f5_assistencia": "Assistência",
+      "cr4f5_assistenciamesmodia": "Assistência Mesmo Dia",
+      "cr4f5_assistencias_encerradas_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_assistencias_encerradas_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_assistencias_encerradas_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_assistencias_encerradas_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_assistencias_encerradas_ProcessSession": "Sessões de Processo",
+      "cr4f5_assistencias_encerradas_SyncErrors": "Erros de Sincronização",
+      "cr4f5_assistencias_encerradasid": "Assistências_Encerradas",
+      "cr4f5_continuatratamento": "Continua Tratamento",
+      "cr4f5_datadialogo": "Data Diálogo",
+      "cr4f5_dataentrevista": "Data Entrevista",
+      "cr4f5_dialogador": "Dialogador",
+      "cr4f5_diasemana": "Dia Semana",
+      "cr4f5_diasemanaentrevista": "Dia Semana Entrevista",
+      "cr4f5_entrevistador": "Entrevistador",
+      "cr4f5_entrevistanova": "Entrevista Nova",
+      "cr4f5_extra": "Extra",
+      "cr4f5_finalizada": "Finalizada",
+      "cr4f5_id": "ID",
+      "cr4f5_identrevista": "ID Assistência",
+      "cr4f5_idpessoa": "ID Pessoa",
+      "cr4f5_idpessoatexto": "ID Pessoa Texto",
+      "cr4f5_passoudialogo": "Passou Diálogo",
+      "cr4f5_primeiraassistencia": "Primeira Assistência",
+      "cr4f5_semana1": "Semana 1",
+      "cr4f5_semana2": "Semana 2",
+      "cr4f5_semana3": "Semana 3",
+      "cr4f5_semana4": "Semana 4",
+      "cr4f5_tratamentomedico": "Tratamento Médico",
+      "cr4f5_ultimocomparecimento": "Ultimo Comparecimento",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "Assistências_Encerradas",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Assistências_Encerradas (Modos de exibição)",
+    "Name": "_cr4f5_assistencias_encerradas_views",
+    "RelatedEntityName": "Assistências_Encerradas",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "539b21ff-f49d-4fab-a16b-2aec194d12e8": "Exibição Associada de Assistências_Encerradas",
+      "5cc3529c-1438-4935-a373-970ac653e330": "Exibição de Consulta de Assistências_Encerradas",
+      "65c07ea3-4c30-4749-ade0-9b9e6d9298bf": "Assistências_Encerradas Ativos(as)",
+      "9f784c45-111a-459f-8dc1-e2521acb29f0": "Assistências_Encerradas Inativos(as)",
+      "f4db2e18-b43c-4b7a-9e92-c4560f2d4af0": "Exibição de Localização Avançada de Assistências_Encerradas"
+    }
+  },
+  {
+    "DisplayName": "Status (Assistências_Encerradas)",
+    "Name": "cr4f5_assistencias_encerradas_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Assistências_Encerradas"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Assistências_Encerradas",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (Assistências_Encerradas)",
+    "Name": "cr4f5_assistencias_encerradas_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Assistências_Encerradas"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Assistências_Encerradas",
+    "Type": "OptionSetInfo"
+  }
+]

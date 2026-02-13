@@ -1,0 +1,99 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_controleversoeses",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_controleversoes",
+    "MaxGetRowsCount": 2000,
+    "Name": "ControleVersoes",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "cr4f5_controleversoes_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_controleversoes_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_controleversoes_DuplicateBaseRecord": "Registros Duplicados (cr4f5_controleversoes_DuplicateBaseRecord)",
+      "cr4f5_controleversoes_DuplicateMatchingRecord": "Registros Duplicados (cr4f5_controleversoes_DuplicateMatchingRecord)",
+      "cr4f5_controleversoes_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_controleversoes_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_controleversoes_ProcessSession": "Sessões de Processo",
+      "cr4f5_controleversoes_SyncErrors": "Erros de Sincronização",
+      "cr4f5_controleversoesid": "ControleVersoes",
+      "cr4f5_datapublicada": "DataPublicada",
+      "cr4f5_id": "AppNome",
+      "cr4f5_versaopublicada": "VersaoPublicada",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "ControleVersoes",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "ControleVersoes (Views)",
+    "Name": "_cr4f5_controleversoes_views",
+    "RelatedEntityName": "ControleVersoes",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "0fd3419e-530c-40f3-9525-9d79db81450a": "Exibição Associada de ControleVersoes",
+      "7596dc69-97ce-42eb-b899-b091df972bb9": "Exibição de Consulta de ControleVersoes",
+      "b8d6b589-a75b-46d4-a9ba-fa0b008b9b49": "ControleVersoes Ativos(as)",
+      "c0cc3767-c7ef-4aec-bbd6-02a217a3bad8": "Exibição de Localização Avançada de ControleVersoes",
+      "e480df9b-b199-4b5a-92ee-e00d1f4768f8": "ControleVersoes Inativos(as)"
+    }
+  },
+  {
+    "DisplayName": "Status (ControleVersoes)",
+    "Name": "cr4f5_controleversoes_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "ControleVersoes"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "ControleVersoes",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (ControleVersoes)",
+    "Name": "cr4f5_controleversoes_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "ControleVersoes"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "ControleVersoes",
+    "Type": "OptionSetInfo"
+  }
+]

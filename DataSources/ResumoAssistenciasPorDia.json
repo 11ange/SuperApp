@@ -1,0 +1,10 @@
+[
+  {
+    "ApiId": "/providers/microsoft.powerapps/apis/shared_logicflows",
+    "FlowNameId": "0fea178c-e8f4-4476-bc06-2f2326c9bf8c",
+    "Name": "ResumoAssistenciasPorDia",
+    "ServiceKind": "ConnectedWadl",
+    "Type": "ServiceInfo",
+    "WorkflowEntityId": "91260802-2088-f011-b4cc-000d3a890e4b"
+  }
+]

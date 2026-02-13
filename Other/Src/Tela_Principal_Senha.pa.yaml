@@ -1,0 +1,142 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  Tela_Principal_Senha:
+    Properties:
+      Fill: =RGBA(232, 232, 232, 1)
+      LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: |-
+        =//Set(Hora;Int(Text(Now();"hh")));;
+        //Set(DiaSemana;
+        //   Switch(
+        //       Weekday(Now());
+        //       1; "Domingo";
+        //       2; "Segunda";
+        //       3; "Terça";
+        //       4; "Quarta";
+        //       5; "Quinta";
+        //       6; "Sexta";
+        //       7; "Sabado"
+        //    )
+        //);;
+        //Set(Periodo;
+        //    If(Hora<12;"Manhã";
+        //        If(Hora<18;"Tarde";"Noite")
+        //    )
+        //);;
+        //Set(DiaComPeriodo;Concatenate(DiaSemana;"_";Periodo));;
+
+        //Define tolerancia de semanas que pode faltar na assistência:
+        //Set(tolerancia;2);;
+
+        //Zera variaveis dos popup
+        //Set(PopupApagaAssistido; false);;
+        //Set(PopupApagaEntrevista; false);;
+        //Set(PopupApagaTarefeiro; false);;
+        //Set(PopupApagaTodos; false);;
+        //Set(PopupConfirmaPresenca; false);;
+        //Set(PopupInformaNumero; false);;
+        Set(DialogoRealizado, false);
+    Children:
+      - LblAppName2_9:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Font: =Font.'Open Sans'
+            Height: =88
+            Size: =27
+            Text: ="Sistema CEOV"
+            Width: =262
+            Wrap: =false
+            X: =189
+      - Img_CEOV_6:
+          Control: Image@2.2.3
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Height: =372
+            Image: =logo
+            ImagePosition: =ImagePosition.Fill
+            Width: =610
+            X: =15
+            Y: =194
+      - Btn_Cadastro_Assistidos_5:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: =Navigate(Tela_Busca_Assistidos, ScreenTransition.Cover)
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Cadastrar senha"
+            Tooltip: ="Acessa o cadastro dos Assistidos"
+            Width: =300
+            X: =195
+            Y: =600
+      - Lbl_Titulo_6:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(241, 244, 249, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Font: =Font.'Lato Light'
+            FontWeight: =FontWeight.Bold
+            Height: =158
+            Italic: =true
+            Size: =35
+            Text: ="S I S T E M A   U N I F I C A D O"
+            Width: =Parent.Width
+      - Lbl_Usuario_Logado_6:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(241, 244, 249, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =96
+            Italic: =true
+            Size: =28
+            Text: =Concatenate("   ",Usuario_Logado," - ",Perfil_Logado)
+            Width: =Parent.Width
+            Y: =Parent.Height- Self.Height
+      - Icon2_5:
+          Control: Classic/Icon@2.5.0
+          Group: Voltar_Login_5
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(250, 250, 250, 1)
+            Icon: =Icon.Home
+            OnSelect: =Navigate(Tela_Login,ScreenTransition.None)
+            X: =542
+            Y: =1054
+      - Label9_6:
+          Control: Label@2.5.1
+          Group: Voltar_Login_5
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(250, 250, 250, 1)
+            Font: =Font.'Open Sans'
+            Height: =72
+            OnSelect: =Navigate(Tela_Login,ScreenTransition.None)
+            Size: =24
+            Text: ="Login"
+            Width: =120
+            X: =439
+            Y: =1054

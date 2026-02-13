@@ -1,0 +1,125 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_assistencias",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_assistencia",
+    "MaxGetRowsCount": 2000,
+    "Name": "Assistências",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "{Attachments}": "Attachments",
+      "cr4f5_abandonou": "Abandonou",
+      "cr4f5_anotacoesdialogo": "Anotações Diálogo",
+      "cr4f5_anotacoesentrevista": "Anotações Entrevista",
+      "cr4f5_assistencia": "Assistência (cr4f5_assistencia)",
+      "cr4f5_assistencia_Annotations": "Anotações",
+      "cr4f5_assistencia_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_assistencia_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_assistencia_DuplicateBaseRecord": "Registros Duplicados (cr4f5_assistencia_DuplicateBaseRecord)",
+      "cr4f5_assistencia_DuplicateMatchingRecord": "Registros Duplicados (cr4f5_assistencia_DuplicateMatchingRecord)",
+      "cr4f5_assistencia_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_assistencia_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_assistencia_ProcessSession": "Sessões de Processo",
+      "cr4f5_assistencia_SyncErrors": "Erros de Sincronização",
+      "cr4f5_assistencia1": "ID",
+      "cr4f5_assistenciaid": "Assistência (cr4f5_assistenciaid)",
+      "cr4f5_assistenciamesmodia": "Assistência Mesmo Dia",
+      "cr4f5_continuatratamento": "Continua Tratamento",
+      "cr4f5_datadialogo": "Data Diálogo",
+      "cr4f5_dataentrevista": "Data Entrevista",
+      "cr4f5_dialogador": "Dialogador",
+      "cr4f5_diasemana": "Dia Semana",
+      "cr4f5_diasemanaentrevista": "Dia Semana Entrevista",
+      "cr4f5_entrevistador": "Entrevistador",
+      "cr4f5_entrevistanova": "Entrevista Nova",
+      "cr4f5_extra": "Extra",
+      "cr4f5_finalizada": "Finalizada",
+      "cr4f5_idassistencia": "ID Assistência",
+      "cr4f5_idpessoa": "ID Pessoa",
+      "cr4f5_idpessoatexto": "ID Pessoa Texto",
+      "cr4f5_passoudialogo": "Passou Diálogo",
+      "cr4f5_primeiraassistencia": "Primeira Assistência",
+      "cr4f5_semana1": "Semana 1",
+      "cr4f5_semana2": "Semana 2",
+      "cr4f5_semana3": "Semana 3",
+      "cr4f5_semana4": "Semana 4",
+      "cr4f5_tratamentomedico": "Tratamento Médico",
+      "cr4f5_ultimocomparecimento": "Ultimo Comparecimento",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "Assistências",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Assistências (Modos de exibição)",
+    "Name": "_cr4f5_assistencia_views",
+    "RelatedEntityName": "Assistências",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "6873da04-5a4f-45e2-bccc-1b86cb4580cb": "Exibição de Localização Avançada de Assistência",
+      "7f7d4320-af57-428a-b100-69a4ab0532a5": "Assistência Ativos(as)",
+      "d634bc9c-60b0-4655-ba4b-af79f69b4fbc": "Assistência Inativos(as)",
+      "e4ffa264-5340-4a55-ad03-622183682561": "Exibição de Consulta de Assistência",
+      "e6081493-53cd-4037-95c3-60cb644788cf": "Exibição Associada de Assistência"
+    }
+  },
+  {
+    "DisplayName": "Status (Assistências)",
+    "Name": "cr4f5_assistencia_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Assistências"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Assistências",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (Assistências)",
+    "Name": "cr4f5_assistencia_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Assistências"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Assistências",
+    "Type": "OptionSetInfo"
+  }
+]

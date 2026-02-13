@@ -1,0 +1,195 @@
+{
+  "35cfe2ae-d57a-48aa-b3d0-15414564ac0b": {
+    "appActions": [
+      "Run"
+    ],
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "Logic flows",
+      "iconUri": "https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/v1.0.1774/1.0.1774.4397/logicflows/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_logicflows",
+      "parameterHints": {
+        "46c2fd56-48e2-4169-944a-3b8a133fc284": {
+          "value": "shared_commondataserviceforapps"
+        },
+        "workflowDisplayName": {
+          "value": "LogAlteracaoCampos"
+        },
+        "workflowEntityId": {
+          "value": "123047f1-d5e0-f011-8406-6045bd3afadd"
+        },
+        "workflowName": {
+          "value": "3d8b11cb-714a-8ad6-0bf4-f8cd987c466d"
+        }
+      },
+      "parameterHintsV2": {
+        "shared_commondataserviceforapps": {
+          "value": "46c2fd56-48e2-4169-944a-3b8a133fc284"
+        },
+        "workflowDisplayName": {
+          "value": "LogAlteracaoCampos"
+        },
+        "workflowEntityId": {
+          "value": "123047f1-d5e0-f011-8406-6045bd3afadd"
+        },
+        "workflowName": {
+          "value": "3d8b11cb-714a-8ad6-0bf4-f8cd987c466d"
+        }
+      }
+    },
+    "datasets": {},
+    "dataSources": [
+      "LogAlteracaoCampos"
+    ],
+    "dependencies": {
+      "shared_commondataserviceforapps": "46c2fd56-48e2-4169-944a-3b8a133fc284"
+    },
+    "dependents": [],
+    "id": "35cfe2ae-d57a-48aa-b3d0-15414564ac0b"
+  },
+  "46c2fd56-48e2-4169-944a-3b8a133fc284": {
+    "appActions": [],
+    "connectionRef": {
+      "apiTier": "Premium",
+      "bypassConsent": true,
+      "displayName": "Microsoft Dataverse",
+      "iconUri": "https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1797/1.0.1797.4592/commondataserviceforapps/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_commondataserviceforapps",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {},
+    "dataSources": [],
+    "dependencies": {},
+    "dependents": [
+      "aca76616-a3eb-4383-b165-eba9d6b0c700",
+      "35cfe2ae-d57a-48aa-b3d0-15414564ac0b"
+    ],
+    "id": "46c2fd56-48e2-4169-944a-3b8a133fc284"
+  },
+  "74689172-d4be-4dab-aa51-13f8fecdda87": {
+    "appActions": [
+      "Run"
+    ],
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "Logic flows",
+      "iconUri": "https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/v1.0.1774/1.0.1774.4397/logicflows/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_logicflows",
+      "parameterHints": {
+        "beb57156-db56-4029-aefd-42710b067267": {
+          "value": "shared_commondataserviceforapps"
+        },
+        "workflowDisplayName": {
+          "value": "ResumoAssistenciasPorDia"
+        },
+        "workflowEntityId": {
+          "value": "91260802-2088-f011-b4cc-000d3a890e4b"
+        },
+        "workflowName": {
+          "value": "50c59c2c-49a8-6377-383a-703729db2c4e"
+        }
+      },
+      "parameterHintsV2": {
+        "shared_commondataserviceforapps": {
+          "value": "beb57156-db56-4029-aefd-42710b067267"
+        },
+        "workflowDisplayName": {
+          "value": "ResumoAssistenciasPorDia"
+        },
+        "workflowEntityId": {
+          "value": "91260802-2088-f011-b4cc-000d3a890e4b"
+        },
+        "workflowName": {
+          "value": "50c59c2c-49a8-6377-383a-703729db2c4e"
+        }
+      }
+    },
+    "datasets": {},
+    "dataSources": [
+      "ResumoAssistenciasPorDia"
+    ],
+    "dependencies": {
+      "shared_commondataserviceforapps": "beb57156-db56-4029-aefd-42710b067267"
+    },
+    "dependents": [],
+    "id": "74689172-d4be-4dab-aa51-13f8fecdda87"
+  },
+  "aca76616-a3eb-4383-b165-eba9d6b0c700": {
+    "appActions": [
+      "Run"
+    ],
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "Logic flows",
+      "iconUri": "https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/v1.0.1774/1.0.1774.4397/logicflows/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_logicflows",
+      "parameterHints": {
+        "46c2fd56-48e2-4169-944a-3b8a133fc284": {
+          "value": "shared_commondataserviceforapps"
+        },
+        "workflowDisplayName": {
+          "value": "EncerrarAssistencia"
+        },
+        "workflowEntityId": {
+          "value": "6e9204ed-f925-f011-8c4d-000d3a890e4b"
+        },
+        "workflowName": {
+          "value": "7bda97ab-ad1e-1208-c701-158ed62f56dc"
+        }
+      },
+      "parameterHintsV2": {
+        "shared_commondataserviceforapps": {
+          "value": "46c2fd56-48e2-4169-944a-3b8a133fc284"
+        },
+        "workflowDisplayName": {
+          "value": "EncerrarAssistencia"
+        },
+        "workflowEntityId": {
+          "value": "6e9204ed-f925-f011-8c4d-000d3a890e4b"
+        },
+        "workflowName": {
+          "value": "7bda97ab-ad1e-1208-c701-158ed62f56dc"
+        }
+      }
+    },
+    "datasets": {},
+    "dataSources": [
+      "EncerrarAssistencia"
+    ],
+    "dependencies": {
+      "shared_commondataserviceforapps": "46c2fd56-48e2-4169-944a-3b8a133fc284"
+    },
+    "dependents": [],
+    "id": "aca76616-a3eb-4383-b165-eba9d6b0c700"
+  },
+  "beb57156-db56-4029-aefd-42710b067267": {
+    "appActions": [],
+    "connectionRef": {
+      "apiTier": "Premium",
+      "authenticationType": "Oauth",
+      "bypassConsent": true,
+      "displayName": "Microsoft Dataverse",
+      "executionRestrictions": {
+        "apiId": "unknown",
+        "appVer": "3.26014.7",
+        "modifiedOn": "2026-02-13 14:07:21",
+        "policy": "{\"type\":\"unused\"}",
+        "version": 1
+      },
+      "iconUri": "https://conn-afd-prod-endpoint-bmc9bqahasf3grgk.b01.azurefd.net/releases/v1.0.1797/1.0.1797.4592/commondataserviceforapps/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_commondataserviceforapps",
+      "parameterHints": {},
+      "parameterHintsV2": {},
+      "sharedConnectionId": "/providers/microsoft.powerapps/apis/shared_commondataserviceforapps/connections/shared-commondataser-b0486005-6d1a-4240-af55-81bc11649069",
+      "xrmConnectionReferenceLogicalName": "new_sharedcommondataserviceforapps_b79bf"
+    },
+    "datasets": {},
+    "dataSources": [],
+    "dependencies": {},
+    "dependents": [
+      "74689172-d4be-4dab-aa51-13f8fecdda87"
+    ],
+    "id": "beb57156-db56-4029-aefd-42710b067267"
+  }
+}

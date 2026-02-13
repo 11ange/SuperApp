@@ -1,0 +1,276 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  Orientação:
+    Properties:
+      Fill: =RGBA(232, 232, 232, 1)
+      LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: |-
+        =UpdateContext({MostraPopUp: false});
+        UpdateContext({Orientador: Dropdown_Orientação.Selected.Value});
+    Children:
+      - Lbl_Titulo_5:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(241, 244, 249, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Font: =Font.'Open Sans'
+            Height: =88
+            Italic: =true
+            Size: =27
+            Text: ="Registro de Orientação"
+            Width: =Parent.Width - Self.X
+            X: =80
+      - Icone_Voltar_Assistidos_4:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Height: =88
+            Icon: =Icon.BackArrow
+            OnSelect: =Navigate(Tela_Principal, ScreenTransition.CoverRight)
+            PaddingBottom: =24
+            PaddingLeft: =24
+            PaddingRight: =24
+            PaddingTop: =24
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Back to list"
+            Width: =88
+      - Lbl_Usuario_Logado_5:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(241, 244, 249, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =88
+            Italic: =true
+            Size: =28
+            Text: =Concatenate("   ",Usuario_Logado," - ",Perfil_Logado)
+            Width: =Parent.Width
+            Y: =Parent.Height-Self.Height
+      - Dropdown_Orientação:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            ChevronBackground: =RGBA(0, 51, 102, 1)
+            ChevronFill: =RGBA(255, 255, 255, 1)
+            ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            ChevronHoverFill: =RGBA(255, 255, 255, 1)
+            Default: |+
+              ="1"
+            Font: =Font.'Open Sans'
+            HoverFill: =RGBA(153, 205, 255, 1)
+            Items: |-
+              =SortByColumns( 
+                  Distinct( 
+                      Filter( 
+                          Pessoas, 
+                          'ID Pessoa' in  
+                          Distinct( 
+                              Filter(Alocações, Aloc_Tarefa = 24), 
+                              Aloc_Pessoa 
+                          ).Value 
+                      ), 
+                      'Nome Pessoa' 
+                  ), 
+                  "Value", // Ou "Result"
+                  SortOrder.Ascending 
+              )
+            Items.Value: =Value
+            OnChange: |-
+              =//false
+              UpdateContext({Orientador: Dropdown_Orientação.Selected.Value});
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =RGBA(0, 89, 178, 1)
+            SelectionColor: =RGBA(255, 255, 255, 1)
+            SelectionFill: =RGBA(0, 51, 102, 1)
+            Size: =24
+            Width: =550
+            X: '=(Parent.Width - Self.Width) / 2     '
+            Y: =Label10.Y + Label10.Height + 50
+      - Btn_Registra_Orientação:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            Height: =85
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |+
+              =//false
+              UpdateContext({MostraPopUp: true})
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Size: =27
+            Text: ="Confirma"
+            X: =(Parent.Width - Self.Width) / 2
+            Y: '=Dropdown_Orientação.Y + Dropdown_Orientação.Height + 50 '
+      - Label10:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =100
+            Size: =27
+            Text: ="Para qual Tarefeiro deseja registrar a Orientação?"
+            Width: =550
+            X: '=(Parent.Width - Self.Width) / 2 '
+            Y: =200
+      - Fundo_Popup_2:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(100, 118, 132, 0.6)
+            Height: =Parent.Height - RectQuickActionBar3_3.Height
+            Visible: =MostraPopUp
+            Width: =Parent.Width
+            Y: =88
+      - Retangulo_Popup_Confirma_Envio_Dialogo_3:
+          Control: Rectangle@2.3.0
+          Group: Popup_Confirma_Orientação
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =MostraPopUp
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - lbl_Aviso_popup_Confirma_Envio_Dialogo_3:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Orientação
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =Color.Red
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Text: ="Aviso"
+            Visible: =MostraPopUp
+            Width: =Retangulo_Popup_Confirma_Envio_Dialogo_3.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - Btn_Sim_Confirma_Orientação:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Orientação
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =//------------------------------------------------------------------------------------------
+              // Log
+              Patch(
+                  Logs,
+                  Defaults(Logs),
+                  {
+                      DataeHora: Now(),
+                      DeviceID: DeviceID,
+                      Ação: "Registrado Orientação para " & Orientador
+                  }
+              );
+              //------------------------------------------------------------------------------------------
+
+              //------------------------------------------------------------------------------------------
+              Patch(Assistências_Encerradas,
+                  Defaults(Assistências_Encerradas),
+                  {
+                      'ID Pessoa': 0,
+                      'ID Pessoa Texto': 0,
+                      'ID Assistência': "E00000000",
+                      'Data Entrevista': DateValue(Today()),
+                      Entrevistador: Orientador,
+                      'Dia Semana': DiaComPeriodo,
+                      'Dia Semana Entrevista': DiaComPeriodo,
+                      'Primeira Assistência': "Sim",
+                      Assistência: "Orientação",
+                      'Tratamento Médico': "Não",
+                      'Anotações Entrevista': "Apenas orientação",
+                      'Ultimo Comparecimento': DateValue(Today()),
+                      Extra: 0,
+                      Finalizada: "Sim",
+                      'Assistência Mesmo Dia': "Não",
+                      'Continua Tratamento': "Não",
+                      'Data Diálogo': DateValue(Today()),
+                      Dialogador: Orientador
+                  }
+              );
+              //------------------------------------------------------------------------------------------
+
+              UpdateContext({MostraPopUp: false});
+
+              Back();
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Sim"
+            Visible: =MostraPopUp
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_3.X + (Retangulo_Popup_Confirma_Envio_Dialogo_3.Width/4)*3 - Self.Width/2
+            Y: =630
+      - Btn_Nao_Confirma_Envio_Dialogo_1:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Orientação
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({MostraPopUp: false})
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Não"
+            Visible: =MostraPopUp
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_3.X + (Retangulo_Popup_Confirma_Envio_Dialogo_3.Width/4) - Self.Width/2
+            Y: =630
+      - HtmlText1:
+          Control: HtmlViewer@2.1.0
+          Group: Popup_Confirma_Orientação
+          Properties:
+            Font: =Font.'Open Sans'
+            Height: =100
+            HtmlText: |-
+              ="<div style='text-align: center;'>
+                  Confirma Orientação para:<br> 
+                  <b>" & Orientador & "</b>
+              </div>"
+            Visible: =MostraPopUp
+            Width: =Retangulo_Popup_Confirma_Envio_Dialogo_3.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =505

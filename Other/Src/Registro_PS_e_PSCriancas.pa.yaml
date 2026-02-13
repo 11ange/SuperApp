@@ -1,0 +1,350 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  Registro_PS_e_PSCriancas:
+    Properties:
+      Fill: =RGBA(232, 232, 232, 1)
+      LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: |
+        =Reset(txt_PS);
+        Reset(txt_PSC);
+
+        UpdateContext(
+            {
+                Atual_PS:  0,
+                Atual_PSC: 0,
+                Mostra_PSC: false
+            }
+        );
+
+        Refresh(Presenças);
+
+        With(
+            {
+                dataInicial: Data_Inicial_1.SelectedDate,
+                periodoSelecionado: Dropdown_Periodo_2.Selected.Value,
+                isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5
+            },
+
+            If(
+                Weekday(Data_Inicial_1.SelectedDate) = 5,
+
+                // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período
+                UpdateContext({
+                    diaSelecionado: LookUp(
+                        Presenças,
+                        Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy") &&
+                        PeriodoDia = Dropdown_Periodo_2.Selected.Value
+                    )
+                }),
+
+                // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data
+                UpdateContext({
+                    diaSelecionado: LookUp(
+                        Presenças,
+                        Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy")
+                    )
+                })
+            );
+
+            UpdateContext({
+                Atual_PS: diaSelecionado.PS,
+                Atual_PSC: diaSelecionado.'PS Crianças',
+                Mostra_PSC:
+                    Or(
+                        Weekday(dataInicial) = 4, // Quarta
+                        Weekday(dataInicial) = 7, // Sábado
+                        Weekday(dataInicial) = 1, // Domingo
+                        And(
+                            Weekday(dataInicial) = 5, // Quinta
+                            periodoSelecionado = "Tarde"
+                        )
+                    )
+            });
+        );
+    Children:
+      - RectQuickActionBar3_13:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Height: =88
+            Width: =Parent.Width
+      - Icone_Cancela_Controle_4:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =88
+            Icon: =Icon.CancelBadge
+            OnSelect: =Back()
+            PaddingBottom: =22
+            PaddingLeft: =22
+            PaddingRight: =22
+            PaddingTop: =22
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Cancel item"
+            Width: =88
+      - LblAppName3_7:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =RGBA(58, 58, 58, 0)
+            Font: =Font.'Open Sans'
+            Height: =88
+            Size: =27
+            Text: ="Totais de Passes Simples"
+            Width: =Parent.Width - Icone_Cancela_Controle_4.Width
+            Wrap: =false
+            X: =80
+      - lbl_Data_Inicial_1:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            Text: ="Data"
+            Visible: =false
+            Width: =180
+            X: =App.MinScreenWidth/4 - Self.Width/2 - 20
+            Y: =100
+      - Data_Inicial_1:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            IconBackground: =RGBA(0, 51, 102, 1)
+            IconFill: =RGBA(255, 255, 255, 1)
+            OnChange: |-
+              =Refresh(Presenças);
+
+              With(
+                  {
+                      dataInicial: Data_Inicial_1.SelectedDate,
+                      periodoSelecionado: Dropdown_Periodo_2.Selected.Value,
+                      isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5
+                  },
+
+                  If(
+                      Weekday(Data_Inicial_1.SelectedDate) = 5,
+
+                      // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período
+                      UpdateContext({
+                          diaSelecionado: LookUp(
+                              Presenças,
+                              Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy") &&
+                              PeriodoDia = Dropdown_Periodo_2.Selected.Value
+                          )
+                      }),
+
+                      // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data
+                      UpdateContext({
+                          diaSelecionado: LookUp(
+                              Presenças,
+                              Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy")
+                          )
+                      })
+                  );
+
+                  UpdateContext({
+                      Atual_PS: diaSelecionado.PS,
+                      Atual_PSC: diaSelecionado.'PS Crianças',
+                      Mostra_PSC:
+                          Or(
+                              Weekday(dataInicial) = 4, // Quarta
+                              Weekday(dataInicial) = 7, // Sábado
+                              Weekday(dataInicial) = 1, // Domingo
+                              And(
+                                  Weekday(dataInicial) = 5, // Quinta
+                                  periodoSelecionado = "Tarde"
+                              )
+                          )
+                  });
+              );
+            Width: =250
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =RectQuickActionBar3_13.X + RectQuickActionBar3_13.Height + 60
+      - Dropdown_Periodo_2:
+          Control: Classic/DropDown@2.3.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            ChevronBackground: =RGBA(0, 51, 102, 1)
+            ChevronFill: =RGBA(255, 255, 255, 1)
+            ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            ChevronHoverFill: =RGBA(255, 255, 255, 1)
+            Font: =Font.'Open Sans'
+            Height: =50
+            HoverFill: =RGBA(153, 205, 255, 1)
+            Items: =["Tarde", "Noite"]
+            Items.Value: =Value
+            OnChange: |-
+              =Refresh(Presenças);
+
+              With(
+                  {
+                      dataInicial: Data_Inicial_1.SelectedDate,
+                      periodoSelecionado: Dropdown_Periodo_2.Selected.Value,
+                      isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5
+                  },
+
+                  If(
+                      Weekday(Data_Inicial_1.SelectedDate) = 5,
+
+                      // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período
+                      UpdateContext({
+                          diaSelecionado: LookUp(
+                              Presenças,
+                              Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy") &&
+                              PeriodoDia = Dropdown_Periodo_2.Selected.Value
+                          )
+                      }),
+
+                      // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data
+                      UpdateContext({
+                          diaSelecionado: LookUp(
+                              Presenças,
+                              Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy")
+                          )
+                      })
+                  );
+
+                  UpdateContext({
+                      Atual_PS: diaSelecionado.PS,
+                      Atual_PSC: diaSelecionado.'PS Crianças',
+                      Mostra_PSC:
+                          Or(
+                              Weekday(dataInicial) = 4, // Quarta
+                              Weekday(dataInicial) = 7, // Sábado
+                              Weekday(dataInicial) = 1, // Domingo
+                              And(
+                                  Weekday(dataInicial) = 5, // Quinta
+                                  periodoSelecionado = "Tarde"
+                              )
+                          )
+                  });
+              );
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =RGBA(0, 89, 178, 1)
+            SelectionColor: =RGBA(255, 255, 255, 1)
+            SelectionFill: =RGBA(0, 51, 102, 1)
+            Visible: =(Weekday(Data_Inicial_1.SelectedDate) = 5) //true
+            Width: =300
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =Data_Inicial_1.Y + Data_Inicial_1.Height + 30
+      - btn_Enviar:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: "=If(\r\n    !IsBlank(diaSelecionado),\r\n    With(\r\n        {\r\n            valorPS:\r\n                If(\r\n                    IsBlank(txt_PS.Text),\r\n                    diaSelecionado.PS,\r\n                    Value(txt_PS.Text)\r\n                ),\r\n\r\n            valorPSC:\r\n                If(\r\n                    Mostra_PSC,\r\n                    If(\r\n                        IsBlank(txt_PSC.Text),\r\n                        diaSelecionado.'PS Crianças',\r\n                        Value(txt_PSC.Text)\r\n                    ),\r\n                    diaSelecionado.'PS Crianças'\r\n                )\r\n        },\r\n\r\n        Patch(\r\n            Presenças,\r\n            diaSelecionado,\r\n            {\r\n                PS: valorPS,\r\n                'PS Crianças': valorPSC\r\n            }\r\n        )\r\n    )\r\n);\r\n\r\nRefresh(Presenças);\r\n\r\nWith(\r\n    {\r\n        dataInicial: Data_Inicial_1.SelectedDate,\r\n        periodoSelecionado: Dropdown_Periodo_2.Selected.Value,\r\n        isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5\r\n    },\r\n\r\n    If(\r\n        Weekday(Data_Inicial_1.SelectedDate) = 5,\r\n\r\n        // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período\r\n        UpdateContext({\r\n            diaSelecionado: LookUp(\r\n                Presenças,\r\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\") &&\r\n                PeriodoDia = Dropdown_Periodo_2.Selected.Value\r\n            )\r\n        }),\r\n\r\n        // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data\r\n        UpdateContext({\r\n            diaSelecionado: LookUp(\r\n                Presenças,\r\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\")\r\n            )\r\n        })\r\n    );\r\n\r\n    UpdateContext({\r\n        Atual_PS: diaSelecionado.PS,\r\n        Atual_PSC: diaSelecionado.'PS Crianças',\r\n        Mostra_PSC:\r\n            Or(\r\n                Weekday(dataInicial) = 4, // Quarta\r\n                Weekday(dataInicial) = 7, // Sábado\r\n                Weekday(dataInicial) = 1, // Domingo\r\n                And(\r\n                    Weekday(dataInicial) = 5, // Quinta\r\n                    periodoSelecionado = \"Tarde\"\r\n                )\r\n            )\r\n    });\r\n    \r\n);"
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Gravar Valores"
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =txt_PSC.Y + txt_PSC.Height + 100
+      - txt_PS:
+          Control: Classic/TextInput@2.3.2
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Default: =
+            Font: =Font.'Open Sans'
+            Format: =TextFormat.Number
+            HintText: ="PS"
+            HoverBorderColor: =RGBA(0, 89, 178, 1)
+            HoverFill: =RGBA(153, 205, 255, 1)
+            Width: =180
+            X: =320
+            Y: =lbl_Explicacao.Y + lbl_Explicacao.Height + 100
+      - txt_PSC:
+          Control: Classic/TextInput@2.3.2
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Default: =
+            Font: =Font.'Open Sans'
+            Format: =TextFormat.Number
+            HintText: ="PS Crianças"
+            HoverBorderColor: =RGBA(0, 89, 178, 1)
+            HoverFill: =RGBA(153, 205, 255, 1)
+            Visible: =Mostra_PSC
+            Width: =180
+            X: =txt_PS.X
+            Y: =txt_PS.Y + txt_PS.Height + 50
+      - lbl_Explicacao:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =100
+            Size: =27
+            Text: ="Digite somente os valores de passes de assistidos"
+            Width: =550
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =Dropdown_Periodo_2.Y + Dropdown_Periodo_2.Height + 30
+      - lbl_PS:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Text: ="PS"
+            Width: =180
+            X: =20
+            Y: =txt_PS.Y
+      - lbl_PSC:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Text: ="PS Crianças"
+            Visible: =Mostra_PSC
+            Width: =180
+            X: =20
+            Y: =txt_PSC.Y
+      - lbl_Atual_Novo:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Text: ="Atual           Novo"
+            Width: =300
+            X: =220
+            Y: =lbl_Explicacao.Y + lbl_Explicacao.Height + 30
+      - lbl_Atual_PS:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Right
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Text: =Atual_PS
+            Width: =70
+            X: =220
+            Y: =txt_PS.Y
+      - lbl_Atual_PSC:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Right
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Text: =Atual_PSC
+            Visible: =Mostra_PSC
+            Width: =70
+            X: =lbl_Atual_PS.X
+            Y: =txt_PSC.Y

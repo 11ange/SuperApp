@@ -1,0 +1,259 @@
+Resumo_Geral As screen:
+    Fill: =RGBA(232, 232, 232, 1)
+    OnVisible: =true
+
+    RectQuickActionBar3_10 As rectangle:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        Height: =88
+        Width: =Parent.Width
+        ZIndex: =6
+
+    Icone_Cancela_Controle_2 As icon.Cancel:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.CancelBadge
+        OnSelect: =Back()
+        PaddingBottom: =22
+        PaddingLeft: =22
+        PaddingRight: =22
+        PaddingTop: =22
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Cancel item"
+        Width: =88
+        ZIndex: =7
+
+    LblAppName3_5 As label:
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(58, 58, 58, 0)
+        Height: =88
+        Size: =27
+        Text: ="Resumo Geral"
+        Width: =Parent.Width - Icone_Cancela_Controle_2.Width
+        Wrap: =false
+        X: =80
+        ZIndex: =9
+
+    HTML_Assistencias_1 As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            =//"Exiba seu texto <b><font color=blue>HTML</font></b> aqui."
+            "Assistências em aberto: <b>" & Assistencias
+        Size: =21
+        Width: =450
+        X: =95
+        Y: =200
+        ZIndex: =13
+
+    HTML_Aguardando_Dialogo_1 As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            =//"Exiba seu texto <b><font color=blue>HTML</font></b> aqui."
+            "Aguardando diálogo: <b>" & AguardandoDialogos
+        Size: =21
+        Width: =450
+        X: =98
+        Y: =650
+        ZIndex: =15
+
+    Dropdown_Dia_Semana As dropdown:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        ChevronBackground: =RGBA(0, 51, 102, 1)
+        ChevronDisabledBackground: =RGBA(166, 166, 166, 1)
+        ChevronDisabledFill: =RGBA(244, 244, 244, 1)
+        ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        ChevronHoverFill: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Height: =50
+        HoverColor: =RGBA(0, 0, 0, 1)
+        HoverFill: =RGBA(153, 205, 255, 1)
+        Items: =DiasAssistência
+        OnChange: |
+            =ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Dia_Semana.Selected.Value
+                )
+            );
+            Set(Assistencias, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    Finalizada = "Sim",
+                    'Dia Semana' = Dropdown_Dia_Semana.Selected.Value
+                )
+            );
+            Set(AguardandoDialogos, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    IsBlank('Semana 1'),
+                    'Dia Semana' = Dropdown_Dia_Semana.Selected.Value
+                )
+            );
+            Set(SoEntrevista, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Dia_Semana.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasFinal,
+                Filter(
+                    ColecaoAssistenciasFiltradas,
+                    IsBlank('Semana 2') &&
+                    IsBlank('Semana 3') &&
+                    IsBlank('Semana 4') &&
+                    DateDiff('Semana 1', Now()) > tolerancia * 7
+                )
+            );
+            Set(So1aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Dia_Semana.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasFinal,
+                Filter(
+                    ColecaoAssistenciasFiltradas,
+                    IsBlank('Semana 3') &&
+                    IsBlank('Semana 4') &&
+                    DateDiff('Semana 2', Now()) > tolerancia * 7
+                )
+            );
+            Set(So2aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Dia_Semana.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasFinal,
+                Filter(
+                    ColecaoAssistenciasFiltradas,
+                    IsBlank('Semana 4') &&
+                    DateDiff('Semana 3', Now()) > tolerancia * 7
+                )
+            );
+            Set(So3aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            
+            Set(ForaPrazo,
+                SoEntrevista + So1aSemana + So2aSemana + So3aSemana
+            );
+            //------
+            
+            Set(DentroPrazo,
+                Assistencias - ForaPrazo
+            );
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =RGBA(0, 89, 178, 1)
+        SelectionFill: =RGBA(0, 51, 102, 1)
+        Size: =21
+        Width: =300
+        X: =170
+        Y: =121
+        ZIndex: =16
+
+    HTML_Aguardando_Dialogo_2 As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            =//"Exiba seu texto <b><font color=blue>HTML</font></b> aqui."
+            "Dentro do prazo: <b>" & DentroPrazo
+        Size: =21
+        Width: =450
+        X: =98
+        Y: =500
+        ZIndex: =17
+
+    HTML_Aguardando_Dialogo_3 As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            =//"Exiba seu texto <b><font color=blue>HTML</font></b> aqui."
+            "Fora do prazo: <b>" & ForaPrazo
+        Size: =21
+        Width: =450
+        X: =98
+        Y: =550
+        ZIndex: =18
+
+    HTML_Aguardando_Dialogo_4 As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            =//"Exiba seu texto <b><font color=blue>HTML</font></b> aqui."
+            "Só Entrevista: <b>" & SoEntrevista
+        Size: =21
+        Width: =450
+        X: =95
+        Y: =250
+        ZIndex: =19
+
+    HTML_Aguardando_Dialogo_5 As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            =//"Exiba seu texto <b><font color=blue>HTML</font></b> aqui."
+            "Só 1a. Semana: <b>" & So1aSemana
+        Size: =21
+        Width: =450
+        X: =98
+        Y: =300
+        ZIndex: =20
+
+    HTML_Aguardando_Dialogo_6 As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            =//"Exiba seu texto <b><font color=blue>HTML</font></b> aqui."
+            "Só 2a. Semana: <b>" & So2aSemana
+        Size: =21
+        Width: =450
+        X: =98
+        Y: =350
+        ZIndex: =21
+
+    HTML_Aguardando_Dialogo_7 As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            =//"Exiba seu texto <b><font color=blue>HTML</font></b> aqui."
+            "Só 3a. Semana: <b>" & So3aSemana
+        Size: =21
+        Width: =450
+        X: =98
+        Y: =400
+        ZIndex: =22
+

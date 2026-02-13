@@ -1,0 +1,41 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+EditorState:
+  ScreensOrder:
+    - Tela_Login
+    - Tela_Principal
+    - Manutenção
+    - Limpeza
+    - Orientação
+    - Corrige_Dialogo
+    - Tela_Principal_Senha
+    - Tela_Busca_Assistidos
+    - Tela_Consulta_Assistidos
+    - Tela_Edicao_Assistidos
+    - Tela_Busca_Tarefeiros
+    - Tela_Consulta_Tarefeiros
+    - Tela_Edicao_Tarefeiros
+    - Tela_Busca_Todos
+    - Tela_Consulta_Todos
+    - Tela_Edicao_Todos
+    - Tela_Busca_Entrevistas_Presença
+    - Tela_Busca_Entrevistas
+    - Tela_Consulta_Entrevista
+    - Tela_Consulta_Entrevista_Finalizada
+    - Tela_Edicao_Entrevista
+    - Tela_Criacao_Entrevista_Assistido
+    - Tela_Edicao_Tarefas
+    - Tela_Infos_Entrevista_Dialogo
+    - Tela_Busca_Dialogos
+    - Tela_Dialogo
+    - Tela_Controle_Presença
+    - Tela_Registra_Extra
+    - Resumo_do_dia
+    - Registro_PS_e_PSCriancas
+    - Resumo_Geral

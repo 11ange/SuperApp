@@ -1,0 +1,10 @@
+[
+  {
+    "ApiId": "/providers/microsoft.powerapps/apis/shared_logicflows",
+    "FlowNameId": "055da16f-95b7-4f3e-af96-52da4c8ef9bf",
+    "Name": "LogAlteracaoCampos",
+    "ServiceKind": "ConnectedWadl",
+    "Type": "ServiceInfo",
+    "WorkflowEntityId": "123047f1-d5e0-f011-8406-6045bd3afadd"
+  }
+]

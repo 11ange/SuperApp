@@ -1,0 +1,98 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_usuarioses",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_usuarios",
+    "MaxGetRowsCount": 2000,
+    "Name": "Usuarios",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "cr4f5_id": "ID",
+      "cr4f5_nomeusuario": "Nome Usuario",
+      "cr4f5_perfilusuario": "Perfil Usuario",
+      "cr4f5_senhausuario": "Senha Usuario",
+      "cr4f5_usuarios_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_usuarios_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_usuarios_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_usuarios_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_usuarios_ProcessSession": "Sessões de Processo",
+      "cr4f5_usuarios_SyncErrors": "Erros de Sincronização",
+      "cr4f5_usuariosid": "Usuarios",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "Usuarios",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Usuarios (Modos de exibição)",
+    "Name": "_cr4f5_usuarios_views",
+    "RelatedEntityName": "Usuarios",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "0a456cb4-480b-4786-9168-6326d8be5402": "Exibição Associada de Usuarios",
+      "327954d2-2315-420d-acc8-bb4963c5dfdd": "Exibição de Localização Avançada de Usuarios",
+      "51434ea7-528e-4d69-a8de-c05cc66fd9dc": "Usuarios Inativos(as)",
+      "7d79eeb6-e183-4b97-82b6-7a6b72aeffec": "Usuarios Ativos(as)",
+      "ba13630b-7aa6-4ce8-b12d-0c5bdbe72093": "Exibição de Consulta de Usuarios"
+    }
+  },
+  {
+    "DisplayName": "Status (Usuarios)",
+    "Name": "cr4f5_usuarios_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Usuarios"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Usuarios",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (Usuarios)",
+    "Name": "cr4f5_usuarios_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Usuarios"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Usuarios",
+    "Type": "OptionSetInfo"
+  }
+]

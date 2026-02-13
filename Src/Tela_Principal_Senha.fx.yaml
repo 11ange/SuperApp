@@ -1,0 +1,137 @@
+"Tela_Principal_Senha As screen.'phoneDetailViewLayout_ver3.0'":
+    Fill: =RGBA(232, 232, 232, 1)
+    OnVisible: |-
+        =//Set(Hora;Int(Text(Now();"hh")));;
+        //Set(DiaSemana;
+        //   Switch(
+        //       Weekday(Now());
+        //       1; "Domingo";
+        //       2; "Segunda";
+        //       3; "Terça";
+        //       4; "Quarta";
+        //       5; "Quinta";
+        //       6; "Sexta";
+        //       7; "Sabado"
+        //    )
+        //);;
+        //Set(Periodo;
+        //    If(Hora<12;"Manhã";
+        //        If(Hora<18;"Tarde";"Noite")
+        //    )
+        //);;
+        //Set(DiaComPeriodo;Concatenate(DiaSemana;"_";Periodo));;
+        
+        //Define tolerancia de semanas que pode faltar na assistência:
+        //Set(tolerancia;2);;
+        
+        //Zera variaveis dos popup
+        //Set(PopupApagaAssistido; false);;
+        //Set(PopupApagaEntrevista; false);;
+        //Set(PopupApagaTarefeiro; false);;
+        //Set(PopupApagaTodos; false);;
+        //Set(PopupConfirmaPresenca; false);;
+        //Set(PopupInformaNumero; false);;
+        Set(DialogoRealizado, false);
+
+    LblAppName2_9 As label:
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Height: =88
+        Size: =27
+        Text: ="Sistema CEOV"
+        Width: =262
+        Wrap: =false
+        X: =189
+        ZIndex: =5
+
+    Img_CEOV_6 As image:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Height: =372
+        Image: =logo
+        ImagePosition: =ImagePosition.Fill
+        Width: =610
+        X: =15
+        Y: =194
+        ZIndex: =9
+
+    Btn_Cadastro_Assistidos_5 As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Tela_Busca_Assistidos, ScreenTransition.Cover)
+        Size: =24
+        Text: ="Cadastrar senha"
+        Tooltip: ="Acessa o cadastro dos Assistidos"
+        Width: =300
+        X: =195
+        Y: =600
+        ZIndex: =10
+
+    Lbl_Titulo_6 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(241, 244, 249, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(0, 18, 107, 1)
+        Font: =Font.'Lato Light'
+        FontWeight: =FontWeight.Bold
+        Height: =158
+        Italic: =true
+        Size: =35
+        Text: ="S I S T E M A   U N I F I C A D O"
+        Width: =Parent.Width
+        ZIndex: =11
+
+    Lbl_Usuario_Logado_6 As label:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(241, 244, 249, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(0, 18, 107, 1)
+        FontWeight: =FontWeight.Bold
+        Height: =96
+        Italic: =true
+        Size: =28
+        Text: =Concatenate("   ",Usuario_Logado," - ",Perfil_Logado)
+        Width: =Parent.Width
+        Y: =Parent.Height- Self.Height
+        ZIndex: =14
+
+    Voltar_Login_5 As group:
+        Height: =5
+        Width: =5
+        X: =60
+        Y: =60
+        ZIndex: =22
+
+        Icon2_5 As icon.Reset:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(250, 250, 250, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(244, 244, 244, 1)
+            Icon: =Icon.Home
+            OnSelect: =Navigate(Tela_Login,ScreenTransition.None)
+            X: =542
+            Y: =1054
+            ZIndex: =20
+
+        Label9_6 As label:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(250, 250, 250, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Height: =72
+            OnSelect: =Navigate(Tela_Login,ScreenTransition.None)
+            Size: =24
+            Text: ="Login"
+            Width: =120
+            X: =439
+            Y: =1054
+            ZIndex: =21
+

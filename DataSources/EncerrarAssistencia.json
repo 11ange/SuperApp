@@ -1,0 +1,10 @@
+[
+  {
+    "ApiId": "/providers/microsoft.powerapps/apis/shared_logicflows",
+    "FlowNameId": "0141c5e0-3e5b-4c56-ac49-7af1d016adf8",
+    "Name": "EncerrarAssistencia",
+    "ServiceKind": "ConnectedWadl",
+    "Type": "ServiceInfo",
+    "WorkflowEntityId": "6e9204ed-f925-f011-8c4d-000d3a890e4b"
+  }
+]

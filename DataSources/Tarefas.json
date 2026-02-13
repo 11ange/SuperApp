@@ -1,0 +1,118 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_tarefases",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_tarefas",
+    "MaxGetRowsCount": 2000,
+    "Name": "Tarefas",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "cr4f5_codigotarefa": "Codigo Tarefa",
+      "cr4f5_espiritual": "Espiritual",
+      "cr4f5_id": "ID",
+      "cr4f5_nometarefa": "Nome Tarefa",
+      "cr4f5_tarefas_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_tarefas_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_tarefas_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_tarefas_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_tarefas_ProcessSession": "Sessões de Processo",
+      "cr4f5_tarefas_SyncErrors": "Erros de Sincronização",
+      "cr4f5_tarefasid": "Tarefas",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "Tarefas",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Tarefas (Modos de exibição)",
+    "Name": "_cr4f5_tarefas_views",
+    "RelatedEntityName": "Tarefas",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "472bca3f-1a32-4887-9e9d-7b37e7e4a279": "Tarefas Inativos(as)",
+      "71bcbe38-883e-45e8-ac3a-d167c88f9bd3": "Exibição de Consulta de Tarefas",
+      "72f4b077-730c-4e9a-9d40-ea4be8cd267e": "Exibição Associada de Tarefas",
+      "c6a96456-8363-42d2-af9b-cce12bfb7ea3": "Exibição de Localização Avançada de Tarefas",
+      "d4cb85d2-1dcb-4544-85b0-63f69fd4aef3": "Tarefas Ativos(as)"
+    }
+  },
+  {
+    "DisplayName": "Espiritual (Tarefas)",
+    "Name": "cr4f5_tarefas_cr4f5_espiritual",
+    "OptionSetInfoNameMapping": {
+      "0": "Não",
+      "1": "Sim"
+    },
+    "OptionSetIsBooleanValued": true,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "cr4f5_espiritual",
+        "OptionSetReferenceEntityName": "Tarefas"
+      }
+    },
+    "OptionSetTypeKey": "BooleanType",
+    "RelatedColumnInvariantName": "cr4f5_espiritual",
+    "RelatedEntityName": "Tarefas",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Status (Tarefas)",
+    "Name": "cr4f5_tarefas_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Tarefas"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Tarefas",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (Tarefas)",
+    "Name": "cr4f5_tarefas_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Tarefas"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Tarefas",
+    "Type": "OptionSetInfo"
+  }
+]

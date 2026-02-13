@@ -1,0 +1,99 @@
+[
+  {
+    "CdsFCBContext": "{\"FileType\":true,\"ImageExternalStorage\":true}",
+    "EntitySetName": "cr4f5_logses",
+    "IsHidden": false,
+    "IsSampleData": false,
+    "IsWritable": true,
+    "LogicalName": "cr4f5_logs",
+    "MaxGetRowsCount": 2000,
+    "Name": "Logs",
+    "NativeCDSDataSourceInfoNameMapping": {
+      "_ownerid_value": "Proprietário",
+      "cr4f5_acao": "Ação",
+      "cr4f5_dataehora": "DataeHora",
+      "cr4f5_detalhesjson": "DetalhesJSON",
+      "cr4f5_deviceid": "DeviceID",
+      "cr4f5_id": "ID",
+      "cr4f5_logs_AsyncOperations": "Trabalhos do Sistema",
+      "cr4f5_logs_BulkDeleteFailures": "Falhas da Exclusão em Massa",
+      "cr4f5_logs_MailboxTrackingFolders": "Pastas de Acompanhamento Automático da Caixa de Correio",
+      "cr4f5_logs_PrincipalObjectAttributeAccesses": "Compartilhamento de Campo",
+      "cr4f5_logs_ProcessSession": "Sessões de Processo",
+      "cr4f5_logs_SyncErrors": "Erros de Sincronização",
+      "cr4f5_logsid": "Logs",
+      "createdby": "Criada Por",
+      "createdon": "Data de Criação",
+      "createdonbehalfby": "Criado por (Delegado)",
+      "importsequencenumber": "Número de Sequência de Importação",
+      "modifiedby": "Modificado Por",
+      "modifiedon": "Data de Modificação",
+      "modifiedonbehalfby": "Modificado por (Delegado)",
+      "overriddencreatedon": "Registro Criado em",
+      "owningbusinessunit": "Unidade de Negócios Proprietária",
+      "owningteam": "Equipe Proprietária",
+      "owninguser": "Usuário Proprietário",
+      "statecode": "Status",
+      "statuscode": "Razão do Status",
+      "timezoneruleversionnumber": "Número de Versão da Regra de Fuso Horário",
+      "utcconversiontimezonecode": "Código de Fuso Horário de Conversão de UTC",
+      "versionnumber": "Número da Versão"
+    },
+    "PreferredName": "Logs",
+    "Type": "NativeCDSDataSourceInfo"
+  },
+  {
+    "DisplayName": "Logs (Modos de exibição)",
+    "Name": "_cr4f5_logs_views",
+    "RelatedEntityName": "Logs",
+    "TrimmedViewName": true,
+    "Type": "ViewInfo",
+    "ViewInfoNameMapping": {
+      "4447d082-d63a-44e9-9f4a-44e3181b3bc2": "Logs Inativos(as)",
+      "8b20563b-f381-43ce-a147-cae9f428bc64": "Exibição de Localização Avançada de Logs",
+      "b26b6ad7-95f5-4b9d-bdb1-f28b6367954b": "Exibição Associada de Logs",
+      "b84e8991-64e6-4edb-a106-c1c173947584": "Exibição de Consulta de Logs",
+      "f527946e-29bc-46ea-91e4-c1e63069ee9a": "Logs Ativos(as)"
+    }
+  },
+  {
+    "DisplayName": "Status (Logs)",
+    "Name": "cr4f5_logs_statecode",
+    "OptionSetInfoNameMapping": {
+      "0": "Ativo(a)",
+      "1": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statecode",
+        "OptionSetReferenceEntityName": "Logs"
+      }
+    },
+    "OptionSetTypeKey": "StateType",
+    "RelatedColumnInvariantName": "statecode",
+    "RelatedEntityName": "Logs",
+    "Type": "OptionSetInfo"
+  },
+  {
+    "DisplayName": "Razão do Status (Logs)",
+    "Name": "cr4f5_logs_statuscode",
+    "OptionSetInfoNameMapping": {
+      "1": "Ativo(a)",
+      "2": "Inativo(a)"
+    },
+    "OptionSetIsBooleanValued": false,
+    "OptionSetIsGlobal": false,
+    "OptionSetReference": {
+      "OptionSetReferenceItem0": {
+        "OptionSetReferenceColumnName": "statuscode",
+        "OptionSetReferenceEntityName": "Logs"
+      }
+    },
+    "OptionSetTypeKey": "StatusType",
+    "RelatedColumnInvariantName": "statuscode",
+    "RelatedEntityName": "Logs",
+    "Type": "OptionSetInfo"
+  }
+]

@@ -1,0 +1,383 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  Tela_Registra_Extra:
+    Properties:
+      Fill: =RGBA(232, 232, 232, 1)
+      LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: =false
+    Children:
+      - RectQuickActionBar3_12:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Height: =88
+            Width: =Parent.Width
+      - Icone_Cancela_Controle_3:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =88
+            Icon: =Icon.Cancel
+            OnSelect: |-
+              =UpdateContext({ MostraPopUp: false });
+              Back()
+            PaddingBottom: =22
+            PaddingLeft: =22
+            PaddingRight: =22
+            PaddingTop: =22
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Cancel item"
+            Width: =88
+      - Icone_Salva_Controle_1:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =88
+            Icon: =Icon.Save
+            OnSelect: =
+            PaddingBottom: =22
+            PaddingLeft: =22
+            PaddingRight: =22
+            PaddingTop: =22
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Submit item"
+            Visible: =false
+            Width: =88
+            X: =Parent.Width - Self.Width
+      - LblAppName3_6:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =RGBA(58, 58, 58, 0)
+            Font: =Font.'Open Sans'
+            Height: =88
+            Size: =27
+            Text: ="Registra Extra"
+            Width: =Parent.Width - Icone_Cancela_Controle_3.Width - Icone_Salva_Controle_1.Width
+            Wrap: =false
+            X: =80
+      - Btn_Registra_Excedente_A1:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({AssistenciaExtra: "A1", PopupConfirmaExcedente: true});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="A1"
+            Width: =250
+            X: =50
+            Y: =400
+      - Label4:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Semibold
+            Height: =120
+            Size: =27
+            Text: ="Para qual assistência deseja confirmar a presença extra?"
+            Width: =500
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =200
+      - Btn_Registra_Excedente_A2:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({AssistenciaExtra: "A2", PopupConfirmaExcedente: true});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="A2"
+            Width: =250
+            X: =50
+            Y: =Btn_Registra_Excedente_A1.Y + Btn_Registra_Excedente_A1.Height + 30
+      - Btn_Registra_Excedente_A3:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({AssistenciaExtra: "A3", PopupConfirmaExcedente: true});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="A3"
+            Width: =250
+            X: =50
+            Y: =Btn_Registra_Excedente_A2.Y + Btn_Registra_Excedente_A2.Height + 30
+      - Btn_Registra_Excedente_C1:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({AssistenciaExtra: "C1", PopupConfirmaExcedente: true});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="C1"
+            Width: =250
+            X: =Parent.Width - Self.Width - 50
+            Y: =Btn_Registra_Excedente_A1.Y
+      - Btn_Registra_Excedente_C2:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({AssistenciaExtra: "C2", PopupConfirmaExcedente: true});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="C2"
+            Width: =250
+            X: =Parent.Width - Self.Width - 50
+            Y: |-
+              =Btn_Registra_Excedente_A2
+              .Y
+      - Btn_Registra_Excedente_C3:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({AssistenciaExtra: "C3", PopupConfirmaExcedente: true});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="C3"
+            Width: =250
+            X: =Parent.Width - Self.Width - 50
+            Y: |+
+              =Btn_Registra_Excedente_A3.Y
+      - Fundo_Popup_1:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(100, 118, 132, 0.6)
+            Height: =Parent.Height - RectQuickActionBar3_12.Height
+            Visible: =PopupConfirmaExcedente//MostraPopUp Or PopupConfirmaEnvioDialogo Or PopupConfirmaExcedente //Or PopupDialogoSemanaQueVem
+            Width: =Parent.Width
+            Y: =88
+      - Retangulo_Popup_Confirma_Excedente:
+          Control: Rectangle@2.3.0
+          Group: Popup_Confirma_Excedente_2
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =PopupConfirmaExcedente
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - Btn_Nao_Confirma_Excedente_2:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Excedente_2
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({PopupConfirmaExcedente: false});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Não"
+            Visible: =PopupConfirmaExcedente
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Excedente.X + (Retangulo_Popup_Confirma_Excedente.Width/4) - Self.Width/2
+            Y: =630
+      - Btn_Sim_Confirma_Excedente_2:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Excedente_2
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =
+              //------------------------------------------------------------------------------------------
+              // Registra na tabela Presenças_Excedentes um excedente na data atual e na assistência
+              // Verificar se a data atual já existe na tabela Presenças_Excedentes
+              //------------------------------------------------------------------------------------------
+              // Registra na tabela Presenças_Excedentes um excedente na data atual e na assistência
+              // Verificar se a data atual já existe na tabela Presenças_Excedentes
+              Set(Hoje, Text(Today(), "[$-pt-BR]dd/mm/yyyy"));
+
+              Set(ExistingRecord, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo));
+
+              // Se não existir, criar um novo registro
+              If(
+                  IsBlank(ExistingRecord),
+                  Patch(Excedentes, Defaults(Excedentes), {Data: Hoje, PeriodoDia: Periodo})
+              );
+
+              If(
+                  AssistenciaExtra = "A1",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),
+                  AssistenciaExtra = "A2",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),
+                  AssistenciaExtra = "A3",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)}),
+                  AssistenciaExtra = "C1",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1)/*,
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
+                  AssistenciaExtra = "C2",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1)/*,
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
+                  AssistenciaExtra = "C3",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1)/*,
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)*/}),
+                  AssistenciaExtra = "A3/A1",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
+                           A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),
+                  AssistenciaExtra = "C3/C1",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
+                           C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1)/*,
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)*/}),
+                  AssistenciaExtra = "A3/A2",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
+                           A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),
+                  AssistenciaExtra = "C3/C2",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
+                           C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1)/*,
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)*/}),
+                  AssistenciaExtra = "A3/A2-Casa",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)})
+              );
+              //------------------------------------------------------------------------------------------
+
+              UpdateContext({PopupConfirmaExcedente: false});
+
+              Back();
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Sim"
+            Visible: =PopupConfirmaExcedente
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Excedente.X + (Retangulo_Popup_Confirma_Excedente.Width/4)*3 - Self.Width/2
+            Y: =630
+      - lbl_Texto_popup_Confirma_Envio_Dialogo_4:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Excedente_2
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =84
+            Text: ="Deseja confirmar Excedente para hoje?"
+            Visible: =PopupConfirmaExcedente
+            Width: =464
+            X: =Retangulo_Popup_Confirma_Excedente.X
+            Y: =505
+      - lbl_Aviso_popup_Confirma_Envio_Dialogo_4:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Excedente_2
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =Color.Red
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Text: ="Aviso"
+            Visible: =PopupConfirmaExcedente
+            Width: =464
+            X: =Retangulo_Popup_Confirma_Excedente.X
+            Y: =428

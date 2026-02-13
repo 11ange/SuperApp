@@ -1,0 +1,184 @@
+"'de78a7a6-d19e-4305-9582-d75cd33c4aa3' As TestSuite":
+    Description: =""
+    DisplayName: ="Testes Funcionais das Telas"
+
+    "'c3eca9d4-4189-453d-b1c8-7fa9553d25f2' As TestCase":
+        Description: ="Teste"
+        DisplayName: ="Cria Assistido Sem Entrevista"
+
+        Step11 As TestStep:
+            Description: ="Cria variáveis"
+            Screen: =Tela_Principal
+            Value: |-
+                =Set(NomeAssistido, "Teste Assistido");
+                Set(NomeSocialAssistido, "QwertyuioP");
+                Set(IdadeAssistido, "51");
+                Set(ConhecDoutrinaAssistido, "Pouco")
+
+        Step9 As TestStep:
+            Description: ="Verificar se tem registro na tabela Pessoas"
+            Value: =Assert(CountIf(Pessoas,true)=0)
+
+        Step1 As TestStep:
+            Description: ="Clicar botão Assistidos"
+            Value: =Select(Btn_Cadastro_Assistidos)
+
+        Step2 As TestStep:
+            Description: ="Clicar Botão cria Assistido"
+            Value: =Select(Icone_Cria_Assistido)
+
+        Step3 As TestStep:
+            Description: ="Preencher nome do Assistido"
+            Value: =SetProperty(DataCardValue25_1.Text, NomeAssistido)
+
+        Step4 As TestStep:
+            Description: ="Preencher nome social"
+            Value: =SetProperty(DataCardValue31.Text, NomeSocialAssistido)
+
+        Step5 As TestStep:
+            Description: ="Preencher idade"
+            Value: =SetProperty(DataCardValue58.Text,IdadeAssistido)
+
+        Step6 As TestStep:
+            Description: ="Preencher conhecimento doutrina"
+            Value: =SetProperty(Dropdown_Conhec_Doutrina.SelectedText, ConhecDoutrinaAssistido)
+
+        Step7 As TestStep:
+            Description: ="Salvar"
+            Value: =Select(Icone_Salva_Assistido)
+
+        Step8 As TestStep:
+            Description: ="Verificar se é o ID 1"
+            Value: =Assert(lbl_Texto_popup_Numero.Text = "1")
+
+        Step10 As TestStep:
+            Description: ="Não cria entrevista"
+            Value: =Select(Btn_Retorna)
+
+        Step12 As TestStep:
+            Description: ="Verificar campos da tabela"
+            Screen: =Tela_Busca_Assistidos
+            Value: |-
+                =Assert(LookUp(Pessoas, 'ID Pessoa' = 1).'Nome Pessoa' = NomeAssistido);
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 1).'Nome Social' = NomeSocialAssistido);
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 1).Idade = Int(IdadeAssistido));
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 1).ConhDoutrina = ConhecDoutrinaAssistido);
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 1).'Em Assistência' = "Sim");
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 1).Tarefeiro = "Não");
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 1).Ativo = "Sim");
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 1).'Ultima Assistência' = Blank());
+                //--------------
+
+        Step13 As TestStep:
+            Description: ="Volta tela principal"
+            Value: =Select(Icone_Voltar_Assistidos)
+
+    "'067cc4ab-c192-4a23-a389-0bc92bf583c4' As TestCase":
+        Description: =""
+        DisplayName: ="Limpa Tabelas"
+
+        Step1 As TestStep:
+            Description: ="Limpa todas as tabelas"
+            Value: |
+                =RemoveIf(Assistências, true);
+                RemoveIf(Assistências_Encerradas, true);
+                RemoveIf(Pessoas, true);
+                RemoveIf(Presenças, true);
+                RemoveIf(Excedentes, true);
+                RemoveIf(Logs, true);
+
+    "'a6961b5b-4d09-4ac6-9b35-72dcd43f930d' As TestCase":
+        Description: ="Teste"
+        DisplayName: ="Cria Tarefeiro"
+
+        Step1 As TestStep:
+            Description: ="Cria variáveis"
+            Screen: =Tela_Principal
+            Value: |-
+                =Set(NomeTarefeiro, "Entrevistador Teste");
+                Set(NomeSocialTarefeiro, "zXCVBnm");
+                Set(IdadeTarefeiro, "52");
+                Set(ConhecDoutrinaTarefeiro, "Estudo Completo")
+
+        Step2 As TestStep:
+            Description: ="Verificar se tem registro na tabela Pessoas"
+            Screen: =Tela_Principal
+            Value: =Assert(CountIf(Pessoas,true)=1)
+
+        Step3 As TestStep:
+            Description: ="Clicar botão Tarefeiros"
+            Screen: =Tela_Principal
+            Value: =Select(Btn_Cadastro_Tarefeiros)
+
+        Step4 As TestStep:
+            Description: ="Clicar Botão cria Tarefeiro"
+            Screen: =Tela_Busca_Assistidos
+            Value: =Select(Icone_Cria_Tarefeiro)
+
+        Step5 As TestStep:
+            Description: ="Preenche nome do Tarefeiro"
+            Screen: =Tela_Edicao_Tarefeiros
+            Value: =SetProperty(DataCardValue25.Text, NomeTarefeiro)
+
+        Step6 As TestStep:
+            Description: ="Preenche nome social"
+            Screen: =Tela_Edicao_Tarefeiros
+            Value: =SetProperty(DataCardValue48.Text, NomeSocialTarefeiro)
+
+        Step7 As TestStep:
+            Description: ="Preenche idade"
+            Screen: =Tela_Edicao_Tarefeiros
+            Value: =SetProperty(DataCardValue98.Text,IdadeTarefeiro)
+
+        Step8 As TestStep:
+            Description: ="Em assistencia"
+            Screen: =Tela_Edicao_Tarefeiros
+            Value: =SetProperty(DataCardValue37.SelectedText, "Não")
+
+        Step9 As TestStep:
+            Description: ="Ativo"
+            Screen: =Tela_Edicao_Tarefeiros
+            Value: =SetProperty(DataCardValue64.SelectedText, "Sim")
+
+        Step10 As TestStep:
+            Description: ="Preenche conhecimento doutrina"
+            Screen: =Tela_Edicao_Tarefeiros
+            Value: =SetProperty(DataCardValue88.SelectedText, ConhecDoutrinaTarefeiro)
+
+        Step11 As TestStep:
+            Description: ="Salva"
+            Screen: =Tela_Edicao_Assistidos
+            Value: =Select(Icone_Salva_Tarefeiro)
+
+        Step12 As TestStep:
+            Description: ="Verifica campos da tabela"
+            Screen: =Tela_Busca_Tarefeiros
+            Value: |-
+                =Assert(LookUp(Pessoas, 'ID Pessoa' = 2).'Nome Pessoa' = NomeTarefeiro);
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 2).'Nome Social' = NomeSocialTarefeiro);
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 2).Idade = Int(IdadeTarefeiro));
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 2).ConhDoutrina = ConhecDoutrinaTarefeiro);
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 2).'Em Assistência' = "Não");
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 2).Tarefeiro = "Sim");
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 2).Ativo = "Sim");
+                //--------------
+                Assert(LookUp(Pessoas, 'ID Pessoa' = 2).'Ultima Assistência' = Blank());
+                //--------------
+
+        Step13 As TestStep:
+            Description: ="Volta tela principal"
+            Value: =Select(Icone_Voltar_Tarefeiros)
+

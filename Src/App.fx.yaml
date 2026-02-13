@@ -1,0 +1,119 @@
+App As appinfo:
+    BackEnabled: =false
+    ConfirmExitMessage: =
+    Formulas: =
+    MinScreenHeight: =1446
+    MinScreenWidth: =720
+    OnStart: |
+        =Set(DeviceID, Text(RandBetween(1,999999))); // GUID() & "-" & Text(RandBetween(1;999999)));;
+        
+        Set(AppVersaoAtual, "1.0.23");
+        Set(
+            UltimaVersaoPublicada,
+            LookUp(ControleVersoes, AppNome = "SuperApp", VersaoPublicada)
+        );
+        
+        Patch(
+            Logs,
+            Defaults(Logs),
+            {
+                DataeHora: Now(),
+                DeviceID: DeviceID,
+                Ação: "App inicializado"
+            }
+        );
+        
+        //----------------------------------------------------------------------
+        // Pra "acordar" o dataverse. Não apagar o usuario Teste (Id=190)
+        Refresh(Pessoas);
+        Refresh(Assistências);
+        Refresh(Assistências_Encerradas);
+        //----------------------------------------------------------------------
+        
+        //----------------------------------------------------------------------
+        //Calcula o dia da semana com período atual (no momento que abriu a tela)
+        Set(Hora, Int(Text(Now(), "hh")));
+        Set(DiaSemana,
+            Switch(
+               Weekday(Now()),
+               1, "Domingo",
+               2, "Segunda",
+               3, "Terça",
+               4, "Quarta",
+               5, "Quinta",
+               6, "Sexta",
+               7, "Sábado"
+            )
+        );
+        
+        Set(Periodo,
+            If(Hora<12, "Manhã",
+                If(Hora<18, "Tarde", "Noite")
+            )
+        );
+        
+        Set(DiaComPeriodo, Concatenate(DiaSemana, "_", Periodo));
+        
+        Clear(SimNao);
+        Clear(DiasAssistência);
+        Clear(TiposAssistências);
+        Clear(ConhecDoutrina);
+        
+        ClearCollect(SimNao, 
+            [" ","Sim","Não"]
+        );
+        
+        ClearCollect(DiasAssistência,
+            [" ","Terça_Noite","Quarta_Noite","Quinta_Tarde","Quinta_Noite","Sábado_Tarde","Domingo_Manhã"]
+        );
+        
+        // Se alterar algum valor precisa alterar também na tela de presença pois na confirmação da presença
+        // é usada o tipo de assistência para computar na tabela 'Presença'
+        ClearCollect(TiposAssistências,
+            [" ","A1","A2","A3","A2-D","A3-D","A2-Casa","C1","C2","C3","C2-D","C3-D","A3/A2-Casa", "A3/A2", "C3/C2", "A3/A1", "C3/C1", "Orientação"]
+        );
+        
+        ClearCollect(ConhecDoutrina,
+            [" ","Não","Pouco","Estudo Incompleto","Estudo Completo","Outra Casa","Evangelização"]
+        );
+        //----------------------------------------------------------------------
+        
+        //----------------------------------------------------------------------
+        //Define tolerancia de semanas que pode faltar na assistência:
+        Set(tolerancia,2);
+        //----------------------------------------------------------------------
+        
+        Set(DialogoRealizado,false);
+        Set(Dialogador_Salvo,Blank());
+        Set(DataDialogo_Salvo,Today());
+        Set(Assistencia_Salvo,Blank());
+        Set(DiaSemana_Salvo,Blank());
+        Set(AnotacoesDialogo_Salvo,Blank());
+        Set(TratMedico_Salvo,Blank());
+        
+        ClearCollect(
+            AlocacoesFiltradas, // Nome da sua collection
+            AddColumns(
+                Filter(
+                    Alocações,
+                    Aloc_Tarefa = 24
+                ),
+                'Dia', Text(Aloc_Dia),
+                'DiaCurto', Lower(Left(Aloc_Dia, 3)),
+                'Periodo', Text(Aloc_Período),
+                'NomePessoa', Text(LookUp(Pessoas, 'ID Pessoa' = Aloc_Pessoa, 'Nome Pessoa'))
+            )
+        );
+        
+        Tela_Principal
+    SizeBreakpoints: =[600,800,1280]
+    StartScreen: =Tela_Principal
+    Theme: =PowerAppsTheme
+
+    Host As hostControl.DefaultHostControlVariant:
+        OnCancel: =false
+        OnEdit: =false
+        OnNew: =false
+        OnSave: =false
+        OnView: =false
+

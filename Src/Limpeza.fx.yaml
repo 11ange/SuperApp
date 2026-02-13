@@ -1,0 +1,896 @@
+"Limpeza As screen.'phoneDetailViewLayout_ver3.0'":
+    Fill: =RGBA(232, 232, 232, 1)
+    OnVisible: |-
+        =UpdateContext({MostraPopUpIndividual: false, MostraPopUpTodos: false})
+
+    Lbl_Titulo_4 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(241, 244, 249, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(0, 18, 107, 1)
+        Font: =Font.'Lato Light'
+        FontWeight: =FontWeight.Bold
+        Height: =88
+        Italic: =true
+        Size: =35
+        Text: ="LIMPEZA"
+        Width: =Parent.Width
+        ZIndex: =1
+
+    Icone_Voltar_Assistidos_3 As icon.ChevronLeft:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.BackArrow
+        OnSelect: =Navigate(Tela_Principal, ScreenTransition.CoverRight)
+        PaddingBottom: =24
+        PaddingLeft: =24
+        PaddingRight: =24
+        PaddingTop: =24
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Back to list"
+        Width: =88
+        ZIndex: =2
+
+    Btn_Limpeza_60dias As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =85
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |
+            =// verifica assistencia maior que 60 dias e coloca o ID da pessoa na collection
+            UpdateContext({Limite: 60});
+            
+            Clear(ColecaoAssistenciasAntigas);
+            
+            ClearCollect(
+                ColecaoAssistenciasDiaSemana,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Limpeza.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasAntigas,
+                Filter(
+                    ColecaoAssistenciasDiaSemana,
+                    'Ultimo Comparecimento' <= Today() - Limite
+                    //'Data Entrevista' <= Today() - Limite ||
+                    //(!IsBlank('Semana 1') && 'Semana 1' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 2') && 'Semana 2' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 3') && 'Semana 3' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 4') && 'Semana 4' <= Today() - Limite)
+                )
+            );
+        Size: =24
+        Text: ="60 dias"
+        Width: =280
+        X: =App.MinScreenWidth/4 - Self.Width/2
+        Y: =130
+        ZIndex: =4
+
+    DataTable_Limpeza As dataTable.datatable:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        BorderStyle: =BorderStyle.Solid
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisplayMode: =DisplayMode.Edit
+        Fill: =RGBA(0, 0, 0, 0)
+        Font: =Font.'Open Sans'
+        FontWeight: =FontWeight.Normal
+        HeadingColor: =RGBA(255, 255, 255, 1)
+        HeadingFill: =RGBA(0, 51, 102, 1)
+        HeadingFont: =Font.'Open Sans'
+        HeadingFontWeight: =FontWeight.Normal
+        HeadingSize: =21
+        Height: =313
+        HoverColor: =RGBA(0, 0, 0, 1)
+        HoverFill: =RGBA(153, 205, 255, .2)
+        InputFill: =RGBA(255, 255, 255, 1)
+        InvertedColor: =RGBA(255, 255, 255, 1)
+        Items: =ColecaoAssistenciasAntigas
+        LinkColor: =RGBA(0, 134, 208, 1)
+        PrimaryColor1: =RGBA(0, 51, 102, 1)
+        PrimaryColor2: =RGBA(0, 89, 178, 1)
+        PrimaryColor3: =RGBA(153, 205, 255, 1)
+        SelectedColor: =RGBA(0, 0, 0, 1)
+        SelectedFill: =RGBA(0, 51, 102, .2)
+        Size: =15
+        Width: =App.MinScreenWidth/2
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =Dropdown_Limpeza.Y + Dropdown_Limpeza.Height + 30
+        ZIndex: =7
+
+        cr4f5_idpessoa_Coluna1 As dataTableColumn.textualColumn:
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="ID Pessoa"
+            FieldName: ="cr4f5_idpessoa"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            OnSelect: =false
+            Order: =1
+            Text: =ThisItem.'ID Pessoa'
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+        cr4f5_ultimocomparecimento_Coluna1 As dataTableColumn.textualColumn:
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Ultimo Comparecimento"
+            FieldName: ="cr4f5_ultimocomparecimento"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =2
+            Text: =ThisItem.'Ultimo Comparecimento'
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =2
+
+    Lbl_Usuario_Logado_4 As label:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(241, 244, 249, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(0, 18, 107, 1)
+        FontWeight: =FontWeight.Bold
+        Height: =88
+        Italic: =true
+        Size: =28
+        Text: =Concatenate("   ",Usuario_Logado," - ",Perfil_Logado)
+        Width: =Parent.Width
+        Y: =Parent.Height-Self.Height
+        ZIndex: =8
+
+    Dropdown_Limpeza As dropdown:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        ChevronBackground: =RGBA(0, 51, 102, 1)
+        ChevronDisabledBackground: =RGBA(166, 166, 166, 1)
+        ChevronDisabledFill: =RGBA(244, 244, 244, 1)
+        ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        ChevronHoverFill: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Height: =50
+        HoverColor: =RGBA(0, 0, 0, 1)
+        HoverFill: =RGBA(153, 205, 255, 1)
+        Items: =DiasAssistência
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =RGBA(0, 89, 178, 1)
+        SelectionFill: =RGBA(0, 51, 102, 1)
+        Size: =21
+        Width: =300
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =528
+        ZIndex: =33
+
+    Btn_Limpeza_90dias As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =85
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |-
+            =// verifica assistencia maior que 90 dias e coloca o ID da pessoa na collection
+            UpdateContext({Limite: 90});
+            
+            Clear(ColecaoAssistenciasAntigas);
+            
+            ClearCollect(
+                ColecaoAssistenciasDiaSemana,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Limpeza.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasAntigas,
+                Filter(
+                    ColecaoAssistenciasDiaSemana,
+                    'Ultimo Comparecimento' <= Today() - Limite
+                    //'Data Entrevista' <= Today() - Limite ||
+                    //(!IsBlank('Semana 1') && 'Semana 1' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 2') && 'Semana 2' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 3') && 'Semana 3' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 4') && 'Semana 4' <= Today() - Limite)
+                )
+            );
+        Size: =24
+        Text: ="90 dias"
+        Width: =280
+        X: =(App.MinScreenWidth/4) * 3 - Self.Width/2
+        Y: =Btn_Limpeza_60dias.Y
+        ZIndex: =34
+
+    Btn_Limpeza_120dias As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =85
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |-
+            =// verifica assistencia maior que 120 dias e coloca o ID da pessoa na collection
+            UpdateContext({Limite: 120});
+            
+            Clear(ColecaoAssistenciasAntigas);
+            
+            ClearCollect(
+                ColecaoAssistenciasDiaSemana,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Limpeza.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasAntigas,
+                Filter(
+                    ColecaoAssistenciasDiaSemana,
+                    'Ultimo Comparecimento' <= Today() - Limite
+                    //'Data Entrevista' <= Today() - Limite ||
+                    //(!IsBlank('Semana 1') && 'Semana 1' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 2') && 'Semana 2' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 3') && 'Semana 3' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 4') && 'Semana 4' <= Today() - Limite)
+                )
+            );
+        Size: =24
+        Text: ="120 dias"
+        Width: =280
+        X: =Btn_Limpeza_60dias.X
+        Y: =Btn_Limpeza_60dias.Y + 120
+        ZIndex: =35
+
+    Btn_Limpeza_180dias As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =85
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |-
+            =// verifica assistencia maior que 180 dias e coloca o ID da pessoa na collection
+            UpdateContext({Limite: 180});
+            
+            Clear(ColecaoAssistenciasAntigas);
+            
+            ClearCollect(
+                ColecaoAssistenciasDiaSemana,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Limpeza.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasAntigas,
+                Filter(
+                    ColecaoAssistenciasDiaSemana,
+                    'Ultimo Comparecimento' <= Today() - Limite
+                    //'Data Entrevista' <= Today() - Limite ||
+                    //(!IsBlank('Semana 1') && 'Semana 1' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 2') && 'Semana 2' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 3') && 'Semana 3' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 4') && 'Semana 4' <= Today() - Limite)
+                )
+            );
+        Size: =24
+        Text: ="180 dias"
+        Width: =280
+        X: =Btn_Limpeza_90dias.X
+        Y: =Btn_Limpeza_120dias.Y
+        ZIndex: =36
+
+    Btn_Limpeza_270dias As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =85
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |-
+            =// verifica assistencia maior que 270 dias e coloca o ID da pessoa na collection
+            UpdateContext({Limite: 270});
+            
+            Clear(ColecaoAssistenciasAntigas);
+            
+            ClearCollect(
+                ColecaoAssistenciasDiaSemana,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Limpeza.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasAntigas,
+                Filter(
+                    ColecaoAssistenciasDiaSemana,
+                    'Ultimo Comparecimento' <= Today() - Limite
+                    //'Data Entrevista' <= Today() - Limite ||
+                    //(!IsBlank('Semana 1') && 'Semana 1' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 2') && 'Semana 2' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 3') && 'Semana 3' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 4') && 'Semana 4' <= Today() - Limite)
+                )
+            );
+        Size: =24
+        Text: ="270 dias"
+        Width: =280
+        X: =Btn_Limpeza_60dias.X
+        Y: =Btn_Limpeza_120dias.Y + 120
+        ZIndex: =37
+
+    Btn_Limpeza_360dias As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =85
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |
+            =// verifica assistencia maior que 360 dias e coloca o ID da pessoa na collection
+            UpdateContext({Limite: 360});
+            
+            Clear(ColecaoAssistenciasAntigas);
+            
+            ClearCollect(
+                ColecaoAssistenciasDiaSemana,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Limpeza.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasAntigas,
+                Filter(
+                    ColecaoAssistenciasDiaSemana,
+                    'Ultimo Comparecimento' <= Today() - Limite
+                    //'Data Entrevista' <= Today() - Limite ||
+                    //(!IsBlank('Semana 1') && 'Semana 1' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 2') && 'Semana 2' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 3') && 'Semana 3' <= Today() - Limite) ||
+                    //(!IsBlank('Semana 4') && 'Semana 4' <= Today() - Limite)
+                )
+            );
+        Size: =24
+        Text: ="360 dias"
+        Width: =280
+        X: =Btn_Limpeza_90dias.X
+        Y: =Btn_Limpeza_270dias.Y
+        ZIndex: =38
+
+    Label1 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FontWeight: =FontWeight.Bold
+        Height: =60
+        Size: =27
+        Text: |-
+            =Concatenate(Limite, " dias - Total: ", CountIf(ColecaoAssistenciasAntigas, true))
+        Width: =400
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =979
+        ZIndex: =39
+
+    Btn_Limpeza_Individual As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =85
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |
+            =//UpdateContext({Modo: "Individual"; MostraPopUp: true})
+            UpdateContext({MostraPopUpIndividual: true})
+        Size: =24
+        Text: ="Encerrar Selecionado"
+        Width: =280
+        X: =Btn_Limpeza_60dias.X
+        Y: =Btn_Limpeza_270dias.Y + 700
+        ZIndex: =40
+
+    Btn_Limpeza_Individual_1 As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =85
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |-
+            =UpdateContext({MostraPopUpTodos: true})
+        Size: =24
+        Text: ="Encerrar Todos"
+        Width: =280
+        X: =Btn_Limpeza_90dias.X
+        Y: =Btn_Limpeza_Individual.Y
+        ZIndex: =41
+
+    Fundo_Popup_3 As rectangle:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Fill: =RGBA(100, 118, 132, 0.6)
+        Height: =Parent.Height - RectQuickActionBar3_3.Height
+        Visible: =MostraPopUpIndividual || MostraPopUpTodos
+        Width: =Parent.Width
+        Y: =88
+        ZIndex: =42
+
+    Popup_Confirma_Limpeza_Individual As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =48
+
+        Retangulo_Popup_Confirma_Limpeza As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =MostraPopUpIndividual
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+            ZIndex: =43
+
+        lbl_Aviso_popup_Confirma_Limpeza As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Fill: =Color.Red
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Size: =21
+            Text: ="Aviso"
+            Visible: =MostraPopUpIndividual
+            Width: =Retangulo_Popup_Confirma_Limpeza.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+            ZIndex: =44
+
+        Btn_Sim_Limpeza As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =Set(ID_Encerrada, DataTable_Limpeza.Selected.'ID Pessoa');
+                
+                //------------------------------------------------------------------------------------------
+                // Ajusta colunas
+                Patch(Assistências,
+                    LookUp(Assistências, 'ID Pessoa' = ID_Encerrada),
+                    {
+                        Finalizada: "Sim",
+                        Abandonou: "Sim"
+                    }
+                );
+                Patch(Pessoas,
+                    LookUp(Pessoas, 'ID Pessoa' = ID_Encerrada),
+                    {
+                        'Em Assistência': "Não"
+                    }
+                );
+                //------------------------------------------------------------------------------------------
+                
+                //------------------------------------------------------------------------------------------
+                // Log
+                Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: "Confirmado Encerramento ID:" & ID_Encerrada
+                    }
+                );
+                //------------------------------------------------------------------------------------------
+                
+                //------------------------------------------------------------------------------------------
+                // Copia o registro da tabela original para a nova tabela
+                Patch(
+                    Assistências_Encerradas,
+                    Defaults(Assistências_Encerradas),
+                    {
+                        'ID Assistência': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'ID Assistência',
+                        'ID Pessoa': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'ID Pessoa',
+                        'ID Pessoa Texto': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'ID Pessoa Texto',
+                        'Data Entrevista': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Data Entrevista',
+                        Entrevistador: LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).Entrevistador,
+                        'Dia Semana': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Dia Semana',
+                        'Dia Semana Entrevista': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Dia Semana Entrevista',
+                        'Primeira Assistência': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Primeira Assistência',
+                        //'Passou Diálogo': LookUp(Assistências; 'ID Pessoa' = ID_Encerrada).'Passou Diálogo';
+                        Assistência: LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Assistência (cr4f5_assistencia)',
+                        'Tratamento Médico': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Tratamento Médico',
+                        'Anotações Entrevista': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Anotações Entrevista',
+                        'Assistência Mesmo Dia': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Assistência Mesmo Dia',
+                        'Semana 1': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Semana 1',
+                        'Semana 2': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Semana 2',
+                        'Semana 3': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Semana 3',
+                        'Semana 4': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Semana 4',
+                        Extra: LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).Extra,
+                        Finalizada: "Sim", //LookUp(Assistências; 'ID Pessoa' = ID_Encerrada).Finalizada;
+                        'Data Diálogo': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Data Diálogo',
+                        Dialogador: LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).Dialogador,
+                        'Anotações Diálogo': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Anotações Diálogo',
+                        'Continua Tratamento': LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Continua Tratamento',
+                        Abandonou: "Sim",
+                        'Ultimo Comparecimento':LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Ultimo Comparecimento',
+                        'Entrevista Nova':LookUp(Assistências, 'ID Pessoa' = ID_Encerrada).'Entrevista Nova'
+                    }
+                );
+                //------------------------------------------------------------------------------------------
+                
+                //------------------------------------------------------------------------------------------
+                // Remove o registro da tabela original
+                Remove(Assistências, LookUp(Assistências, 'ID Pessoa' = ID_Encerrada));
+                //------------------------------------------------------------------------------------------
+                
+                UpdateContext({MostraPopUpIndividual: false});
+            Size: =24
+            Text: ="Sim"
+            Visible: =MostraPopUpIndividual
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Limpeza.X + (Retangulo_Popup_Confirma_Limpeza.Width/4)*3 - Self.Width/2
+            Y: =630
+            ZIndex: =45
+
+        Btn_Nao_Limpeza As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =UpdateContext({MostraPopUpIndividual: false})
+            Size: =24
+            Text: ="Não"
+            Visible: =MostraPopUpIndividual
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Limpeza.X + (Retangulo_Popup_Confirma_Limpeza.Width/4) - Self.Width/2
+            Y: =630
+            ZIndex: =46
+
+        HtmlText_Limpeza As htmlViewer:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Height: =100
+            HtmlText: |-
+                ="<div style='text-align: center;'>
+                    Confirma Encerramento <br> 
+                    para Assistido <b>" & DataTable_Limpeza.Selected.'ID Pessoa Texto' & "</b> ?
+                </div>"
+            Size: =21
+            Visible: =MostraPopUpIndividual
+            Width: =Retangulo_Popup_Confirma_Limpeza.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =505
+            ZIndex: =47
+
+    Popup_Confirma_Limpeza_Todos As group:
+        Height: =5
+        Width: =5
+        X: =148
+        Y: =20
+        ZIndex: =53
+
+        Retangulo_Popup_Confirma_Limpeza_1 As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =MostraPopUpTodos
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =448
+            ZIndex: =48
+
+        lbl_Aviso_popup_Confirma_Limpeza_1 As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Fill: =Color.Red
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Size: =21
+            Text: ="Aviso"
+            Visible: =MostraPopUpTodos
+            Width: =Retangulo_Popup_Confirma_Limpeza_1.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =448
+            ZIndex: =49
+
+        Btn_Sim_Limpeza_1 As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =// 1. Prepara a coleção (Isso mantém igual)
+                ClearCollect(
+                    colAssistenciasParaProcessar,
+                    Filter(
+                        Assistências,
+                        'ID Pessoa' in ColecaoAssistenciasAntigas.'ID Pessoa'
+                    )
+                );
+                
+                // 2. Executa TUDO em um único loop usando 'As ItemAtual'
+                ForAll(
+                    colAssistenciasParaProcessar As ItemAtual,
+                
+                    // --- ETAPA A: LOG E CÓPIA PARA ENCERRADOS ---
+                    Patch(
+                        Logs,
+                        Defaults(Logs),
+                        {
+                            DataeHora: Now(),
+                            DeviceID: DeviceID,
+                            Ação: "Encerramento em Lote ID: " & ItemAtual.'ID Pessoa'
+                        }
+                    );
+                
+                    Patch(
+                        Assistências_Encerradas,
+                        Defaults(Assistências_Encerradas),
+                        {
+                            'ID Assistência': ItemAtual.'ID Assistência',
+                            'ID Pessoa': ItemAtual.'ID Pessoa',
+                            'ID Pessoa Texto': ItemAtual.'ID Pessoa Texto',
+                            'Data Entrevista': ItemAtual.'Data Entrevista',
+                            Entrevistador: ItemAtual.Entrevistador,
+                            'Dia Semana': ItemAtual.'Dia Semana',
+                            'Dia Semana Entrevista': ItemAtual.'Dia Semana Entrevista',
+                            'Primeira Assistência': ItemAtual.'Primeira Assistência',
+                            Assistência: ItemAtual.'Assistência (cr4f5_assistencia)',
+                            'Tratamento Médico': ItemAtual.'Tratamento Médico',
+                            'Anotações Entrevista': ItemAtual.'Anotações Entrevista',
+                            'Assistência Mesmo Dia': ItemAtual.'Assistência Mesmo Dia',
+                            'Semana 1': ItemAtual.'Semana 1',
+                            'Semana 2': ItemAtual.'Semana 2',
+                            'Semana 3': ItemAtual.'Semana 3',
+                            'Semana 4': ItemAtual.'Semana 4',
+                            Extra: ItemAtual.Extra,
+                            'Data Diálogo': ItemAtual.'Data Diálogo',
+                            Dialogador: ItemAtual.Dialogador,
+                            'Anotações Diálogo': ItemAtual.'Anotações Diálogo',
+                            'Continua Tratamento': ItemAtual.'Continua Tratamento',
+                            'Ultimo Comparecimento': ItemAtual.'Ultimo Comparecimento',
+                            'Entrevista Nova': ItemAtual.'Entrevista Nova',
+                            Finalizada: "Sim",
+                            Abandonou: "Sim"
+                        }
+                    );
+                
+                    // --- ETAPA B: REMOVE O ORIGINAL ---
+                    // Removemos usando o ID para garantir que removemos o item certo na fonte
+                    Remove(Assistências, ItemAtual);
+                
+                    // --- ETAPA C: ATUALIZA O STATUS DA PESSOA (Correção do erro) ---
+                    With(
+                        {
+                            registroPessoa: LookUp(Pessoas, 'ID Pessoa' = ItemAtual.'ID Pessoa')
+                        },
+                        If(
+                            !IsBlank(registroPessoa),
+                            Patch(
+                                Pessoas,
+                                registroPessoa,
+                                { 'Em Assistência': "Não" }
+                            )
+                        )
+                    )
+                );
+                
+                // 3. Finalização
+                Notify(
+                    "Processo concluído! " & CountRows(colAssistenciasParaProcessar) & " assistências foram encerradas.",
+                    NotificationType.Success
+                );
+                
+                Clear(ColecaoAssistenciasAntigas);
+                Clear(colAssistenciasParaProcessar);
+                UpdateContext({MostraPopUpTodos: false});
+                
+                /*ClearCollect(
+                    colAssistenciasParaProcessar,
+                    Filter(
+                        Assistências,
+                        'ID Pessoa' in ColecaoAssistenciasAntigas.'ID Pessoa'
+                    )
+                );
+                
+                ForAll(
+                    colAssistenciasParaProcessar,
+                    //------------------------------------------------------------------------------------------
+                    // 2. Cria um registro de log para a ação de encerramento.
+                    Patch(
+                        Logs,
+                        Defaults(Logs),
+                        {
+                            DataeHora: Now(),
+                            DeviceID: DeviceID, // O DeviceID pode não estar disponível em todos os players/navegadores.
+                            Ação: "Encerramento em Lote ID: " & ThisRecord.'ID Pessoa'
+                        }
+                    );
+                    //------------------------------------------------------------------------------------------
+                
+                    //------------------------------------------------------------------------------------------
+                    // 3. Copia o registro da tabela original para a tabela de encerrados.
+                    // Usamos 'ThisRecord' diretamente, pois ele já contém o registro completo.
+                    Patch(
+                        Assistências_Encerradas,
+                        Defaults(Assistências_Encerradas),
+                        {
+                            'ID Assistência': ThisRecord.'ID Assistência',
+                            'ID Pessoa': ThisRecord.'ID Pessoa',
+                            'ID Pessoa Texto': ThisRecord.'ID Pessoa Texto',
+                            'Data Entrevista': ThisRecord.'Data Entrevista',
+                            Entrevistador: ThisRecord.Entrevistador,
+                            'Dia Semana': ThisRecord.'Dia Semana',
+                            'Dia Semana Entrevista': ThisRecord.'Dia Semana Entrevista',
+                            'Primeira Assistência': ThisRecord.'Primeira Assistência',
+                            //'Passou Diálogo': ThisRecord.'Passou Diálogo',
+                            Assistência: ThisRecord.'Assistência (cr4f5_assistencia)',
+                            'Tratamento Médico': ThisRecord.'Tratamento Médico',
+                            'Anotações Entrevista': ThisRecord.'Anotações Entrevista',
+                            'Assistência Mesmo Dia': ThisRecord.'Assistência Mesmo Dia',
+                            'Semana 1': ThisRecord.'Semana 1',
+                            'Semana 2': ThisRecord.'Semana 2',
+                            'Semana 3': ThisRecord.'Semana 3',
+                            'Semana 4': ThisRecord.'Semana 4',
+                            Extra: ThisRecord.Extra,
+                            'Data Diálogo': ThisRecord.'Data Diálogo',
+                            Dialogador: ThisRecord.Dialogador,
+                            'Anotações Diálogo': ThisRecord.'Anotações Diálogo',
+                            'Continua Tratamento': ThisRecord.'Continua Tratamento',
+                            'Ultimo Comparecimento': ThisRecord.'Ultimo Comparecimento',
+                            'Entrevista Nova': ThisRecord.'Entrevista Nova',
+                
+                            // Define os valores de status para o registro encerrado.
+                            Finalizada: "Sim",
+                            Abandonou: "Sim"
+                        }
+                    );
+                    //------------------------------------------------------------------------------------------
+                
+                    //------------------------------------------------------------------------------------------
+                    // 4. Remove o registro original da tabela 'Assistências'.
+                    // Esta é a última etapa para garantir que os dados foram copiados antes da remoção.
+                    Remove(Assistências, ThisRecord)
+                    //------------------------------------------------------------------------------------------
+                );
+                ForAll(
+                    colAssistenciasParaProcessar,
+                    With(
+                        {
+                            registroPessoa: LookUp(
+                                Pessoas, 
+                                'ID Pessoa' = ThisRecord.'ID Pessoa'
+                            )
+                        },
+                        If(
+                            !IsBlank(registroPessoa),
+                            Patch(
+                                Pessoas,
+                                registroPessoa,
+                                {
+                                    'Em Assistência': "Não"
+                                }
+                            ),
+                            Notify(
+                                "Pessoa ID " & registroPessoa.'ID Pessoa' & " não encontrada", 
+                                NotificationType.Warning
+                            )
+                        )
+                    )
+                );
+                
+                // --- ETAPA 3: AÇÕES FINAIS APÓS O PROCESSAMENTO ---
+                
+                // Notifica o usuário que a operação em lote foi concluída com sucesso.
+                Notify(
+                    "Processo concluído! " & CountRows(colAssistenciasParaProcessar) & " assistências foram encerradas.",
+                    NotificationType.Success
+                );
+                
+                // Limpa as coleções locais que foram usadas para o processo.
+                Clear(ColecaoAssistenciasAntigas);
+                Clear(colAssistenciasParaProcessar);
+                
+                // Opcional: Se você tiver um pop-up de confirmação para a ação em lote, pode escondê-lo aqui.
+                UpdateContext({MostraPopUpTodos: false});
+                */
+            Size: =24
+            Text: ="Sim"
+            Visible: =MostraPopUpTodos
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Limpeza_1.X + (Retangulo_Popup_Confirma_Limpeza_1.Width/4)*3 - Self.Width/2
+            Y: =650
+            ZIndex: =50
+
+        Btn_Nao_Limpeza_1 As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =UpdateContext({MostraPopUpTodos: false});
+            Size: =24
+            Text: ="Não"
+            Visible: =MostraPopUpTodos
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Limpeza_1.X + (Retangulo_Popup_Confirma_Limpeza_1.Width/4) - Self.Width/2
+            Y: =650
+            ZIndex: =51
+
+        HtmlText_Limpeza_1 As htmlViewer:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Height: =100
+            HtmlText: |-
+                ="<div style='text-align: center;'>
+                        Confirma Encerramento para<br> 
+                        todos os listados <b>(Total: " & CountIf(
+                    ColecaoAssistenciasAntigas,
+                    true
+                ) & ")</b>?
+                    </div>"
+            Size: =21
+            Visible: =MostraPopUpTodos
+            Width: =Retangulo_Popup_Confirma_Limpeza_1.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =525
+            ZIndex: =52
+

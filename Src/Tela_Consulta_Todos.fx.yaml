@@ -1,0 +1,993 @@
+"Tela_Consulta_Todos As screen.'phoneDetailViewLayout_ver3.0'":
+    Fill: =RGBA(232, 232, 232, 1)
+    OnVisible: |-
+        =//Set(PopupApagaTodos; false)
+        false
+
+    RectQuickActionBar2_3 As rectangle:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        Height: =88
+        Width: =Parent.Width
+        ZIndex: =1
+
+    Icone_Volta_Consulta_Todos As icon.ChevronLeft:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.BackArrow
+        OnSelect: |-
+            =UpdateContext({ MostraPopUp: false });
+            Navigate(Tela_Busca_Todos, ScreenTransition.None)
+        PaddingBottom: =24
+        PaddingLeft: =24
+        PaddingRight: =24
+        PaddingTop: =24
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Back to list"
+        Width: =88
+        ZIndex: =2
+
+    Icone_Edita_Todos As icon.Edit:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        DisplayMode: =If(DataSourceInfo([@Pessoas], DataSourceInfo.EditPermission), DisplayMode.Edit, DisplayMode.Disabled)
+        Height: =88
+        Icon: =Icon.Edit
+        OnSelect: |-
+            =EditForm(Form_Edita_Todos);
+            
+            Patch(
+                Logs,
+                Defaults(Logs),
+                {
+                    DataeHora: Now(),
+                    DeviceID: DeviceID,
+                    Ação: "Editando Todos ID:" & PessoaSelecionada
+                }
+            );
+            
+            Navigate(Tela_Edicao_Todos, ScreenTransition.None)
+        PaddingBottom: =24
+        PaddingLeft: =24
+        PaddingRight: =24
+        PaddingTop: =24
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Edit this item"
+        Width: =88
+        X: =Parent.Width - Self.Width
+        ZIndex: =3
+
+    Icone_Apaga_Todos As icon.Trash:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        DisplayMode: |-
+            =If(
+                !IsBlank(
+                    LookUp(
+                        Pessoas,
+                        'ID Pessoa' = PessoaSelecionada
+                    )
+                ) && DataSourceInfo(
+                    [@Pessoas],
+                    DataSourceInfo.DeletePermission
+                ),
+                DisplayMode.Edit,
+                DisplayMode.Disabled
+            )
+        Height: =88
+        Icon: =Icon.Trash
+        OnSelect: |-
+            =UpdateContext({ MostraPopUp: true })
+        PaddingBottom: =24
+        PaddingLeft: =24
+        PaddingRight: =24
+        PaddingTop: =24
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Delete this item"
+        Width: =88
+        X: =Parent.Width - Icone_Edita_Todos.Width - Self.Width
+        ZIndex: =4
+
+    Lbl_Titulo_Consulta_Todos As label:
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Height: =88
+        Size: =27
+        Text: ="Consulta Todos"
+        Width: =Parent.Width - Self.X - Icone_Apaga_Todos.Width - Icone_Edita_Todos.Width
+        Wrap: =false
+        X: =80
+        ZIndex: =5
+
+    Form_Detalha_Todos As formViewer:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        DataSource: =Pessoas
+        Height: =692
+        Item: =LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)
+        Width: =Parent.Width
+        Y: =RectQuickActionBar2_3.Height
+        ZIndex: =6
+
+        ID_Tarefeiro_DataCard1_1 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_idpessoa"
+            Default: =ThisItem.'ID Pessoa'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'ID Pessoa')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =105
+            Required: =false
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            DataCardKey11_1 As label:
+                Align: =Align.Center
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: ="Número da Pessoa"
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue11_1 As label:
+                Align: =Align.Center
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =24
+                Text: =Int(Parent.Default)
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey11_1.Y + DataCardKey11_1.Height + 5
+                ZIndex: =2
+
+            "'Borda Texto Numero Assistido_3' As button":
+                BorderColor: |-
+                    =//ColorFade(Self.Fill; -15%)
+                    RGBA(0, 89, 178, 1)
+                BorderThickness: =3
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                Fill: =RGBA(0, 0, 0, 0)
+                FontWeight: =FontWeight.Semibold
+                Height: =ID_Tarefeiro_DataCard1_1.Height - 2
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+                Size: =24
+                Text: =
+                Width: =Parent.Width * 0.5
+                X: =Parent.Width/2 - Self.Width/2
+                Y: =2
+                ZIndex: =3
+
+        Nome_Tarefeiro_DataCard2_1 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_nomepessoa"
+            Default: =ThisItem.'Nome Pessoa'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'Nome Pessoa')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =100
+            Required: =true
+            Width: =Parent.Width
+            X: =0
+            Y: =1
+            ZIndex: =1
+
+            DataCardKey12_1 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: ="Nome da Pessoa"
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue12_1 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey12_1.Y + DataCardKey12_1.Height + 5
+                ZIndex: =2
+
+        Nome_Social_DataCard3_1 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_nomesocial"
+            Default: =ThisItem.'Nome Social'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'Nome Social')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =Parent.Width
+            X: =0
+            Y: =2
+            ZIndex: =1
+
+            DataCardKey22_1 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: ="Nome Social"
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue22_1 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey22_1.Y + DataCardKey22_1.Height + 5
+                ZIndex: =2
+
+        Idade_DataCard5 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_idade"
+            Default: =ThisItem.Idade
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,Idade)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =105
+            Required: =true
+            Width: =Parent.Width
+            X: =0
+            Y: =3
+            ZIndex: =1
+
+            DataCardKey111 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue99 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey111.Y + DataCardKey111.Height + 5
+                ZIndex: =2
+
+        "'Número Cartão_DataCard6' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_numerocartao"
+            Default: =ThisItem.'Número Cartão'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'cr4f5_numerocartao')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =720
+            X: =0
+            Y: =4
+            ZIndex: =1
+
+            DataCardKey84 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue63 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey84.Y + DataCardKey84.Height + 5
+                ZIndex: =2
+
+        "'Em Assistência_DataCard3' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_emassistencia"
+            Default: =ThisItem.'Em Assistência'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'Em Assistência')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =Parent.Width
+            X: =0
+            Y: =5
+            ZIndex: =1
+
+            DataCardKey2 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue2 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey2.Y + DataCardKey2.Height + 5
+                ZIndex: =2
+
+        Tarefeiro_DataCard2 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_tarefeiro"
+            Default: =ThisItem.Tarefeiro
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,Tarefeiro)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =Parent.Width
+            X: =0
+            Y: =6
+            ZIndex: =1
+
+            DataCardKey28 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue34 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey28.Y + DataCardKey28.Height + 5
+                ZIndex: =2
+
+        Ativo_DataCard2 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_ativo"
+            Default: =ThisItem.Ativo
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,Ativo)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =Parent.Width
+            X: =0
+            Y: =7
+            ZIndex: =1
+
+            DataCardKey39 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue38 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey39.Y + DataCardKey39.Height + 5
+                ZIndex: =2
+
+        ConhDoutrina_DataCard6 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_conhdoutrina"
+            Default: =ThisItem.ConhDoutrina
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,ConhDoutrina)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =135
+            Required: =true
+            Width: =Parent.Width
+            X: =0
+            Y: =8
+            ZIndex: =1
+
+            DataCardKey100 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: ="Conhecimento da doutrina" //Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue91 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey100.Y + DataCardKey100.Height + 5
+                ZIndex: =2
+
+        Email_Tarefeiro_DataCard1_1 As typedDataCard.emailViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_email"
+            Default: =ThisItem.Email
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,Email)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =105
+            Required: =false
+            Width: =Parent.Width
+            X: =0
+            Y: =9
+            ZIndex: =1
+
+            DataCardKey10_1 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue10_1 As htmlViewer:
+                AutoHeight: =true
+                Color: =RGBA(0, 134, 208, 1)
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                Height: =45
+                HtmlText: |-
+                    ="<a href='mailto:" & Parent.Default & "'>" & Parent.Default & "</a>"
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey10_1.Y + DataCardKey10_1.Height + 5
+                ZIndex: =2
+
+        Telefone_Tarefeiro_DataCard1_1 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_telefone"
+            Default: =ThisItem.Telefone
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,Telefone)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =105
+            Required: =false
+            Width: =Parent.Width
+            X: =0
+            Y: =10
+            ZIndex: =1
+
+            DataCardKey14_1 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue15_1 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey14_1.Y + DataCardKey14_1.Height + 5
+                ZIndex: =2
+
+        Observacoes_DataCard3 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_observacoes"
+            Default: =ThisItem.Observações
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,Observações)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =200
+            Required: =false
+            Width: =Parent.Width
+            X: =0
+            Y: =11
+            ZIndex: =1
+
+            DataCardKey105 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =21
+                Text: ="Observações"
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue78 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =Parent.Width - 60
+                X: =60
+                Y: =DataCardKey105.Y + DataCardKey105.Height + 5
+                ZIndex: =2
+
+    Popup_Apaga_Todos As group:
+        Height: =5
+        Width: =5
+        X: =60
+        Y: =60
+        ZIndex: =13
+
+        Fundo_Popup_Apaga_Todos As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(100, 118, 132, 0.6)
+            Height: =Parent.Height - Lbl_Titulo_Consulta_Todos.Height
+            Visible: =MostraPopUp
+            Width: =Parent.Width
+            Y: =88
+            ZIndex: =7
+
+        Popup_Todos As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =MostraPopUp
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =360
+            ZIndex: =8
+
+        lbl_Aviso_Apaga_Todos As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Fill: =Color.Red
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Size: =21
+            Text: ="Aviso"
+            Visible: =MostraPopUp
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =360
+            ZIndex: =9
+
+        lbl_Texto_popup_Todos As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Height: =84
+            Size: =21
+            Text: ="Deseja realmente apagar esta pessoa?"
+            Visible: =MostraPopUp
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =lbl_Aviso_Apaga_Todos.Y + lbl_Aviso_Apaga_Todos.Height
+            ZIndex: =10
+
+        Btn_Cancela_Exclusao_Todos As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =UpdateContext({ MostraPopUp: false })
+            Size: =24
+            Text: ="Não"
+            Visible: =MostraPopUp
+            Width: =157
+            X: =Popup_Todos.X + Parent.Width/6 - Self.Width/2
+            Y: =553
+            ZIndex: =11
+
+        Btn_Confirma_Exclusao_Todos As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =UpdateContext({ MostraPopUp: false });
+                
+                Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: "Apagando Todos ID:" & PessoaSelecionada
+                    }
+                );
+                
+                Remove(Pessoas, LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)); 
+                
+                If (IsEmpty(Errors(Pessoas, LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada))), Back())
+            Size: =24
+            Text: ="Sim"
+            Visible: =MostraPopUp
+            Width: =157
+            X: =Popup_Todos.X + (Parent.Width/6)*3 - Self.Width/2
+            Y: =553
+            ZIndex: =12
+
+    Lbl_Assistencias_Encerradas_1 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 89, 178, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisplayMode: =DisplayMode.View
+        FontWeight: =FontWeight.Bold
+        Height: =50
+        Size: =24
+        Text: |-
+            ="Assistências Encerradas:"
+        Width: =500
+        X: =Parent.Width/2 - Self.Width/2
+        Y: =lbl_Aviso_1.Y + lbl_Aviso_1.Height + 20
+        ZIndex: =14
+
+    "Gallery1_1 As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver5.0'":
+        BorderColor: =RGBA(0, 89, 178, 1)
+        DelayItemLoading: =true
+        Height: =Parent.Height - Self.Y
+        Items: |
+            =Filter(Assistências_Encerradas, 'ID Pessoa' = PessoaSelecionada)
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        OnSelect: |-
+            =Set(EntrevistaHistorico, ThisItem.'ID Assistência');
+            
+            Patch(
+                Logs,
+                Defaults(Logs),
+                {
+                    DataeHora: Now(),
+                    DeviceID: DeviceID,
+                    Ação: "Visualizando Entrevista Encerrada: " & EntrevistaHistorico & " - Pessoa ID: " & PessoaSelecionada
+                }
+            );
+            
+            Navigate(Tela_Consulta_Entrevista_Finalizada, ScreenTransition.None)
+        TemplatePadding: =0
+        TemplateSize: =90
+        Width: =Parent.Width
+        Y: =Lbl_Assistencias_Encerradas_1.Y + Lbl_Assistencias_Encerradas_1.Height + 10
+        ZIndex: =15
+
+        Title5_1 As label:
+            Color: =RGBA(50, 49, 48, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =18
+            Text: |-
+                =Concatenate(Text(ThisItem.'Data Entrevista', "dd-mmm-yyyy", "pt-br"),"  -  ",Proper(Text(ThisItem.'Data Entrevista',"ddd")))
+                //ThisItem.'Data Entrevista'
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.TemplateWidth - 86
+            X: =16
+            Y: =(Parent.TemplateHeight - (Self.Size * 1.8 + Subtitle4.Size * 1.8)) / 2
+            ZIndex: =1
+
+        Subtitle4_1 As label:
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =16
+            Text: =ThisItem.Assistência
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Title5_1.Width
+            X: =Title5_1.X
+            Y: =Title5_1.Y + Title5_1.Height
+            ZIndex: =2
+
+        NextArrow8_1 As icon.ChevronRight:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(166, 166, 166, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(244, 244, 244, 1)
+            Height: =50
+            Icon: =Icon.ChevronRight
+            OnSelect: =Select(Parent)
+            PaddingBottom: =16
+            PaddingLeft: =16
+            PaddingRight: =16
+            PaddingTop: =16
+            Tooltip: ="Exibir detalhes do item"
+            Width: =50
+            X: =Parent.TemplateWidth - Self.Width - 12
+            Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+            ZIndex: =3
+
+        Separator13_1 As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =8
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth
+            Y: =Parent.TemplateHeight - Self.Height
+            ZIndex: =4
+
+        Rectangle9_1 As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(0, 89, 178, 1)
+            Height: =Parent.TemplateHeight - Separator13_1.Height
+            OnSelect: =Select(Parent)
+            Visible: =ThisItem.IsSelected
+            Width: =4
+            ZIndex: =5
+
+    lbl_Aviso_1 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =If("Sem" in Self.Text,Color.WhiteSmoke,Color.Yellow)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =If("Sem" in Self.Text,Color.Green,Color.Red)
+        FontWeight: =If("Sem" in Self.Text,FontWeight.Normal, FontWeight.Bold)
+        Height: =70
+        OnSelect: |-
+            =Set(AssistenciaSelecionada, LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).'ID Assistência');
+            //Set(PresencaSelecionada, PessoaSelecionada);
+            
+            If("Não" in Lbl_Dialogo_Pendente_1.Text && "Com" in lbl_Aviso_1.Text,
+                Navigate(Tela_Controle_Presença, ScreenTransition.None)
+            );
+        Size: =21
+        Text: |-
+            =If(
+                (CountIf(Assistências, ('ID Pessoa'=PessoaSelecionada) && (Finalizada="Não")))>0,
+                "Com Assistência em Andamento",
+                "Sem Assistência em Andamento"
+            )
+        Visible: |-
+            =If(LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada).'Em Assistência' = "Sim", true, false)
+            //true
+        Width: =560
+        X: =Parent.Width/2 - Self.Width/2
+        Y: =Lbl_Dialogo_Pendente_1.Y + Lbl_Dialogo_Pendente_1.Height + 10
+        ZIndex: =16
+
+    Lbl_Dialogo_Pendente_1 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: |-
+            =//RGBA(0; 0; 0; 1)
+            If("Sim" in Self.Text,Color.Yellow,Color.Black)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: |-
+            =//RGBA(0; 0; 0; 0)
+            If("Sim" in Self.Text,Color.Red,Color.Transparent)
+        FontWeight: =If("Sim" in Self.Text,FontWeight.Bold, FontWeight.Normal)
+        Height: =70
+        OnSelect: |-
+            =Set(AssistenciaSelecionada, Blank());
+            
+            Set(
+                AssistenciaSelecionada,
+                LookUp(
+                    Assistências,
+                    IsBlank('Data Diálogo') && Finalizada = "Sim" && 'ID Pessoa' = Value(PessoaSelecionada),
+                    'ID Assistência'
+                )
+            );
+            
+            If(!IsBlank(AssistenciaSelecionada),
+                Navigate(Tela_Infos_Entrevista_Dialogo, ScreenTransition.None)
+            );
+        Size: =21
+        Text: |-
+            =If(
+                !IsBlank(
+                    LookUp(
+                        Assistências,
+                        IsBlank('Data Diálogo') && Finalizada = "Sim" && 'ID Pessoa' = PessoaSelecionada,
+                        'ID Assistência'
+                    )
+                ),
+                "Diálogo Pendente? Sim",
+                "Diálogo Pendente? Não"
+            )
+        Visible: |-
+            =If(LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada).'Em Assistência' = "Sim", true, false)
+            //true
+        Width: =400
+        X: =Parent.Width/2 - Self.Width/2
+        Y: =Form_Detalha_Todos.Y + Form_Detalha_Todos.Height + 20
+        ZIndex: =17
+

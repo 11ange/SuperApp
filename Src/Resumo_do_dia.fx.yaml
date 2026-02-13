@@ -1,0 +1,536 @@
+Resumo_do_dia As screen:
+    Fill: =RGBA(232, 232, 232, 1)
+    OnVisible: |-
+        =//Clear(ResumoDiaOrientação);
+        //Clear(ResumoDiaAssistências);
+        //Clear(ResumoDiaAssistênciasEncerradasTemp);
+        //Clear(ResumoDiaAssistênciasEncerradas);
+        //Clear(ResumoDiaGeral);
+        //Clear(Colecao_So_Entrevistas);
+        //Clear(Colecao_So_Finalizadas);
+        //Clear(Total_Assistencias_Periodo);
+        //Clear(Total_Extra_Periodo);
+        UpdateContext(
+            {
+                Presencas: 0,
+                Dialogos: 0,
+                Encerradas: 0,
+                Orientações: 0,
+                EntrevistasNovas: 0
+            }
+        );
+        
+        UpdateContext({varDataFinalSelecionada: Data_Inicial.SelectedDate})
+
+    Button3 As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =70
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |-
+            =// Chama o fluxo, passa os parâmetros da tela e armazena a resposta completa
+            // na variável 'varResultadoDoFlow'
+            Set(
+                varResultadoDoFlow,
+                ResumoAssistenciasPorDia.Run(
+                    Text(Data_Inicial.SelectedDate, "yyyy-mm-dd"),  // 1. Data Desejada
+                    //Data_Inicial.SelectedDate,
+                    Dropdown_Periodo_1.Selected.Value,              // 2. Período
+                    17                                              // 3. limiteHoraTarde
+                )
+            );
+            
+            // Limpa e recria a coleção 'dadosAgrupados' com os tipos de dados corretos
+            ClearCollect(
+                dadosAgrupados,
+                ForAll(
+                    // 1. Itera sobre a tabela não tipada retornada pelo ParseJSON
+                    Table(ParseJSON(varResultadoDoFlow.resultadofinal)),
+                    
+                    // 2. Para cada registro, cria um novo registro com colunas "tipadas"
+                    {
+                        // Converte a propriedade 'Tarefeiro' para o tipo Texto do Power Apps
+                        Tarefeiro: Text(ThisRecord.Value.Tarefeiro),
+                        Quantidade: Int(ThisRecord.Value.Quantidade),
+                        // Converte a sub-matriz 'IDPessoas' para uma tabela Power Apps
+                        // com uma coluna chamada "ID" do tipo Número
+                        IDPessoas: ForAll(
+                            Table(ThisRecord.Value.IDPessoas),
+                            { ID: Value(ThisRecord.Value) }
+                        )
+                    }
+                )
+            );
+            ClearCollect(
+                colResumo,
+                ForAll(
+                    Table(ParseJSON(varResultadoDoFlow.resultadoresumido)),
+                    {
+                        Nome: Text(ThisRecord.Value.Nome),
+                        Valor: Value(ThisRecord.Value.Valor)
+                    }
+                )
+            );
+            UpdateContext({
+                varDialogos: LookUp(colResumo, Nome = "Dialogos").Valor,
+                varEntrevistas: LookUp(colResumo, Nome = "Entrevistas").Valor,
+                varEntrevistasFinalizadas: LookUp(colResumo, Nome = "EntrevistasFinalizadas").Valor,
+                varRetornos: LookUp(colResumo, Nome = "Retornos").Valor,
+                varOrientacao: LookUp(colResumo, Nome = "Orientação").Valor,
+                varNovosAssistidos: LookUp(colResumo, Nome = "NovosAssistidos").Valor,
+                varFinalizadas: LookUp(colResumo, Nome = "Finalizadas").Valor
+            });
+            
+            If(
+                Weekday(Data_Inicial.SelectedDate) = 5,
+            
+                // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período
+                UpdateContext({
+                    presençasSelecionado: LookUp(
+                        Presenças,
+                        Data = Text(Data_Inicial.SelectedDate, "dd/mm/yyyy") &&
+                        PeriodoDia = Dropdown_Periodo_1.Selected.Value
+                    )
+                }),
+            
+                // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data
+                UpdateContext({
+                    presençasSelecionado: LookUp(
+                        Presenças,
+                        Data = Text(Data_Inicial.SelectedDate, "dd/mm/yyyy")
+                    )
+                })
+            );
+            
+            // Verifica PRIMEIRO se é uma quinta-feira
+            If(
+                Weekday(Data_Inicial.SelectedDate) = 5,
+            
+                // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período
+                UpdateContext({
+                    extrasSelecionado: LookUp(
+                        Excedentes,
+                        Data = Text(Data_Inicial.SelectedDate, "dd/mm/yyyy") &&
+                        PeriodoDia = Dropdown_Periodo_1.Selected.Value
+                    )
+                }),
+            
+                // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data
+                UpdateContext({
+                    extrasSelecionado: LookUp(
+                        Excedentes,
+                        Data = Text(Data_Inicial.SelectedDate, "dd/mm/yyyy")
+                    )
+                })
+            );
+            
+            UpdateContext({
+                assistenciasSomadas: {
+                    A1: Coalesce(presençasSelecionado.A1, 0) + Coalesce(extrasSelecionado.A1, 0),
+                    A2: Coalesce(presençasSelecionado.A2, 0) + Coalesce(extrasSelecionado.A2, 0),
+                    A3: Coalesce(presençasSelecionado.A3, 0) + Coalesce(extrasSelecionado.A3, 0),
+                    C1: Coalesce(presençasSelecionado.C1, 0) + Coalesce(extrasSelecionado.C1, 0),
+                    C2: Coalesce(presençasSelecionado.C2, 0) + Coalesce(extrasSelecionado.C2, 0),
+                    C3: Coalesce(presençasSelecionado.C3, 0) + Coalesce(extrasSelecionado.C3, 0),
+                    PS: Coalesce(presençasSelecionado.PS, 0) + Coalesce(extrasSelecionado.PS, 0),
+                    PSC: Coalesce(presençasSelecionado.'PS Crianças', 0) + Coalesce(extrasSelecionado.'PS Crianças', 0)
+            
+                }
+            });
+            
+            Set(totalAssistencias,
+                    assistenciasSomadas.A1 + assistenciasSomadas.A2 + assistenciasSomadas.A3 +
+                    assistenciasSomadas.C1 + assistenciasSomadas.C2 + assistenciasSomadas.C3 +
+                    assistenciasSomadas.PS + assistenciasSomadas.PSC
+            );
+        Size: =24
+        Text: ="Gerar Resumo"
+        Width: =280
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =Dropdown_Periodo_1.Y + Dropdown_Periodo_1.Height + 30
+        ZIndex: =1
+
+    Data_Inicial As datepicker:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        CalendarHeaderFill: =RGBA(0, 51, 102, 1)
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Height: =70
+        HoverDateFill: =RGBA(153, 205, 255, 1)
+        IconBackground: =RGBA(0, 51, 102, 1)
+        SelectedDateFill: =RGBA(0, 51, 102, 1)
+        Size: =24
+        Width: =350
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =lbl_Data_Inicial.X + lbl_Data_Inicial.Height + 30
+        ZIndex: =2
+
+    lbl_Data_Inicial As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Height: =50
+        Size: =21
+        Text: ="Data"
+        Visible: =false
+        Width: =180
+        X: =App.MinScreenWidth/4 - Self.Width/2 - 20
+        Y: =100
+        ZIndex: =4
+
+    RectQuickActionBar3_5 As rectangle:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        Height: =88
+        Width: =Parent.Width
+        ZIndex: =6
+
+    Icone_Cancela_Controle_1 As icon.Cancel:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.CancelBadge
+        OnSelect: =Back()
+        PaddingBottom: =22
+        PaddingLeft: =22
+        PaddingRight: =22
+        PaddingTop: =22
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Cancel item"
+        Width: =88
+        ZIndex: =7
+
+    LblAppName3_4 As label:
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(58, 58, 58, 0)
+        Height: =88
+        Size: =27
+        Text: ="Resumo do Dia"
+        Width: =Parent.Width - Icone_Cancela_Controle_1.Width
+        Wrap: =false
+        X: =80
+        ZIndex: =8
+
+    "'Resumo Dia' As dataTable.datatable":
+        BorderColor: =RGBA(0, 89, 178, 1)
+        BorderStyle: =BorderStyle.Solid
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisplayMode: =DisplayMode.Edit
+        Fill: =RGBA(0, 0, 0, 0)
+        Font: =Font.'Open Sans'
+        FontWeight: =FontWeight.Normal
+        HeadingColor: =RGBA(255, 255, 255, 1)
+        HeadingFill: =RGBA(0, 51, 102, 1)
+        HeadingFont: =Font.'Open Sans'
+        HeadingFontWeight: =FontWeight.Normal
+        HeadingSize: =21
+        Height: =500
+        HoverColor: =RGBA(0, 0, 0, 1)
+        HoverFill: =RGBA(153, 205, 255, .2)
+        InputFill: =RGBA(255, 255, 255, 1)
+        InvertedColor: =RGBA(255, 255, 255, 1)
+        Items: =dadosAgrupados//ResumoDiaGeral
+        LinkColor: =RGBA(0, 134, 208, 1)
+        PrimaryColor1: =RGBA(0, 51, 102, 1)
+        PrimaryColor2: =RGBA(0, 89, 178, 1)
+        PrimaryColor3: =RGBA(153, 205, 255, 1)
+        SelectedColor: =RGBA(0, 0, 0, 1)
+        SelectedFill: =RGBA(0, 51, 102, .2)
+        Size: =21
+        Width: =Parent.Width
+        X: =0
+        Y: =HTML_Total_Geral.Y + HTML_Total_Geral.Height + 30
+        ZIndex: =9
+
+        Tarefeiro_Coluna1 As dataTableColumn.textualColumn:
+            AutoWidth: =false
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Tarefeiro"
+            FieldName: ="Tarefeiro"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =1
+            Text: =ThisItem.Tarefeiro
+            Width: =550
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+        Quantidade_Column1 As dataTableColumn.textualColumn:
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Total"
+            FieldName: ="Quantidade"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =2
+            Text: =ThisItem.Quantidade
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =2
+
+    HTML_Total As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            ="<div style='display: flex; justify-content: center; align-items: center;'>
+            Entrevistas:&nbsp;<b>" & varEntrevistas + varEntrevistasFinalizadas - varDialogos & "</b>&nbsp; /&nbsp; Dialogos:&nbsp;<b>" & varDialogos &
+            "</b></div>"
+        Size: =21
+        Width: =550
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =Button3.Y + Button3.Height + 30
+        ZIndex: =10
+
+    HTML_Encerradas As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            ="<div style='display: flex; justify-content: center; align-items: center;'>
+            Orientações:&nbsp;<b>" & varOrientacao & "</b>&nbsp; /&nbsp; Encerrados:&nbsp;<b>" & varFinalizadas &
+            "</b></div>"
+        Size: =21
+        Width: =450
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =HTML_Total.Y + HTML_Total.Height + 5
+        ZIndex: =11
+
+    HTML_Orientações As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            ="<div style='display: flex; justify-content: center; align-items: center;'>
+            Total do dia:&nbsp;<b>" & varEntrevistas + varEntrevistasFinalizadas + varOrientacao + varFinalizadas & "</b> </div>"
+        Size: =21
+        Width: =450
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =HTML_Encerradas.Y + HTML_Encerradas.Height + 5
+        ZIndex: =12
+
+    Label2 As label:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Height: =145
+        Size: =21
+        Text: |-
+            ="IDs Pessoas: " &
+            With(
+                {
+                    // Cria uma variável temporária com a lista de IDs concatenados
+                    fullString: Concat('Resumo Dia'.Selected.IDPessoas,
+                    If(ID = 0, "Orientação", ID) & "; ")
+                },
+                // Usa a função Left para pegar todo o texto, exceto os últimos 2 caracteres ("; ")
+                Left(fullString, Len(fullString) - 2)
+            )
+        Width: =560
+        X: =60
+        Y: =1300
+        ZIndex: =13
+
+    HTML_Detalhado_Assistencias_Adultos As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            ="<div style='display: flex; justify-content: center; align-items: center;'>
+            A1:&nbsp;<b>" & assistenciasSomadas.A1 & 
+            "</b>&nbsp;| A2:&nbsp;<b>" & assistenciasSomadas.A2 & 
+            "</b>&nbsp;| A3:&nbsp;<b>" & assistenciasSomadas.A3 & 
+            "</b>&nbsp;| PS:&nbsp;<b>" & assistenciasSomadas.PS & 
+            "</b> </div>"
+        Size: =21
+        Width: =550
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =HTML_Total_Tarefeiros.Y + HTML_Total_Tarefeiros.Height + 10
+        ZIndex: =14
+
+    HTML_Detalhado_Assistencias_Crianças As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            ="<div style='display: flex; justify-content: center; align-items: center;'>
+            C1:&nbsp;<b>" & assistenciasSomadas.C1 & 
+            "</b>&nbsp;| C2:&nbsp;<b>" & assistenciasSomadas.C2 & 
+            "</b>&nbsp;| C3:&nbsp;<b>" & assistenciasSomadas.C3 & 
+            "</b>&nbsp;| PS Crianças:&nbsp;<b>" & assistenciasSomadas.PSC & 
+            "</b> </div>"
+        Size: =21
+        Width: =HTML_Detalhado_Assistencias_Adultos.Width
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =HTML_Detalhado_Assistencias_Adultos.Y + HTML_Detalhado_Assistencias_Adultos.Height + 5
+        ZIndex: =15
+
+    Rectangle10 As rectangle:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        BorderThickness: =4
+        Fill: =Color.Transparent
+        Height: =HTML_Total_Geral.Y -Self.Y + HTML_Total_Geral.Height
+        Width: =HTML_Detalhado_Assistencias_Adultos.Width - 20
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =HTML_Detalhado_Assistencias_Adultos.Y
+        ZIndex: =16
+
+    HTML_Total_Geral As htmlViewer:
+        Height: =50
+        HtmlText: |
+            ="<div style='display: flex; justify-content: center; align-items: center;'>
+            Total Geral:&nbsp;<b>" & totalAssistencias & 
+            "</b> </div>"
+        Size: =21
+        Width: =360
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =768
+        ZIndex: =17
+
+    HTML_Total_Tarefeiros As htmlViewer:
+        Height: =50
+        HtmlText: |-
+            ="<div style='display: flex; justify-content: center; align-items: center;'>
+            Novos Assistidos:&nbsp;<b>" & varNovosAssistidos & "</b> </div>"
+        Size: =21
+        Width: =450
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =HTML_Orientações.Y + HTML_Orientações.Height + 5
+        ZIndex: =18
+
+    Dropdown_Periodo_1 As dropdown:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        ChevronBackground: =RGBA(0, 51, 102, 1)
+        ChevronDisabledBackground: =RGBA(166, 166, 166, 1)
+        ChevronDisabledFill: =RGBA(244, 244, 244, 1)
+        ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        ChevronHoverFill: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Height: =50
+        HoverColor: =RGBA(0, 0, 0, 1)
+        HoverFill: =RGBA(153, 205, 255, 1)
+        Items: =["Tarde", "Noite"]
+        OnChange: |
+            =ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                )
+            );
+            Set(Assistencias, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    Finalizada = "Sim",
+                    'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                )
+            );
+            Set(AguardandoDialogos, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    IsBlank('Semana 1'),
+                    'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                )
+            );
+            Set(SoEntrevista, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasFinal,
+                Filter(
+                    ColecaoAssistenciasFiltradas,
+                    IsBlank('Semana 2') &&
+                    IsBlank('Semana 3') &&
+                    IsBlank('Semana 4') &&
+                    DateDiff('Semana 1', Now()) > tolerancia * 7
+                )
+            );
+            Set(So1aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasFinal,
+                Filter(
+                    ColecaoAssistenciasFiltradas,
+                    IsBlank('Semana 3') &&
+                    IsBlank('Semana 4') &&
+                    DateDiff('Semana 2', Now()) > tolerancia * 7
+                )
+            );
+            Set(So2aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            Clear(ColecaoAssistenciasFiltradas);
+            
+            ClearCollect(
+                ColecaoAssistenciasFiltradas,
+                Filter(
+                    Assistências,
+                    'Dia Semana' = Dropdown_Periodo_1.Selected.Value
+                )
+            );
+            
+            ClearCollect(
+                ColecaoAssistenciasFinal,
+                Filter(
+                    ColecaoAssistenciasFiltradas,
+                    IsBlank('Semana 4') &&
+                    DateDiff('Semana 3', Now()) > tolerancia * 7
+                )
+            );
+            Set(So3aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
+            //------
+            
+            Set(ForaPrazo,
+                SoEntrevista + So1aSemana + So2aSemana + So3aSemana
+            );
+            //------
+            
+            Set(DentroPrazo,
+                Assistencias - ForaPrazo
+            );
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =RGBA(0, 89, 178, 1)
+        SelectionFill: =RGBA(0, 51, 102, 1)
+        Size: =21
+        Visible: =(Weekday(Data_Inicial.SelectedDate) = 5) //true
+        Width: =300
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =Data_Inicial.Y + Data_Inicial.Height + 30
+        ZIndex: =19
+

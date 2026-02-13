@@ -1,0 +1,430 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  Manutenção:
+    Properties:
+      Fill: =RGBA(232, 232, 232, 1)
+      LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: |-
+        =//Set(Hora;Int(Text(Now();"hh")));;
+        //Set(DiaSemana;
+        //   Switch(
+        //       Weekday(Now());
+        //       1; "Domingo";
+        //       2; "Segunda";
+        //       3; "Terça";
+        //       4; "Quarta";
+        //       5; "Quinta";
+        //       6; "Sexta";
+        //       7; "Sabado"
+        //    )
+        //);;
+        //Set(Periodo;
+        //    If(Hora<12;"Manhã";
+        //        If(Hora<18;"Tarde";"Noite")
+        //    )
+        //);;
+        //Set(DiaComPeriodo;Concatenate(DiaSemana;"_";Periodo));;
+
+        //Define tolerancia de semanas que pode faltar na assistência:
+        //Set(tolerancia;2);;
+
+        //Zera variaveis dos popup
+        //Set(PopupApagaAssistido; false);;
+        //Set(PopupApagaEntrevista; false);;
+        //Set(PopupApagaTarefeiro; false);;
+        //Set(PopupApagaTodos; false);;
+        //Set(PopupConfirmaPresenca; false);;
+        //Set(PopupInformaNumero; false);;
+        Set(DialogoRealizado, false);
+    Children:
+      - Lbl_Titulo_2:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(241, 244, 249, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Font: =Font.'Lato Light'
+            FontWeight: =FontWeight.Bold
+            Height: =88
+            Italic: =true
+            Size: =35
+            Text: ="MANUTENÇÃO"
+            Width: =Parent.Width
+      - Lbl_Usuario_Logado_2:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(241, 244, 249, 1)
+            Fill: =RGBA(0, 18, 107, 1)
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =88
+            Italic: =true
+            Size: =28
+            Text: =Concatenate("   ",Usuario_Logado," - ",Perfil_Logado)
+            Width: =Parent.Width
+            Y: =Parent.Height-Self.Height
+      - Btn_Busca_Entrevistas_Duplicadas:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            Height: =85
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |+
+              =Set(UltimoCadastro, Max(Assistências,'ID Pessoa'));
+
+              ClearCollect(
+                  MinhaColecaoDuplicada,
+                  ForAll(
+                      Sequence(UltimoCadastro),
+                      {
+                          Valor: Value,
+                          Duplicatas: Filter(
+                              Assistências,
+                                  'ID Pessoa' = Value)
+                      }
+                  )
+              );
+
+              ClearCollect(
+                  ValoresDuplicados,
+                  Filter(
+                      MinhaColecaoDuplicada,
+                      CountRows(Duplicatas) > 1
+                  )
+              );
+
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Entrevistas Duplicadas"
+            Y: =585
+      - DataTable_Entrevistas_Duplicadas:
+          Control: DataTable@1.0.3
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            HeadingColor: =RGBA(255, 255, 255, 1)
+            HeadingFill: =RGBA(0, 51, 102, 1)
+            HeadingFont: =Font.'Open Sans'
+            Height: =347
+            HoverFill: =RGBA(153, 205, 255, .2)
+            Items: =ValoresDuplicados
+            SelectedFill: =RGBA(0, 51, 102, .2)
+            Width: =280
+            Y: =680
+          Children:
+            - Valor_Coluna1_1:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  AutoWidth: =false
+                  FieldDisplayName: ="Valor"
+                  FieldName: ="Valor"
+                  Order: =2
+                  Text: =ThisItem.Valor
+                  Width: =279
+      - Icone_Voltar_Assistidos_1:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =88
+            Icon: =Icon.ChevronLeft
+            OnSelect: =Navigate(Tela_Principal, ScreenTransition.CoverRight)
+            PaddingBottom: =24
+            PaddingLeft: =24
+            PaddingRight: =24
+            PaddingTop: =24
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Back to list"
+            Width: =88
+      - DataTable1:
+          Control: DataTable@1.0.3
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            HeadingColor: =RGBA(255, 255, 255, 1)
+            HeadingFill: =RGBA(0, 51, 102, 1)
+            HeadingFont: =Font.'Open Sans'
+            Height: =313
+            HoverFill: =RGBA(153, 205, 255, .2)
+            Items: =Logs
+            SelectedFill: =RGBA(0, 51, 102, .2)
+            Size: =15
+            Width: =App.MinScreenWidth
+            Y: =1043
+          Children:
+            - DataeHora_Coluna2:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  AutoWidth: =false
+                  FieldDisplayName: ="DataeHora"
+                  FieldName: ="cre47_dataehora"
+                  Order: =3
+                  Text: =ThisItem.DataeHora
+                  Width: =183
+            - Ação_Coluna1:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  AutoWidth: =false
+                  FieldDisplayName: ="Ação"
+                  FieldName: ="cre47_acao"
+                  Order: =5
+                  Text: =ThisItem.Ação
+                  Width: =354
+            - DeviceID_Coluna1:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  AutoWidth: =false
+                  FieldDisplayName: ="DeviceID"
+                  FieldName: ="cre47_deviceid"
+                  Order: =4
+                  Text: =ThisItem.DeviceID
+                  Width: =145
+      - Btn_1:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            Height: =85
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |+
+              =//------------------------------------------------------------------------------------------
+              // Copia os registros com 'Data Diálogo' preenchida para Assistências_Encerradas
+              ForAll(
+                  Filter(Assistências, !IsBlank('Data Diálogo')),
+                  Patch(
+                      Assistências_Encerradas,
+                      Defaults(Assistências_Encerradas),
+                      {
+                          'ID Assistência': ThisRecord.'ID Assistência',
+                          'ID Pessoa': ThisRecord.'ID Pessoa',
+                          'ID Pessoa Texto': ThisRecord.'ID Pessoa Texto',
+                          'Data Entrevista': ThisRecord.'Data Entrevista',
+                          Entrevistador: ThisRecord.Entrevistador,
+                          'Dia Semana': ThisRecord.'Dia Semana',
+                          'Primeira Assistência': ThisRecord.'Primeira Assistência',
+                          Assistência: ThisRecord.'Assistência (cr4f5_assistencia)',
+                          'Tratamento Médico': ThisRecord.'Tratamento Médico',
+                          'Anotações Entrevista': Left(ThisRecord.'Anotações Entrevista', 100), // Trunca para 100 caracteres
+                          'Assistência Mesmo Dia': ThisRecord.'Assistência Mesmo Dia',
+                          'Semana 1': ThisRecord.'Semana 1',
+                          'Semana 2': ThisRecord.'Semana 2',
+                          'Semana 3': ThisRecord.'Semana 3',
+                          'Semana 4': ThisRecord.'Semana 4',
+                          Extra: ThisRecord.Extra,
+                          Finalizada: ThisRecord.Finalizada,
+                          'Data Diálogo': ThisRecord.'Data Diálogo',
+                          Dialogador: ThisRecord.Dialogador,
+                          'Anotações Diálogo': Left(ThisRecord.'Anotações Diálogo', 100), // Trunca para 100 caracteres
+                          'Continua Tratamento': ThisRecord.'Continua Tratamento',
+                          Abandonou: "Não",
+                          'Ultimo Comparecimento': ThisRecord.'Ultimo Comparecimento',
+                          'Entrevista Nova': ThisRecord.'Entrevista Nova'
+                      }
+                  )
+              );
+              //------------------------------------------------------------------------------------------
+
+              //------------------------------------------------------------------------------------------
+              // Remove os registros errados da tabela original
+              RemoveIf(Assistências, !IsBlank('Data Diálogo'));
+              //------------------------------------------------------------------------------------------
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Move Finalizadas"
+            X: =20
+            Y: =156
+      - Btn_Busca_Entrevistas_Duplicadas_2:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            Height: =85
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: =
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Copia Entrevistas"
+            X: =104
+            Y: =454
+      - Button2:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =//RemoveIf(Assistências; true);;
+              //RemoveIf(Assistências_Encerradas; true);;
+              //RemoveIf(Pessoas; true);;
+              //RemoveIf(Presenças; true);;
+              //RemoveIf(Excedentes; true);;
+              //RemoveIf(Logs; true);;
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Apaga Todas Tabelas"
+            X: =400
+            Y: =454
+      - Btn_2:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            Height: =85
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: =
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Ultimo Comp."
+            X: =20
+            Y: =285
+      - Btn_Busca_Entrevistas_Duplicadas_3:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            Height: =85
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateIf(
+                  Assistências,
+                  IsBlank(Abandonou) || Abandonou = "",
+                  {
+                      Abandonou: "Não"
+                  }
+              )
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Abandonou"
+            X: =400
+            Y: =156
+      - Btn_Busca_Entrevistas_Duplicadas_1:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            Height: =85
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |
+              =ClearCollect(
+                  EntrevistaNoMesmoDia,
+                  Filter(
+                      Assistências_Encerradas,
+                      DateValue('Data Entrevista') = DateValue('Data de Criação')
+                  )
+              );
+              ClearCollect(
+                  PessoasMesmaData,
+                  Distinct(EntrevistaNoMesmoDia, 'ID Pessoa')
+              )
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Assistencias Duplicadas"
+            X: =373
+            Y: =585
+      - DataTable_Entrevistas_Duplicadas_1:
+          Control: DataTable@1.0.3
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            HeadingColor: =RGBA(255, 255, 255, 1)
+            HeadingFill: =RGBA(0, 51, 102, 1)
+            HeadingFont: =Font.'Open Sans'
+            Height: =347
+            HoverFill: =RGBA(153, 205, 255, .2)
+            Items: =PessoasMesmaData
+            NoDataText: ="Não foi possível localizar dados para mostrar no momento"
+            SelectedFill: =RGBA(0, 51, 102, .2)
+            Width: =280
+            X: =373
+            Y: =680
+          Children:
+            - Value_Column1:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  FieldDisplayName: ="Value"
+                  FieldName: ="Value"
+                  Order: =1
+                  Text: =ThisItem.Value
+      - Btn_3:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            Height: =85
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: =
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Ultimo Comp."
+            X: =400
+            Y: =285
