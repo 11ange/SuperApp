@@ -20,10 +20,7 @@
         Height: =80
         HoverColor: =RGBA(255, 255, 255, 1)
         HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-        OnSelect: |-
-            =Refresh(Assistências);
-            
-            Navigate(Tela_Busca_Entrevistas_Presença, ScreenTransition.Cover)
+        OnSelect: =Navigate(Tela_Busca_Entrevistas_Presença, ScreenTransition.Cover)
         Size: =24
         Text: ="Presença"
         Width: =250
@@ -71,10 +68,7 @@
         Height: =80
         HoverColor: =RGBA(255, 255, 255, 1)
         HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-        OnSelect: |-
-            =Refresh(Pessoas);
-            Refresh(Assistências);
-            Navigate(Tela_Busca_Assistidos, ScreenTransition.Cover)
+        OnSelect: =Navigate(Tela_Busca_Assistidos, ScreenTransition.Cover)
         Size: =24
         Text: ="Assistidos"
         Tooltip: ="Acessa o cadastro dos Assistidos"
@@ -108,10 +102,7 @@
         Height: =80
         HoverColor: =RGBA(255, 255, 255, 1)
         HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-        OnSelect: |-
-            =Refresh(Pessoas);
-            Refresh(Assistências);
-            Navigate(Tela_Busca_Todos, ScreenTransition.Cover)
+        OnSelect: =Navigate(Tela_Busca_Todos, ScreenTransition.Cover)
         Size: =24
         TabIndex: =2
         Text: ="Todos"
@@ -145,11 +136,7 @@
         Height: =80
         HoverColor: =RGBA(255, 255, 255, 1)
         HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-        OnSelect: |-
-            =Refresh(Pessoas);
-            Refresh(Assistências);
-            
-            Navigate(Tela_Busca_Tarefeiros, ScreenTransition.Cover)
+        OnSelect: =Navigate(Tela_Busca_Tarefeiros, ScreenTransition.Cover)
         Size: =24
         TabIndex: =1
         Text: ="Tarefeiros"
@@ -168,10 +155,7 @@
         Height: =80
         HoverColor: =RGBA(255, 255, 255, 1)
         HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-        OnSelect: |-
-            =Refresh(Assistências);
-            
-            Navigate(Tela_Busca_Entrevistas, ScreenTransition.Cover)
+        OnSelect: =Navigate(Tela_Busca_Entrevistas, ScreenTransition.Cover)
         Size: =24
         Text: ="Assistência"
         Width: =250

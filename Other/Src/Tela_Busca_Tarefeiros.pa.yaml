@@ -11,7 +11,13 @@ Screens:
     Properties:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
-      OnVisible: =Reset(Campo_Busca_Tarefeiro);
+      OnVisible: |-
+        =Concurrent(
+            Refresh(Pessoas),
+            Refresh(Assistências)
+        );
+
+        Reset(Campo_Busca_Tarefeiro);
     Children:
       - RectQuickActionBar_Tela_Busca_Tarefeiros:
           Control: Rectangle@2.3.0

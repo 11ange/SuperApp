@@ -12,7 +12,12 @@ Screens:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
       OnVisible: |-
-        =Set(CriaAssistido,false);
+        =Concurrent(
+            Refresh(Pessoas),
+            Refresh(Assistências)
+        );
+
+        Set(CriaAssistido,false);
 
         Reset(Campo_Busca_Assistido);
     Children:

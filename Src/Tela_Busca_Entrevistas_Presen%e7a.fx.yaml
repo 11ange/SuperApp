@@ -1,6 +1,9 @@
 "Tela_Busca_Entrevistas_Presença As screen.'phoneLayout_HeaderAndGallery_ver3.0'":
     Fill: =RGBA(232, 232, 232, 1)
-    OnVisible: =Reset(Campo_Busca_Entrevista_Presença)
+    OnVisible: |-
+        =Refresh(Assistências);
+        
+        Reset(Campo_Busca_Entrevista_Presença)
 
     RectQuickActionBar1 As rectangle:
         BorderColor: =RGBA(0, 89, 178, 1)

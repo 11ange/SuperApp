@@ -11,63 +11,7 @@ Screens:
     Properties:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
-      OnVisible: |
-        =Reset(txt_PS);
-        Reset(txt_PSC);
-
-        UpdateContext(
-            {
-                Atual_PS:  0,
-                Atual_PSC: 0,
-                Mostra_PSC: false
-            }
-        );
-
-        Refresh(Presenças);
-
-        With(
-            {
-                dataInicial: Data_Inicial_1.SelectedDate,
-                periodoSelecionado: Dropdown_Periodo_2.Selected.Value,
-                isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5
-            },
-
-            If(
-                Weekday(Data_Inicial_1.SelectedDate) = 5,
-
-                // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período
-                UpdateContext({
-                    diaSelecionado: LookUp(
-                        Presenças,
-                        Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy") &&
-                        PeriodoDia = Dropdown_Periodo_2.Selected.Value
-                    )
-                }),
-
-                // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data
-                UpdateContext({
-                    diaSelecionado: LookUp(
-                        Presenças,
-                        Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy")
-                    )
-                })
-            );
-
-            UpdateContext({
-                Atual_PS: diaSelecionado.PS,
-                Atual_PSC: diaSelecionado.'PS Crianças',
-                Mostra_PSC:
-                    Or(
-                        Weekday(dataInicial) = 4, // Quarta
-                        Weekday(dataInicial) = 7, // Sábado
-                        Weekday(dataInicial) = 1, // Domingo
-                        And(
-                            Weekday(dataInicial) = 5, // Quinta
-                            periodoSelecionado = "Tarde"
-                        )
-                    )
-            });
-        );
+      OnVisible: "=Refresh(Presenças);\n\nReset(txt_PS);\nReset(txt_PSC);\n\nUpdateContext(\n    {\n        Atual_PS:  0,\n        Atual_PSC: 0,\n        Mostra_PSC: false\n    }\n);\n\nSelect(btn_HelperAtualizaPS);\n\n/*\nIf(\n    !IsBlank(diaSelecionado),\n    With(\n        {\n            valorPS:\n                If(\n                    IsBlank(txt_PS.Text),\n                    diaSelecionado.PS,\n                    Value(txt_PS.Text)\n                ),\n\n            valorPSC:\n                If(\n                    Mostra_PSC,\n                    If(\n                        IsBlank(txt_PSC.Text),\n                        diaSelecionado.'PS Crianças',\n                        Value(txt_PSC.Text)\n                    ),\n                    diaSelecionado.'PS Crianças'\n                )\n        },\n\n        Patch(\n            Presenças,\n            diaSelecionado,\n            {\n                PS: valorPS,\n                'PS Crianças': valorPSC\n            }\n        )\n    )\n);\n\nRefresh(Presenças);\n\nWith(\n    {\n        dataInicial: Data_Inicial_1.SelectedDate,\n        periodoSelecionado: Dropdown_Periodo_2.Selected.Value,\n        isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5\n    },\n\n    If(\n        Weekday(Data_Inicial_1.SelectedDate) = 5,\n\n        // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período\n        UpdateContext({\n            diaSelecionado: LookUp(\n                Presenças,\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\") &&\n                PeriodoDia = Dropdown_Periodo_2.Selected.Value\n            )\n        }),\n\n        // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data\n        UpdateContext({\n            diaSelecionado: LookUp(\n                Presenças,\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\")\n            )\n        })\n    );\n\n    UpdateContext({\n        Atual_PS: diaSelecionado.PS,\n        Atual_PSC: diaSelecionado.'PS Crianças',\n        Mostra_PSC:\n            Or(\n                Weekday(dataInicial) = 4, // Quarta\n                Weekday(dataInicial) = 7, // Sábado\n                Weekday(dataInicial) = 1, // Domingo\n                And(\n                    Weekday(dataInicial) = 5, // Quinta\n                    periodoSelecionado = \"Tarde\"\n                )\n            )\n    });\n    \n);*/"
     Children:
       - RectQuickActionBar3_13:
           Control: Rectangle@2.3.0
@@ -125,52 +69,7 @@ Screens:
             Font: =Font.'Open Sans'
             IconBackground: =RGBA(0, 51, 102, 1)
             IconFill: =RGBA(255, 255, 255, 1)
-            OnChange: |-
-              =Refresh(Presenças);
-
-              With(
-                  {
-                      dataInicial: Data_Inicial_1.SelectedDate,
-                      periodoSelecionado: Dropdown_Periodo_2.Selected.Value,
-                      isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5
-                  },
-
-                  If(
-                      Weekday(Data_Inicial_1.SelectedDate) = 5,
-
-                      // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período
-                      UpdateContext({
-                          diaSelecionado: LookUp(
-                              Presenças,
-                              Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy") &&
-                              PeriodoDia = Dropdown_Periodo_2.Selected.Value
-                          )
-                      }),
-
-                      // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data
-                      UpdateContext({
-                          diaSelecionado: LookUp(
-                              Presenças,
-                              Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy")
-                          )
-                      })
-                  );
-
-                  UpdateContext({
-                      Atual_PS: diaSelecionado.PS,
-                      Atual_PSC: diaSelecionado.'PS Crianças',
-                      Mostra_PSC:
-                          Or(
-                              Weekday(dataInicial) = 4, // Quarta
-                              Weekday(dataInicial) = 7, // Sábado
-                              Weekday(dataInicial) = 1, // Domingo
-                              And(
-                                  Weekday(dataInicial) = 5, // Quinta
-                                  periodoSelecionado = "Tarde"
-                              )
-                          )
-                  });
-              );
+            OnChange: "=Reset(txt_PS);\r\nReset(txt_PSC);\r\n\r\nSelect(btn_HelperAtualizaPS)\r\n/*\r\nIf(\r\n    !IsBlank(diaSelecionado),\r\n    With(\r\n        {\r\n            valorPS:\r\n                If(\r\n                    IsBlank(txt_PS.Text),\r\n                    diaSelecionado.PS,\r\n                    Value(txt_PS.Text)\r\n                ),\r\n\r\n            valorPSC:\r\n                If(\r\n                    Mostra_PSC,\r\n                    If(\r\n                        IsBlank(txt_PSC.Text),\r\n                        diaSelecionado.'PS Crianças',\r\n                        Value(txt_PSC.Text)\r\n                    ),\r\n                    diaSelecionado.'PS Crianças'\r\n                )\r\n        },\r\n\r\n        Patch(\r\n            Presenças,\r\n            diaSelecionado,\r\n            {\r\n                PS: valorPS,\r\n                'PS Crianças': valorPSC\r\n            }\r\n        )\r\n    )\r\n);\r\n\r\nRefresh(Presenças);\r\n\r\nWith(\r\n    {\r\n        dataInicial: Data_Inicial_1.SelectedDate,\r\n        periodoSelecionado: Dropdown_Periodo_2.Selected.Value,\r\n        isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5\r\n    },\r\n\r\n    If(\r\n        Weekday(Data_Inicial_1.SelectedDate) = 5,\r\n\r\n        // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período\r\n        UpdateContext({\r\n            diaSelecionado: LookUp(\r\n                Presenças,\r\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\") &&\r\n                PeriodoDia = Dropdown_Periodo_2.Selected.Value\r\n            )\r\n        }),\r\n\r\n        // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data\r\n        UpdateContext({\r\n            diaSelecionado: LookUp(\r\n                Presenças,\r\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\")\r\n            )\r\n        })\r\n    );\r\n\r\n    UpdateContext({\r\n        Atual_PS: diaSelecionado.PS,\r\n        Atual_PSC: diaSelecionado.'PS Crianças',\r\n        Mostra_PSC:\r\n            Or(\r\n                Weekday(dataInicial) = 4, // Quarta\r\n                Weekday(dataInicial) = 7, // Sábado\r\n                Weekday(dataInicial) = 1, // Domingo\r\n                And(\r\n                    Weekday(dataInicial) = 5, // Quinta\r\n                    periodoSelecionado = \"Tarde\"\r\n                )\r\n            )\r\n    });\r\n    \r\n);*/"
             Width: =250
             X: =(Parent.Width - Self.Width) / 2
             Y: =RectQuickActionBar3_13.X + RectQuickActionBar3_13.Height + 60
@@ -252,7 +151,7 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: "=If(\r\n    !IsBlank(diaSelecionado),\r\n    With(\r\n        {\r\n            valorPS:\r\n                If(\r\n                    IsBlank(txt_PS.Text),\r\n                    diaSelecionado.PS,\r\n                    Value(txt_PS.Text)\r\n                ),\r\n\r\n            valorPSC:\r\n                If(\r\n                    Mostra_PSC,\r\n                    If(\r\n                        IsBlank(txt_PSC.Text),\r\n                        diaSelecionado.'PS Crianças',\r\n                        Value(txt_PSC.Text)\r\n                    ),\r\n                    diaSelecionado.'PS Crianças'\r\n                )\r\n        },\r\n\r\n        Patch(\r\n            Presenças,\r\n            diaSelecionado,\r\n            {\r\n                PS: valorPS,\r\n                'PS Crianças': valorPSC\r\n            }\r\n        )\r\n    )\r\n);\r\n\r\nRefresh(Presenças);\r\n\r\nWith(\r\n    {\r\n        dataInicial: Data_Inicial_1.SelectedDate,\r\n        periodoSelecionado: Dropdown_Periodo_2.Selected.Value,\r\n        isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5\r\n    },\r\n\r\n    If(\r\n        Weekday(Data_Inicial_1.SelectedDate) = 5,\r\n\r\n        // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período\r\n        UpdateContext({\r\n            diaSelecionado: LookUp(\r\n                Presenças,\r\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\") &&\r\n                PeriodoDia = Dropdown_Periodo_2.Selected.Value\r\n            )\r\n        }),\r\n\r\n        // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data\r\n        UpdateContext({\r\n            diaSelecionado: LookUp(\r\n                Presenças,\r\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\")\r\n            )\r\n        })\r\n    );\r\n\r\n    UpdateContext({\r\n        Atual_PS: diaSelecionado.PS,\r\n        Atual_PSC: diaSelecionado.'PS Crianças',\r\n        Mostra_PSC:\r\n            Or(\r\n                Weekday(dataInicial) = 4, // Quarta\r\n                Weekday(dataInicial) = 7, // Sábado\r\n                Weekday(dataInicial) = 1, // Domingo\r\n                And(\r\n                    Weekday(dataInicial) = 5, // Quinta\r\n                    periodoSelecionado = \"Tarde\"\r\n                )\r\n            )\r\n    });\r\n    \r\n);"
+            OnSelect: =Select(btn_HelperAtualizaPS)
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
@@ -348,3 +247,20 @@ Screens:
             Width: =70
             X: =lbl_Atual_PS.X
             Y: =txt_PSC.Y
+      - btn_HelperAtualizaPS:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Font: =Font.'Open Sans'
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: "=If(\r\n    !IsBlank(diaSelecionado),\r\n    With(\r\n        {\r\n            valorPS:\r\n                If(\r\n                    IsBlank(txt_PS.Text),\r\n                    diaSelecionado.PS,\r\n                    Value(txt_PS.Text)\r\n                ),\r\n\r\n            valorPSC:\r\n                If(\r\n                    Mostra_PSC,\r\n                    If(\r\n                        IsBlank(txt_PSC.Text),\r\n                        diaSelecionado.'PS Crianças',\r\n                        Value(txt_PSC.Text)\r\n                    ),\r\n                    diaSelecionado.'PS Crianças'\r\n                )\r\n        },\r\n\r\n        Patch(\r\n            Presenças,\r\n            diaSelecionado,\r\n            {\r\n                PS: valorPS,\r\n                'PS Crianças': valorPSC\r\n            }\r\n        )\r\n    )\r\n);\r\n\r\nRefresh(Presenças);\r\n\r\nWith(\r\n    {\r\n        dataInicial: Data_Inicial_1.SelectedDate,\r\n        periodoSelecionado: Dropdown_Periodo_2.Selected.Value,\r\n        isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5\r\n    },\r\n\r\n    If(\r\n        Weekday(Data_Inicial_1.SelectedDate) = 5,\r\n\r\n        // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período\r\n        UpdateContext({\r\n            diaSelecionado: LookUp(\r\n                Presenças,\r\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\") &&\r\n                PeriodoDia = Dropdown_Periodo_2.Selected.Value\r\n            )\r\n        }),\r\n\r\n        // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data\r\n        UpdateContext({\r\n            diaSelecionado: LookUp(\r\n                Presenças,\r\n                Data = Text(Data_Inicial_1.SelectedDate, \"dd/mm/yyyy\")\r\n            )\r\n        })\r\n    );\r\n\r\n    UpdateContext({\r\n        Atual_PS: diaSelecionado.PS,\r\n        Atual_PSC: diaSelecionado.'PS Crianças',\r\n        Mostra_PSC:\r\n            Or(\r\n                Weekday(dataInicial) = 4, // Quarta\r\n                Weekday(dataInicial) = 7, // Sábado\r\n                Weekday(dataInicial) = 1, // Domingo\r\n                And(\r\n                    Weekday(dataInicial) = 5, // Quinta\r\n                    periodoSelecionado = \"Tarde\"\r\n                )\r\n            )\r\n    });\r\n    \r\n);"
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            X: =440
+            Y: =1376

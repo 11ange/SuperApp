@@ -7,6 +7,12 @@
         Set(Assist_fora_prazo, false);
         Set(Assist_mesmo_dia,  false);
         
+        // Traz o registro apenas UMA vez para a memória
+        UpdateContext({ ctxAssistenciaAtual: LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada) });
+        
+        Set(Assist_Encerrada, ctxAssistenciaAtual.Finalizada = "Sim");
+        Set(Assist_fora_dia, Text(ctxAssistenciaAtual.'Dia Semana') <> DiaComPeriodo);
+        /*
         //Valida se assistência está encerrada - o filtro da tela anterior deve ter restringido
         If(LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).Finalizada="Sim",
             Set(Assist_Encerrada, true),
@@ -18,7 +24,7 @@
             Set(Assist_fora_dia, false),
             Set(Assist_fora_dia, true)
         );
-        
+        */
         //Exibição dos campos de data:
         Set(Semana1, false);
         Set(Semana2, false);
@@ -65,9 +71,13 @@
             Set(Assist_mesmo_dia, diasDesdeSemana3 < 1);
         );
         
+        UpdateContext({ registroAssistencia: ctxAssistenciaAtual });
+        Set(AssistenciaAtual, ctxAssistenciaAtual.'Assistência (cr4f5_assistencia)');
+        Set(DataEntrevistaAtual, ctxAssistenciaAtual.'Data Entrevista');
+        /*
         Set(AssistenciaAtual, LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).'Assistência (cr4f5_assistencia)');
         Set(DataEntrevistaAtual, LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).'Data Entrevista');
-        
+        */
         UpdateContext(
             {MostraPopUp: false,
             PopupConfirmaEnvioDialogo: false,
@@ -982,6 +992,18 @@
                         Ação: "Confirmada Presença ID:" & PessoaSelecionada & " - " & AssistenciaAtual
                     }
                 );
+                Patch(
+                    Assistências,
+                    registroAssistencia, // Usa a variável que já está na memória!
+                    {
+                        'Semana 1': If(Semana1, Today(), registroAssistencia.'Semana 1'),
+                        'Semana 2': If(Semana2, Today(), registroAssistencia.'Semana 2'),
+                        'Semana 3': If(Semana3, Today(), registroAssistencia.'Semana 3'),
+                        'Semana 4': If(Semana4, Today(), registroAssistencia.'Semana 4'),
+                        'Ultimo Comparecimento': Today()
+                    }
+                );
+                /*
                 If(Semana1,
                     Patch(Assistências,
                         LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),
@@ -1013,7 +1035,7 @@
                             'Semana 4': Today()
                         }
                     )
-                );
+                );*/
                 // 1. Variáveis Iniciais
                 Set(Hoje, Text(Today(), "[$-pt-BR]dd/mm/yyyy"));
                 

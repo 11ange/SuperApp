@@ -22,14 +22,16 @@ App As appinfo:
                 Ação: "App inicializado"
             }
         );
-        
+        /*
         //----------------------------------------------------------------------
         // Pra "acordar" o dataverse. Não apagar o usuario Teste (Id=190)
-        Refresh(Pessoas);
-        Refresh(Assistências);
-        Refresh(Assistências_Encerradas);
+        Concurrent(
+            Refresh(Pessoas),
+            Refresh(Assistências),
+            Refresh(Assistências_Encerradas)
+        );
         //----------------------------------------------------------------------
-        
+        */
         //----------------------------------------------------------------------
         //Calcula o dia da semana com período atual (no momento que abriu a tela)
         Set(Hora, Int(Text(Now(), "hh")));
@@ -104,8 +106,6 @@ App As appinfo:
                 'NomePessoa', Text(LookUp(Pessoas, 'ID Pessoa' = Aloc_Pessoa, 'Nome Pessoa'))
             )
         );
-        
-        Tela_Principal
     SizeBreakpoints: =[600,800,1280]
     StartScreen: =Tela_Principal
     Theme: =PowerAppsTheme

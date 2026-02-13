@@ -34,10 +34,7 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: |-
-              =Refresh(Assistências);
-
-              Navigate(Tela_Busca_Entrevistas_Presença, ScreenTransition.Cover)
+            OnSelect: =Navigate(Tela_Busca_Entrevistas_Presença, ScreenTransition.Cover)
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
@@ -89,10 +86,7 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: |-
-              =Refresh(Pessoas);
-              Refresh(Assistências);
-              Navigate(Tela_Busca_Assistidos, ScreenTransition.Cover)
+            OnSelect: =Navigate(Tela_Busca_Assistidos, ScreenTransition.Cover)
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
@@ -128,10 +122,7 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: |-
-              =Refresh(Pessoas);
-              Refresh(Assistências);
-              Navigate(Tela_Busca_Todos, ScreenTransition.Cover)
+            OnSelect: =Navigate(Tela_Busca_Todos, ScreenTransition.Cover)
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
@@ -168,11 +159,7 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: |-
-              =Refresh(Pessoas);
-              Refresh(Assistências);
-
-              Navigate(Tela_Busca_Tarefeiros, ScreenTransition.Cover)
+            OnSelect: =Navigate(Tela_Busca_Tarefeiros, ScreenTransition.Cover)
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
@@ -194,10 +181,7 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: |-
-              =Refresh(Assistências);
-
-              Navigate(Tela_Busca_Entrevistas, ScreenTransition.Cover)
+            OnSelect: =Navigate(Tela_Busca_Entrevistas, ScreenTransition.Cover)
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color

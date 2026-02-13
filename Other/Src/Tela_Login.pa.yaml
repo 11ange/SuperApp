@@ -125,7 +125,26 @@ Screens:
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
             OnSelect: |-
-              =If(
+              =// Faça apenas UM LookUp combinando Usuário e Senha
+              UpdateContext({
+                  ctxUsuarioLogado: LookUp(
+                      Usuarios, 
+                      Upper('Nome Usuario') = Upper(txtUsuario.Text) && 'Senha Usuario' = txtSenha.Text
+                  )
+              });
+
+              // Se ctxUsuarioLogado estiver em branco, o login falhou
+              UpdateContext({ LoginInvalido: IsBlank(ctxUsuarioLogado) });
+
+              If(!LoginInvalido,
+                  Set(Usuario_Logado, ctxUsuarioLogado.'Nome Usuario');
+                  Set(Perfil_Logado, ctxUsuarioLogado.'Perfil Usuario');
+
+                  If(Text(Perfil_Logado)="Admin", Navigate(Tela_Principal, ScreenTransition.None));
+                  If(Text(Perfil_Logado)="Senha", Navigate(Tela_Principal_Senha, ScreenTransition.None));
+              );
+              /*
+              If(
                   CountRows(
                       Filter(
                           Usuarios,
@@ -157,6 +176,7 @@ Screens:
               //If(LoginInvalido=false And Text(Perfil_Logado)="Recepção", //Navigate(Tela_Principal_Recepção,ScreenTransition.None));
               //If(LoginInvalido=false And Text(Perfil_Logado)="Mesa", //Navigate(Tela_Principal_Mesa,ScreenTransition.None));
               If(LoginInvalido=false And Text(Perfil_Logado)="Senha", Navigate(Tela_Principal_Senha,ScreenTransition.None));
+              */
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color

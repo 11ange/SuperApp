@@ -1,7 +1,9 @@
 Registro_PS_e_PSCriancas As screen:
     Fill: =RGBA(232, 232, 232, 1)
-    OnVisible: |
-        =Reset(txt_PS);
+    OnVisible: |-
+        =Refresh(Presenças);
+        
+        Reset(txt_PS);
         Reset(txt_PSC);
         
         UpdateContext(
@@ -10,6 +12,43 @@ Registro_PS_e_PSCriancas As screen:
                 Atual_PSC: 0,
                 Mostra_PSC: false
             }
+        );
+        
+        Select(btn_HelperAtualizaPS);
+        
+        /*
+        If(
+            !IsBlank(diaSelecionado),
+            With(
+                {
+                    valorPS:
+                        If(
+                            IsBlank(txt_PS.Text),
+                            diaSelecionado.PS,
+                            Value(txt_PS.Text)
+                        ),
+        
+                    valorPSC:
+                        If(
+                            Mostra_PSC,
+                            If(
+                                IsBlank(txt_PSC.Text),
+                                diaSelecionado.'PS Crianças',
+                                Value(txt_PSC.Text)
+                            ),
+                            diaSelecionado.'PS Crianças'
+                        )
+                },
+        
+                Patch(
+                    Presenças,
+                    diaSelecionado,
+                    {
+                        PS: valorPS,
+                        'PS Crianças': valorPSC
+                    }
+                )
+            )
         );
         
         Refresh(Presenças);
@@ -56,7 +95,8 @@ Registro_PS_e_PSCriancas As screen:
                         )
                     )
             });
-        );
+            
+        );*/
 
     RectQuickActionBar3_13 As rectangle:
         BorderColor: =RGBA(0, 89, 178, 1)
@@ -121,7 +161,46 @@ Registro_PS_e_PSCriancas As screen:
         HoverDateFill: =RGBA(153, 205, 255, 1)
         IconBackground: =RGBA(0, 51, 102, 1)
         OnChange: |-
-            =Refresh(Presenças);
+            =Reset(txt_PS);
+            Reset(txt_PSC);
+            
+            Select(btn_HelperAtualizaPS)
+            /*
+            If(
+                !IsBlank(diaSelecionado),
+                With(
+                    {
+                        valorPS:
+                            If(
+                                IsBlank(txt_PS.Text),
+                                diaSelecionado.PS,
+                                Value(txt_PS.Text)
+                            ),
+            
+                        valorPSC:
+                            If(
+                                Mostra_PSC,
+                                If(
+                                    IsBlank(txt_PSC.Text),
+                                    diaSelecionado.'PS Crianças',
+                                    Value(txt_PSC.Text)
+                                ),
+                                diaSelecionado.'PS Crianças'
+                            )
+                    },
+            
+                    Patch(
+                        Presenças,
+                        diaSelecionado,
+                        {
+                            PS: valorPS,
+                            'PS Crianças': valorPSC
+                        }
+                    )
+                )
+            );
+            
+            Refresh(Presenças);
             
             With(
                 {
@@ -165,7 +244,8 @@ Registro_PS_e_PSCriancas As screen:
                             )
                         )
                 });
-            );
+                
+            );*/
         SelectedDateFill: =RGBA(0, 51, 102, 1)
         Size: =24
         Width: =250
@@ -252,87 +332,7 @@ Registro_PS_e_PSCriancas As screen:
         Height: =70
         HoverColor: =RGBA(255, 255, 255, 1)
         HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-        OnSelect: |-
-            =If(
-                !IsBlank(diaSelecionado),
-                With(
-                    {
-                        valorPS:
-                            If(
-                                IsBlank(txt_PS.Text),
-                                diaSelecionado.PS,
-                                Value(txt_PS.Text)
-                            ),
-            
-                        valorPSC:
-                            If(
-                                Mostra_PSC,
-                                If(
-                                    IsBlank(txt_PSC.Text),
-                                    diaSelecionado.'PS Crianças',
-                                    Value(txt_PSC.Text)
-                                ),
-                                diaSelecionado.'PS Crianças'
-                            )
-                    },
-            
-                    Patch(
-                        Presenças,
-                        diaSelecionado,
-                        {
-                            PS: valorPS,
-                            'PS Crianças': valorPSC
-                        }
-                    )
-                )
-            );
-            
-            Refresh(Presenças);
-            
-            With(
-                {
-                    dataInicial: Data_Inicial_1.SelectedDate,
-                    periodoSelecionado: Dropdown_Periodo_2.Selected.Value,
-                    isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5
-                },
-            
-                If(
-                    Weekday(Data_Inicial_1.SelectedDate) = 5,
-            
-                    // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período
-                    UpdateContext({
-                        diaSelecionado: LookUp(
-                            Presenças,
-                            Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy") &&
-                            PeriodoDia = Dropdown_Periodo_2.Selected.Value
-                        )
-                    }),
-            
-                    // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data
-                    UpdateContext({
-                        diaSelecionado: LookUp(
-                            Presenças,
-                            Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy")
-                        )
-                    })
-                );
-            
-                UpdateContext({
-                    Atual_PS: diaSelecionado.PS,
-                    Atual_PSC: diaSelecionado.'PS Crianças',
-                    Mostra_PSC:
-                        Or(
-                            Weekday(dataInicial) = 4, // Quarta
-                            Weekday(dataInicial) = 7, // Sábado
-                            Weekday(dataInicial) = 1, // Domingo
-                            And(
-                                Weekday(dataInicial) = 5, // Quinta
-                                periodoSelecionado = "Tarde"
-                            )
-                        )
-                });
-                
-            );
+        OnSelect: =Select(btn_HelperAtualizaPS)
         Size: =24
         Text: ="Gravar Valores"
         Width: =280
@@ -460,4 +460,101 @@ Registro_PS_e_PSCriancas As screen:
         X: =lbl_Atual_PS.X
         Y: =txt_PSC.Y
         ZIndex: =17
+
+    btn_HelperAtualizaPS As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =70
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |-
+            =If(
+                !IsBlank(diaSelecionado),
+                With(
+                    {
+                        valorPS:
+                            If(
+                                IsBlank(txt_PS.Text),
+                                diaSelecionado.PS,
+                                Value(txt_PS.Text)
+                            ),
+            
+                        valorPSC:
+                            If(
+                                Mostra_PSC,
+                                If(
+                                    IsBlank(txt_PSC.Text),
+                                    diaSelecionado.'PS Crianças',
+                                    Value(txt_PSC.Text)
+                                ),
+                                diaSelecionado.'PS Crianças'
+                            )
+                    },
+            
+                    Patch(
+                        Presenças,
+                        diaSelecionado,
+                        {
+                            PS: valorPS,
+                            'PS Crianças': valorPSC
+                        }
+                    )
+                )
+            );
+            
+            Refresh(Presenças);
+            
+            With(
+                {
+                    dataInicial: Data_Inicial_1.SelectedDate,
+                    periodoSelecionado: Dropdown_Periodo_2.Selected.Value,
+                    isQuintaFeira: Weekday(Data_Inicial_1.SelectedDate) = 5
+                },
+            
+                If(
+                    Weekday(Data_Inicial_1.SelectedDate) = 5,
+            
+                    // SE FOR QUINTA-FEIRA: Execute o LookUp com o filtro de período
+                    UpdateContext({
+                        diaSelecionado: LookUp(
+                            Presenças,
+                            Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy") &&
+                            PeriodoDia = Dropdown_Periodo_2.Selected.Value
+                        )
+                    }),
+            
+                    // SE NÃO FOR QUINTA-FEIRA: Execute o LookUp SÓ com o filtro de data
+                    UpdateContext({
+                        diaSelecionado: LookUp(
+                            Presenças,
+                            Data = Text(Data_Inicial_1.SelectedDate, "dd/mm/yyyy")
+                        )
+                    })
+                );
+            
+                UpdateContext({
+                    Atual_PS: diaSelecionado.PS,
+                    Atual_PSC: diaSelecionado.'PS Crianças',
+                    Mostra_PSC:
+                        Or(
+                            Weekday(dataInicial) = 4, // Quarta
+                            Weekday(dataInicial) = 7, // Sábado
+                            Weekday(dataInicial) = 1, // Domingo
+                            And(
+                                Weekday(dataInicial) = 5, // Quinta
+                                periodoSelecionado = "Tarde"
+                            )
+                        )
+                });
+                
+            );
+        Size: =24
+        Text: ="Button"
+        Width: =280
+        X: =440
+        Y: =1376
+        ZIndex: =18
 

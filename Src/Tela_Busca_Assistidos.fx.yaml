@@ -1,7 +1,12 @@
 "Tela_Busca_Assistidos As screen.'phoneBrowseLayout_ver3.0'":
     Fill: =RGBA(232, 232, 232, 1)
     OnVisible: |-
-        =Set(CriaAssistido,false);
+        =Concurrent(
+            Refresh(Pessoas),
+            Refresh(Assistências)
+        );
+        
+        Set(CriaAssistido,false);
         
         Reset(Campo_Busca_Assistido);
 

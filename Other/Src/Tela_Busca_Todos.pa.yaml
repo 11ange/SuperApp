@@ -11,8 +11,13 @@ Screens:
     Properties:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
-      OnVisible: |+
-        =Reset(Campo_Busca_Todos);
+      OnVisible: |-
+        =Concurrent(
+            Refresh(Pessoas),
+            Refresh(Assistências)
+        );
+
+        Reset(Campo_Busca_Todos);
     Children:
       - RectQuickActionBar1_5:
           Control: Rectangle@2.3.0

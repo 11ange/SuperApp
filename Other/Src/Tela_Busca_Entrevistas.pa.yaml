@@ -11,7 +11,10 @@ Screens:
     Properties:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
-      OnVisible: =Reset(Campo_Busca_Entrevista)
+      OnVisible: |-
+        =Refresh(Assistências);
+
+        Reset(Campo_Busca_Entrevista)
     Children:
       - RectQuickActionBar1_1:
           Control: Rectangle@2.3.0
