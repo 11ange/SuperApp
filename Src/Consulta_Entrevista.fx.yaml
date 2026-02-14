@@ -1,0 +1,940 @@
+"Consulta_Entrevista As screen.'phoneDetailViewLayout_ver3.0'":
+    Fill: =RGBA(232, 232, 232, 1)
+    OnVisible: |-
+        =UpdateContext({ MostraPopUp: false })
+
+    RectQuickActionBar2_4 As rectangle:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        Height: =88
+        Width: =Parent.Width
+        ZIndex: =1
+
+    Icone_Volta_Consulta_Entrevista As icon.ChevronLeft:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.BackArrow
+        OnSelect: |-
+            =UpdateContext({ MostraPopUp: false });
+            //Navigate(Tela_Busca_Todos; ScreenTransition.None)
+            Back()
+        PaddingBottom: =24
+        PaddingLeft: =24
+        PaddingRight: =24
+        PaddingTop: =24
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Back to list"
+        Width: =88
+        ZIndex: =2
+
+    Icone_Edita_Entrevista As icon.Edit:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        DisplayMode: =If(DataSourceInfo([@Pessoas], DataSourceInfo.EditPermission), DisplayMode.Edit, DisplayMode.Disabled)
+        Height: =88
+        Icon: =Icon.Edit
+        OnSelect: |-
+            =Patch(
+                Logs,
+                Defaults(Logs),
+                {
+                    DataeHora: Now(),
+                    DeviceID: DeviceID,
+                    Ação: "Edição Entrevista ID:" & AssistenciaSelecionada & " - Assistido ID:" & PessoaSelecionada
+                }
+            );
+            
+            EditForm(Form_Edita_Entrevista);
+            
+            Navigate(Edicao_Entrevista, ScreenTransition.None)
+        PaddingBottom: =24
+        PaddingLeft: =24
+        PaddingRight: =24
+        PaddingTop: =24
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Edit this item"
+        Width: =88
+        X: =Parent.Width - Self.Width
+        ZIndex: =3
+
+    Icone_Apaga_Entrevista As icon.Trash:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        DisplayMode: |-
+            =If(
+                !IsBlank(LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)) && DataSourceInfo(
+                    Pessoas,
+                    DataSourceInfo.DeletePermission
+                ),
+                DisplayMode.Edit,
+                DisplayMode.Disabled
+            )
+        Height: =88
+        Icon: =Icon.Trash
+        OnSelect: |-
+            =UpdateContext({ MostraPopUp: true })
+        PaddingBottom: =24
+        PaddingLeft: =24
+        PaddingRight: =24
+        PaddingTop: =24
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Delete this item"
+        Visible: =false
+        Width: =88
+        X: =Parent.Width - Icone_Edita_Entrevista.Width - Self.Width
+        ZIndex: =4
+
+    Lbl_Titulo_Consulta_Entevista As label:
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Height: =88
+        Size: =27
+        Text: ="Consulta Entrevista"
+        Width: =Parent.Width - Self.X - Icone_Apaga_Entrevista.Width - Icone_Edita_Entrevista.Width
+        Wrap: =false
+        X: =Icone_Volta_Consulta_Entrevista.Width
+        ZIndex: =5
+
+    Form_Detalha_Entrevista As formViewer:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        DataSource: =Assistências
+        Height: =Parent.Height-Self.Y
+        Item: |-
+            =LookUp(
+                Assistências,
+                'ID Assistência' = AssistenciaSelecionada
+            )
+        NumberOfColumns: =1
+        SnapToColumns: =false
+        Width: =Parent.Width
+        Y: =95
+        ZIndex: =6
+
+        "'ID Pessoa_DataCard8' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_idpessoa"
+            Default: =ThisItem.'ID Pessoa'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'ID Pessoa')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =720
+            X: =0
+            Y: =14
+            ZIndex: =1
+
+            DataCardKey14 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue13.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue13 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey14.X + DataCardKey14.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Data Entrevista_DataCard2' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_dataentrevista"
+            Default: =ThisItem.'Data Entrevista'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Data Entrevista')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =720
+            X: =0
+            Y: =15
+            ZIndex: =1
+
+            DataCardKey21 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue15.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue15 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: |-
+                    =Concatenate(Text(ThisItem.'Data Entrevista', "dd-mmm-yyyy", "pt-br")," - ",Proper(Text(ThisItem.'Data Entrevista',"ddd")))
+                    //Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey21.X + DataCardKey21.Width
+                Y: =10
+                ZIndex: =2
+
+        Entrevistador_DataCard1 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_entrevistador"
+            Default: =ThisItem.Entrevistador
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,Entrevistador)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =720
+            X: =0
+            Y: =16
+            ZIndex: =1
+
+            DataCardKey22 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue21.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue21 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey22.X + DataCardKey22.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Assistência Mesmo Dia_DataCard2' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_assistenciamesmodia"
+            Default: =ThisItem.'Assistência Mesmo Dia'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Assistência Mesmo Dia')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Visible: =false
+            Width: =720
+            X: =1
+            Y: =17
+            ZIndex: =1
+
+            DataCardKey72 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue80.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue80 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey72.X + DataCardKey72.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Dia Semana_DataCard3' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_diasemana"
+            Default: =ThisItem.'Dia Semana'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Dia Semana')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =720
+            X: =0
+            Y: =18
+            ZIndex: =1
+
+            DataCardKey32 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue27.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue27 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey32.X + DataCardKey32.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Primeira Assistência_DataCard6' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_primeiraassistencia"
+            Default: =ThisItem.'Primeira Assistência'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Primeira Assistência')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =720
+            X: =1
+            Y: =19
+            ZIndex: =1
+
+            DataCardKey103 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue96.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue96 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey103.X + DataCardKey103.Width
+                Y: =10
+                ZIndex: =2
+
+        Assistência_DataCard5 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_assistencia"
+            Default: =ThisItem.'Assistência (cr4f5_assistencia)'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Assistência (cr4f5_assistencia)')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =720
+            X: =1
+            Y: =20
+            ZIndex: =1
+
+            DataCardKey122 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue117.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue117 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey122.X + DataCardKey122.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Tratamento Médico_DataCard1' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_tratamentomedico"
+            Default: =ThisItem.'Tratamento Médico'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Tratamento Médico')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =720
+            X: =2
+            Y: =20
+            ZIndex: =1
+
+            DataCardKey104 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue105.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue105 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey104.X + DataCardKey104.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Semana 1_DataCard1' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_semana1"
+            Default: =ThisItem.'Semana 1'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Semana 1')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =720
+            X: =0
+            Y: =22
+            ZIndex: =1
+
+            DataCardKey56 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue44.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue44 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Concatenate(Text(ThisItem.'Semana 1', "dd-mmm-yyyy", "pt-br")," - ",Proper(Text(ThisItem.'Semana 1',"ddd")))
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey56.X + DataCardKey56.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Semana 2_DataCard1' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_semana2"
+            Default: =ThisItem.'Semana 2'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Semana 2')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =720
+            X: =0
+            Y: =23
+            ZIndex: =1
+
+            DataCardKey73 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue65.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue65 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: |-
+                    =Concatenate(Text(ThisItem.'Semana 2', "dd-mmm-yyyy", "pt-br")," - ",Proper(Text(ThisItem.'Semana 2',"ddd")))
+                    //Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey73.X + DataCardKey73.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Semana 3_DataCard1' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_semana3"
+            Default: =ThisItem.'Semana 3'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Semana 3')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =720
+            X: =0
+            Y: =24
+            ZIndex: =1
+
+            DataCardKey76 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue70.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue70 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: |-
+                    =Concatenate(Text(ThisItem.'Semana 3', "dd-mmm-yyyy", "pt-br")," - ",Proper(Text(ThisItem.'Semana 3',"ddd")))
+                    //Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey76.X + DataCardKey76.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Semana 4_DataCard1' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_semana4"
+            Default: =ThisItem.'Semana 4'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Semana 4')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =720
+            X: =0
+            Y: =25
+            ZIndex: =1
+
+            DataCardKey80 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue72.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue72 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: |-
+                    =Concatenate(Text(ThisItem.'Semana 4', "dd-mmm-yyyy", "pt-br")," - ",Proper(Text(ThisItem.'Semana 4',"ddd")))
+                    //Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey80.X + DataCardKey80.Width
+                Y: =10
+                ZIndex: =2
+
+        Extra_DataCard1 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_extra"
+            Default: =ThisItem.Extra
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,Extra)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =720
+            X: =0
+            Y: =26
+            ZIndex: =1
+
+            DataCardKey85 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue83.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue83 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey85.X + DataCardKey85.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Anotações Entrevista_DataCard2' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_anotacoesentrevista"
+            Default: =ThisItem.'Anotações Entrevista'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Anotações Entrevista')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =720
+            X: =0
+            Y: =27
+            ZIndex: =1
+
+            DataCardKey87 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue85.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue85 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey87.X + DataCardKey87.Width
+                Y: =10
+                ZIndex: =2
+
+        Finalizada_DataCard3 As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_finalizada"
+            Default: =ThisItem.Finalizada
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,Finalizada)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =720
+            X: =0
+            Y: =29
+            ZIndex: =1
+
+            DataCardKey128 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue118.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue118 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey128.X + DataCardKey128.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Ultimo Comparecimento_DataCard1' As typedDataCard.textualViewCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_ultimocomparecimento"
+            Default: =ThisItem.'Ultimo Comparecimento'
+            DisplayMode: =DisplayMode.View
+            DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Ultimo Comparecimento')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =720
+            X: =0
+            Y: =30
+            ZIndex: =1
+
+            DataCardKey47 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue41.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue41 As label:
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =21
+                Text: |-
+                    =Concatenate(Text(ThisItem.'Ultimo Comparecimento', "dd-mmm-yyyy", "pt-br")," - ",Proper(Text(ThisItem.'Ultimo Comparecimento',"ddd")))
+                    //Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey47.X + DataCardKey47.Width
+                Y: =10
+                ZIndex: =2
+
+    Popup_Apaga_Entrevista As group:
+        Height: =5
+        Width: =5
+        X: =60
+        Y: =60
+        ZIndex: =13
+
+        Fundo_Popup_Apaga_Todos_1 As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(100, 118, 132, 0.6)
+            Height: =1048
+            Visible: =MostraPopUp
+            Width: =640
+            Y: =88
+            ZIndex: =7
+
+        Popup_Todos_1 As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =MostraPopUp
+            Width: =464
+            X: =88
+            Y: =360
+            ZIndex: =8
+
+        lbl_Aviso_Apaga_Todos_1 As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Fill: =Color.Red
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Size: =21
+            Text: ="Aviso"
+            Visible: =MostraPopUp
+            Width: =464
+            X: =88
+            Y: =360
+            ZIndex: =9
+
+        lbl_Texto_popup_Todos_1 As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Height: =84
+            Size: =21
+            Text: ="Deseja realmente apagar esta entrevista?"
+            Visible: =MostraPopUp
+            Width: =464
+            X: =88
+            Y: =437
+            ZIndex: =10
+
+        Btn_Cancela_Exclusao_Todos_1 As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =UpdateContext({ MostraPopUp: false })
+            Size: =24
+            Text: ="Não"
+            Visible: =MostraPopUp
+            Width: =157
+            X: =123
+            Y: =553
+            ZIndex: =11
+
+        Btn_Confirma_Exclusao_Todos_1 As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =UpdateContext({ MostraPopUp: false });
+                
+                Remove(Assistências, LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada)); 
+                
+                If (IsEmpty(Errors(Assistências, LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada))), Back())
+            Size: =24
+            Text: ="Sim"
+            Visible: =MostraPopUp
+            Width: =157
+            X: =361
+            Y: =553
+            ZIndex: =12
+

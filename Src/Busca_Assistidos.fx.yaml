@@ -1,0 +1,346 @@
+"Busca_Assistidos As screen.'phoneBrowseLayout_ver3.0'":
+    Fill: =RGBA(232, 232, 232, 1)
+    OnVisible: |-
+        =Concurrent(
+            Refresh(Pessoas),
+            Refresh(Assistências)
+        );
+        
+        Set(CriaAssistido,false);
+        
+        Reset(Campo_Busca_Assistido);
+
+    RectQuickActionBar_Tela_Busca_Assistidos As rectangle:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        Height: =88
+        Width: =Parent.Width
+        ZIndex: =1
+
+    "Galeria_Busca_Assistidos As gallery.'BrowseLayout_Vertical_ThreeTextVariant_ver5.0'":
+        '#CopilotOverlayLabel': ="Filtrada"
+        BorderColor: =RGBA(0, 89, 178, 1)
+        DelayItemLoading: =true
+        Height: |-
+            =//977
+            Parent.Height - Self.Y
+        Items: |-
+            =SortByColumns(
+                If(
+                    IsBlank(Campo_Busca_Assistido.Text),
+                    // Se estiver vazio, traz apenas a lista filtrada
+                    Filter(
+                        Pessoas,
+                        Tarefeiro = "Não" && 'Em Assistência' = "Sim"
+                    ),
+                    // Se tiver texto, aciona o Search
+                    Search(
+                        Filter(
+                            Pessoas,
+                            Tarefeiro = "Não" && 'Em Assistência' = "Sim"
+                        ),
+                        Campo_Busca_Assistido.Text,
+                        'ID Pessoa Texto',
+                        'Nome Pessoa',
+                        'Nome Social'
+                    )
+                ),
+                "cr4f5_nomepessoa",
+                If(Sort_Assistidos, SortOrder.Descending, SortOrder.Ascending)
+            )
+            /*
+            SortByColumns(
+                Search(
+                    Filter(
+                        Pessoas,
+                        Tarefeiro = "Não" && 'Em Assistência' = "Sim"
+                    ),
+                    Campo_Busca_Assistido.Text,
+                    'ID Pessoa Texto',// Agora pode ser pesquisado
+                    'Nome Pessoa',
+                    'Nome Social'
+                ),
+                "cr4f5_nomepessoa",
+                If(
+                    Sort_Assistidos, SortOrder.Descending, SortOrder.Ascending
+                )
+            )
+            */
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        OnSelect: |-
+            =Set(PessoaSelecionada, ThisItem.'ID Pessoa');
+            
+            Patch(
+                Logs,
+                Defaults(Logs),
+                {
+                    DataeHora: Now(),
+                    DeviceID: DeviceID,
+                    Ação: "Visualizando Pessoa ID:" & PessoaSelecionada
+                    //ID: If(IsEmpty(Logs); 1; Last(Sort(Logs; ID; SortOrder.Ascending)).ID + 1)
+                }
+            );
+            
+            Set(varRegistroOriginalPessoas,ThisItem);
+            
+            Navigate(Consulta_Assistidos, ScreenTransition.None)
+        ShowScrollbar: =false
+        TemplatePadding: =0
+        TemplateSize: =116
+        Width: =Parent.Width
+        Y: |-
+            =//156
+            Campo_Busca_Assistido.Y + Campo_Busca_Assistido.Height
+        ZIndex: =1
+
+        Title1 As label:
+            Color: =RGBA(50, 49, 48, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FontWeight: =If(ThisItem.IsSelected, FontWeight.Bold, FontWeight.Normal)
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: |-
+                =//19
+                If(ThisItem.IsSelected, 21, 19)
+            Text: =ThisItem.'Nome Pessoa'
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.TemplateWidth - 86
+            X: =16
+            Y: =(Parent.TemplateHeight - (Self.Size*1.8 + Subtitle1.Size*1.8 + 2 + Body1.Size*1.8)) / 2
+            ZIndex: =1
+
+        Subtitle1 As label:
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =If(ThisItem.IsSelected, 21, 19)
+            Text: =ThisItem.'ID Pessoa'
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Title1.Width
+            X: =Title1.X
+            Y: =Title1.Y + Title1.Height
+            ZIndex: =2
+
+        Body1 As label:
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =If(ThisItem.IsSelected, 21, 19)
+            Text: =Concatenate(ThisItem.Idade, " anos")
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Title1.Width
+            X: =Title1.X
+            Y: =Subtitle1.Y + Subtitle1.Height
+            ZIndex: =3
+
+        NextArrow1 As icon.ChevronRight:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(166, 166, 166, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(244, 244, 244, 1)
+            Height: =50
+            Icon: =Icon.Edit
+            OnSelect: =Select(Parent)
+            PaddingBottom: =16
+            PaddingLeft: =16
+            PaddingRight: =16
+            PaddingTop: =16
+            Tooltip: ="Exibir detalhes do item"
+            Width: =50
+            X: =Parent.TemplateWidth - Self.Width - 12
+            Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+            ZIndex: =4
+
+        Separator1 As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =8
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth
+            Y: =Parent.TemplateHeight - Self.Height
+            ZIndex: =5
+
+        Rectangle1 As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(0, 89, 178, 1)
+            Height: =Parent.TemplateHeight - Separator1.Height
+            OnSelect: =Select(Parent)
+            Visible: =ThisItem.IsSelected
+            Width: =4
+            ZIndex: =6
+
+    Lbl_Titulo_Busca_Assistidos As label:
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(58, 58, 58, 0)
+        Height: =88
+        Size: =27
+        Text: ="Busca Assistidos"
+        Width: =Parent.Width - Self.X - Icone_Sort_Assistidos.Width - Icone_Cria_Assistido.Width - Icone_Refresh_Assistidos.Width
+        Wrap: =false
+        X: =80
+        ZIndex: =2
+
+    Icone_Refresh_Assistidos As icon.Reload:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.Reload
+        OnSelect: =Refresh(Pessoas)
+        PaddingBottom: =22
+        PaddingLeft: =22
+        PaddingRight: =22
+        PaddingTop: =22
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Refresh list"
+        Width: =88
+        X: =Parent.Width - Icone_Cria_Assistido.Width - Icone_Sort_Assistidos.Width - Self.Width
+        ZIndex: =3
+
+    Icone_Sort_Assistidos As icon.ArrowsUpDown:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.Sort
+        OnSelect: |-
+            =UpdateContext({Sort_Assistidos: !Sort_Assistidos})
+        PaddingBottom: =26
+        PaddingLeft: =26
+        PaddingRight: =26
+        PaddingTop: =26
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: =If(Sort_Assistidos, "Sort list in reverse alphabetical order", "Sort list in alphabetical order")
+        Width: =88
+        X: =Parent.Width - Icone_Cria_Assistido.Width - Self.Width
+        ZIndex: =4
+
+    Icone_Cria_Assistido As icon.Add:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        DisplayMode: =If(DataSourceInfo([@Pessoas], DataSourceInfo.CreatePermission), DisplayMode.Edit, DisplayMode.Disabled)
+        Height: =88
+        Icon: =Icon.Add
+        OnSelect: |-
+            =Patch(
+                Logs,
+                Defaults(Logs),
+                {
+                    DataeHora: Now(),
+                    DeviceID: DeviceID,
+                    Ação: "Criando novo Assistido"
+                }
+            );
+            
+            ResetForm(Form_Edita_Assistidos);
+            NewForm(Form_Edita_Assistidos);
+            
+            Set(CriaAssistido,true);
+            
+            Navigate(Edita_Assistidos, ScreenTransition.None)
+        PaddingBottom: =24
+        PaddingLeft: =24
+        PaddingRight: =24
+        PaddingTop: =24
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Create new item"
+        Width: =88
+        X: =Parent.Width - Self.Width
+        ZIndex: =5
+
+    Campo_Busca_Assistido As text:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        BorderThickness: =2
+        Color: =RGBA(0, 0, 0, 1)
+        Default: |-
+            =//If(CriaAssistido=true;Form_Edita_Assistidos.LastSubmit.ID_Pessoa;Blank())
+            ""
+        DelayOutput: =true
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        FocusedBorderThickness: =4
+        Height: =68
+        HintText: ="Busca por nome, nome social ou número"
+        HoverBorderColor: =RGBA(0, 89, 178, 1)
+        HoverColor: =RGBA(0, 0, 0, 1)
+        HoverFill: =RGBA(153, 205, 255, 1)
+        PaddingLeft: =70
+        Size: =19
+        Width: =Parent.Width
+        Y: =RectQuickActionBar_Tela_Busca_Assistidos.Height
+        ZIndex: =6
+
+    SearchIcon_Tela_Busca_Assistidos As icon.Search:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 89, 178, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =Self.Width
+        Icon: =Icon.Search
+        PaddingBottom: =14
+        PaddingLeft: =14
+        PaddingRight: =14
+        PaddingTop: =14
+        Tooltip: ="Search"
+        Width: =Campo_Busca_Assistido.Height
+        X: =Campo_Busca_Assistido.X
+        Y: =Campo_Busca_Assistido.Y
+        ZIndex: =7
+
+    Rectangle_Tela_Busca_Assistidos As rectangle:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Fill: =RGBA(0, 89, 178, 1)
+        Height: =2
+        Width: =Parent.Width
+        Y: =Campo_Busca_Assistido.Y + Campo_Busca_Assistido.Height
+        ZIndex: =8
+
+    Icone_Voltar_Assistidos As icon.ChevronLeft:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.BackArrow
+        OnSelect: =Navigate(Principal, ScreenTransition.CoverRight)
+        PaddingBottom: =24
+        PaddingLeft: =24
+        PaddingRight: =24
+        PaddingTop: =24
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Back to list"
+        Width: =88
+        ZIndex: =10
+

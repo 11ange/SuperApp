@@ -8,7 +8,7 @@
 
         Step11 As TestStep:
             Description: ="Cria variáveis"
-            Screen: =Tela_Principal
+            Screen: =Principal
             Value: |-
                 =Set(NomeAssistido, "Teste Assistido");
                 Set(NomeSocialAssistido, "QwertyuioP");
@@ -57,7 +57,7 @@
 
         Step12 As TestStep:
             Description: ="Verificar campos da tabela"
-            Screen: =Tela_Busca_Assistidos
+            Screen: =Busca_Assistidos
             Value: |-
                 =Assert(LookUp(Pessoas, 'ID Pessoa' = 1).'Nome Pessoa' = NomeAssistido);
                 //--------------
@@ -100,7 +100,7 @@
 
         Step1 As TestStep:
             Description: ="Cria variáveis"
-            Screen: =Tela_Principal
+            Screen: =Principal
             Value: |-
                 =Set(NomeTarefeiro, "Entrevistador Teste");
                 Set(NomeSocialTarefeiro, "zXCVBnm");
@@ -109,57 +109,57 @@
 
         Step2 As TestStep:
             Description: ="Verificar se tem registro na tabela Pessoas"
-            Screen: =Tela_Principal
+            Screen: =Principal
             Value: =Assert(CountIf(Pessoas,true)=1)
 
         Step3 As TestStep:
             Description: ="Clicar botão Tarefeiros"
-            Screen: =Tela_Principal
+            Screen: =Principal
             Value: =Select(Btn_Cadastro_Tarefeiros)
 
         Step4 As TestStep:
             Description: ="Clicar Botão cria Tarefeiro"
-            Screen: =Tela_Busca_Assistidos
+            Screen: =Busca_Assistidos
             Value: =Select(Icone_Cria_Tarefeiro)
 
         Step5 As TestStep:
             Description: ="Preenche nome do Tarefeiro"
-            Screen: =Tela_Edicao_Tarefeiros
+            Screen: =Edita_Tarefeiros
             Value: =SetProperty(DataCardValue25.Text, NomeTarefeiro)
 
         Step6 As TestStep:
             Description: ="Preenche nome social"
-            Screen: =Tela_Edicao_Tarefeiros
+            Screen: =Edita_Tarefeiros
             Value: =SetProperty(DataCardValue48.Text, NomeSocialTarefeiro)
 
         Step7 As TestStep:
             Description: ="Preenche idade"
-            Screen: =Tela_Edicao_Tarefeiros
+            Screen: =Edita_Tarefeiros
             Value: =SetProperty(DataCardValue98.Text,IdadeTarefeiro)
 
         Step8 As TestStep:
             Description: ="Em assistencia"
-            Screen: =Tela_Edicao_Tarefeiros
+            Screen: =Edita_Tarefeiros
             Value: =SetProperty(DataCardValue37.SelectedText, "Não")
 
         Step9 As TestStep:
             Description: ="Ativo"
-            Screen: =Tela_Edicao_Tarefeiros
+            Screen: =Edita_Tarefeiros
             Value: =SetProperty(DataCardValue64.SelectedText, "Sim")
 
         Step10 As TestStep:
             Description: ="Preenche conhecimento doutrina"
-            Screen: =Tela_Edicao_Tarefeiros
+            Screen: =Edita_Tarefeiros
             Value: =SetProperty(DataCardValue88.SelectedText, ConhecDoutrinaTarefeiro)
 
         Step11 As TestStep:
             Description: ="Salva"
-            Screen: =Tela_Edicao_Assistidos
+            Screen: =Edita_Assistidos
             Value: =Select(Icone_Salva_Tarefeiro)
 
         Step12 As TestStep:
             Description: ="Verifica campos da tabela"
-            Screen: =Tela_Busca_Tarefeiros
+            Screen: =Busca_Tarefeiros
             Value: |-
                 =Assert(LookUp(Pessoas, 'ID Pessoa' = 2).'Nome Pessoa' = NomeTarefeiro);
                 //--------------

@@ -101,7 +101,7 @@ App:
       Set(TratMedico_Salvo,Blank());
 
       ClearCollect(
-          AlocacoesFiltradas, // Nome da sua collection
+          ListaEntrevDialog, // Nome da sua collection
           AddColumns(
               Filter(
                   Alocações,
@@ -114,5 +114,5 @@ App:
           )
       );
     SizeBreakpoints: =[600,800,1280]
-    StartScreen: =Tela_Principal
+    StartScreen: =Principal
     Theme: =PowerAppsTheme

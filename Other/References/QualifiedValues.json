@@ -64,17 +64,17 @@
       }
     },
     {
-      "Kind": "default.cds_cr4f5_execucaoflow_forms",
-      "Namespace": "ExecuçãoFlow (Forms)",
-      "Values": {
-        "Informações": "cf0d83d2-fbf7-427a-9a21-e8e464e4f1c1"
-      }
-    },
-    {
       "Kind": "default.cds_cr4f5_controleversoes_forms",
       "Namespace": "ControleVersoes (Forms)",
       "Values": {
         "Informações": "e774f380-e3ec-4c60-8ac9-6fffbc1c6174"
+      }
+    },
+    {
+      "Kind": "default.cds_cr4f5_execucaoflow_forms",
+      "Namespace": "ExecuçãoFlow (Forms)",
+      "Values": {
+        "Informações": "cf0d83d2-fbf7-427a-9a21-e8e464e4f1c1"
       }
     },
     {

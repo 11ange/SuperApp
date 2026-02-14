@@ -140,8 +140,8 @@ Screens:
                   Set(Usuario_Logado, ctxUsuarioLogado.'Nome Usuario');
                   Set(Perfil_Logado, ctxUsuarioLogado.'Perfil Usuario');
 
-                  If(Text(Perfil_Logado)="Admin", Navigate(Tela_Principal, ScreenTransition.None));
-                  If(Text(Perfil_Logado)="Senha", Navigate(Tela_Principal_Senha, ScreenTransition.None));
+                  If(Text(Perfil_Logado)="Admin", Navigate(Principal, ScreenTransition.None));
+                  //If(Text(Perfil_Logado)="Senha", Navigate(Tela_Principal_Senha, ScreenTransition.None));
               );
               /*
               If(

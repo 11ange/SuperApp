@@ -28,7 +28,7 @@
       "MetaDataIDKey": "",
       "Name": "Ação_Coluna1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -173,7 +173,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -431,7 +431,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_2",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 5,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -687,7 +687,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_3",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 6,
+      "ParentIndex": 5,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1012,7 +1012,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Busca_Entrevistas_Duplicadas",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 9,
+      "ParentIndex": 8,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1282,7 +1282,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Busca_Entrevistas_Duplicadas_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 10,
+      "ParentIndex": 9,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1600,7 +1600,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Busca_Entrevistas_Duplicadas_2",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 7,
+      "ParentIndex": 6,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1870,7 +1870,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Busca_Entrevistas_Duplicadas_3",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2187,7 +2187,7 @@
       "MetaDataIDKey": "",
       "Name": "Button2",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 8,
+      "ParentIndex": 7,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2534,7 +2534,7 @@
       "MetaDataIDKey": "",
       "Name": "DataTable_Entrevistas_Duplicadas",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 11,
+      "ParentIndex": 10,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2757,7 +2757,7 @@
       "MetaDataIDKey": "",
       "Name": "DataTable_Entrevistas_Duplicadas_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 12,
+      "ParentIndex": 11,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3025,7 +3025,7 @@
       "MetaDataIDKey": "",
       "Name": "DataTable1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 13,
+      "ParentIndex": 12,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3210,7 +3210,7 @@
       "MetaDataIDKey": "",
       "Name": "DeviceID_Coluna1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3349,7 +3349,7 @@
       "MetaDataIDKey": "",
       "Name": "Icone_Voltar_Assistidos_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3989,7 +3989,7 @@
       "MetaDataIDKey": "",
       "Name": "Lbl_Usuario_Logado_2",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 13,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

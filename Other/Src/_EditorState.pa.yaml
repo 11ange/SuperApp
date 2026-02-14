@@ -9,33 +9,31 @@
 EditorState:
   ScreensOrder:
     - Tela_Login
-    - Tela_Principal
+    - Principal
     - Manutenção
     - Limpeza
     - Orientação
     - Corrige_Dialogo
-    - Tela_Principal_Senha
-    - Tela_Busca_Assistidos
-    - Tela_Consulta_Assistidos
-    - Tela_Edicao_Assistidos
-    - Tela_Busca_Tarefeiros
-    - Tela_Consulta_Tarefeiros
-    - Tela_Edicao_Tarefeiros
-    - Tela_Busca_Todos
-    - Tela_Consulta_Todos
-    - Tela_Edicao_Todos
-    - Tela_Busca_Entrevistas_Presença
-    - Tela_Busca_Entrevistas
-    - Tela_Consulta_Entrevista
-    - Tela_Consulta_Entrevista_Finalizada
-    - Tela_Edicao_Entrevista
-    - Tela_Criacao_Entrevista_Assistido
-    - Tela_Edicao_Tarefas
-    - Tela_Infos_Entrevista_Dialogo
-    - Tela_Busca_Dialogos
-    - Tela_Dialogo
-    - Tela_Controle_Presença
-    - Tela_Registra_Extra
+    - Busca_Assistidos
+    - Consulta_Assistidos
+    - Edita_Assistidos
+    - Busca_Tarefeiros
+    - Consulta_Tarefeiros
+    - Edita_Tarefeiros
+    - Busca_Todos
+    - Consulta_Todos
+    - Edita_Todos
+    - Busca_Entrevistas_Presença
+    - Busca_Entrevistas
+    - Consulta_Entrevista
+    - Consulta_Entrevista_Finalizada
+    - Edicao_Entrevista
+    - Criacao_Entrevista_Assistido
+    - Edicao_Tarefas
+    - Infos_Entrevista_Dialogo
+    - Busca_Dialogos
+    - Dialogo
+    - Controle_Presença
+    - Registra_Extra
     - Resumo_do_dia
     - Registro_PS_e_PSCriancas
-    - Resumo_Geral

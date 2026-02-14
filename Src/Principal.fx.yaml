@@ -1,0 +1,418 @@
+"Principal As screen.'phoneDetailViewLayout_ver3.0'":
+    Fill: =RGBA(232, 232, 232, 1)
+    Height: |-
+        =//Max(App.Height; App.MinScreenHeight)
+        App.MinScreenHeight
+    OnVisible: |
+        =//Set(PopupInformaNumero; false );;
+        Set(DialogoRealizado, false );
+    Width: |-
+        =//Max(App.Width; App.MinScreenWidth)
+        App.MinScreenWidth
+
+    Btn_Presença As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Busca_Entrevistas_Presença, ScreenTransition.Cover)
+        Size: =24
+        Text: ="Presença"
+        Width: =250
+        X: =(App.MinScreenWidth/4)*3 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y + 110
+        ZIndex: =7
+
+    Btn_Extra As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Registra_Extra, ScreenTransition.Cover)
+        Size: =24
+        Text: ="Extra"
+        Width: =250
+        X: =(App.MinScreenWidth/4)*3 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y + 220
+        ZIndex: =8
+
+    Img_CEOV As image:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Height: =372
+        Image: =logo
+        ImagePosition: =ImagePosition.Fill
+        Width: =610
+        X: =App.MinScreenWidth/2-Self.Width/2
+        Y: =194
+        ZIndex: =9
+
+    Btn_Cadastro_Assistidos As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Busca_Assistidos, ScreenTransition.Cover)
+        Size: =24
+        Text: ="Assistidos"
+        Tooltip: ="Acessa o cadastro dos Assistidos"
+        Width: =250
+        X: =App.MinScreenWidth/4 - Self.Width/2
+        Y: =600
+        ZIndex: =10
+
+    Lbl_Titulo As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(241, 244, 249, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(0, 18, 107, 1)
+        Font: =Font.'Lato Light'
+        FontWeight: =FontWeight.Bold
+        Height: =158
+        Italic: =true
+        Size: =35
+        Text: ="SISTEMA DE ATENDIMENTO"
+        Width: =App.MinScreenWidth
+        ZIndex: =11
+
+    Btn_Cadastro_Todos As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Busca_Todos, ScreenTransition.Cover)
+        Size: =24
+        TabIndex: =2
+        Text: ="Todos"
+        Width: =250
+        X: =App.MinScreenWidth/4 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y + 220
+        ZIndex: =13
+
+    Lbl_Usuario_Logado As label:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(241, 244, 249, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(0, 18, 107, 1)
+        FontWeight: =FontWeight.Bold
+        Height: =96
+        Italic: =true
+        Size: =28
+        Text: =Concatenate("   ",Usuario_Logado," - ",Perfil_Logado)
+        Width: |
+            =App.MinScreenWidth
+        Y: =Parent.Height- Self.Height
+        ZIndex: =14
+
+    Btn_Cadastro_Tarefeiros As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Busca_Tarefeiros, ScreenTransition.Cover)
+        Size: =24
+        TabIndex: =1
+        Text: ="Tarefeiros"
+        Width: =250
+        X: =App.MinScreenWidth/4 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y + 110
+        ZIndex: =15
+
+    Btn_Abre_Entrevista As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Busca_Entrevistas, ScreenTransition.Cover)
+        Size: =24
+        Text: ="Assistência"
+        Width: =250
+        X: =(App.MinScreenWidth/4)*3 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y
+        ZIndex: =16
+
+    Btn_Resumo_dia As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Resumo_do_dia,ScreenTransition.Cover)
+        Size: =24
+        TabIndex: =3
+        Text: ="Resumo do dia"
+        Width: =250
+        X: =App.MinScreenWidth/4 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y + 440
+        ZIndex: =17
+
+    Label8 As label:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Height: =57
+        Size: =21
+        Text: =App.Width
+        Visible: =false
+        Width: =90
+        X: =37
+        Y: =158
+        ZIndex: =22
+
+    Voltar_Login As group:
+        Height: =5
+        Width: =5
+        X: =60
+        Y: =60
+        ZIndex: =22
+
+        Icon2 As icon.Reset:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(250, 250, 250, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(244, 244, 244, 1)
+            Icon: =Icon.Home
+            OnSelect: =Navigate(Tela_Login,ScreenTransition.None)
+            Visible: =false
+            X: =Parent.Width - Self.Width - 20
+            Y: =Lbl_Usuario_Logado.Y + (Lbl_Usuario_Logado.Height/2 - Self.Height/2)
+            ZIndex: =20
+
+        Label9 As label:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(250, 250, 250, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Height: =72
+            OnSelect: =Navigate(Tela_Login,ScreenTransition.None)
+            Size: =24
+            Text: ="Login"
+            Visible: =false
+            Width: =120
+            X: =Icon2.X - Self.Width - 20
+            Y: =Lbl_Usuario_Logado.Y + (Lbl_Usuario_Logado.Height/2 - Self.Height/2)
+            ZIndex: =21
+
+    Label8_1 As label:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Height: =57
+        Size: =21
+        Text: =App.Height
+        Visible: =false
+        Width: =90
+        X: =135
+        Y: =158
+        ZIndex: =23
+
+    Label8_2 As label:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Height: =57
+        Size: =21
+        Text: =App.DesignWidth
+        Visible: =false
+        Width: =90
+        X: =305
+        Y: =158
+        ZIndex: =24
+
+    Label8_3 As label:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Height: =57
+        Size: =21
+        Text: =App.DesignHeight
+        Visible: =false
+        Width: =90
+        X: =385
+        Y: =158
+        ZIndex: =25
+
+    Button1 As button:
+        Color: =RGBA(0, 0, 0, 0)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 0, 0, 0)
+        FontWeight: =FontWeight.Semibold
+        HoverBorderColor: |-
+            =//ColorFade(Self.BorderColor; 20%)
+            Self.Color
+        HoverFill: |-
+            =//ColorFade(RGBA(0; 51; 102; 1); -20%)
+            Self.Color
+        OnSelect: =Navigate(Manutenção,ScreenTransition.None)
+        PressedBorderColor: =Self.Color
+        PressedColor: =Self.Color
+        Size: =24
+        Text: =
+        Width: =40
+        X: =495
+        Y: =318
+        ZIndex: =26
+
+    Btn_Orientacao As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Orientação,ScreenTransition.Cover)
+        Size: =24
+        Text: ="Orientação"
+        Width: =250
+        X: =(App.MinScreenWidth/4)*3 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y + 330
+        ZIndex: =28
+
+    Btn_Limpeza As button:
+        AutoDisableOnSelect: =false
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |-
+            =Refresh(Assistências);
+            
+            Navigate(Limpeza, ScreenTransition.Cover)
+        Size: =24
+        TabIndex: =2
+        Text: ="Limpeza"
+        Visible: =false
+        Width: =250
+        X: =55
+        Y: =926
+        ZIndex: =29
+
+    Btn_AtualizaTarefas As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: |-
+            =Notify("Atualizando lista de tarefeiros...", NotificationType.Information);
+            Clear(ListaEntrevDialog);
+            
+            ClearCollect(
+                ListaEntrevDialog, // Nome da sua collection
+                AddColumns(
+                    Filter(
+                        Alocações,
+                        Aloc_Tarefa = 24
+                    ),
+                    'Dia', Text(Aloc_Dia),
+                    'DiaCurto', Lower(Left(Aloc_Dia, 3)),
+                    'Periodo', Text(Aloc_Período),
+                    'NomePessoa', Text(LookUp(Pessoas, 'ID Pessoa' = Aloc_Pessoa, 'Nome Pessoa'))
+                )
+            );
+        Size: =24
+        Text: ="Atualiza Tarefa"
+        Width: =250
+        X: =(App.MinScreenWidth/4)*3 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y + 550
+        ZIndex: =30
+
+    Btn_Resumo_dia_1 As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Corrige_Dialogo,ScreenTransition.Cover)
+        Size: =24
+        TabIndex: =3
+        Text: ="Corrige Dialogo"
+        Width: =250
+        X: =App.MinScreenWidth/4 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y + 550
+        ZIndex: =31
+
+    lbl_Atualização_SW As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =Color.Yellow
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =Color.Red
+        FontWeight: =FontWeight.Bold
+        Height: =70
+        Size: =21
+        Text: |-
+            ="Há uma nova versão disponível: " & UltimaVersaoPublicada
+        Visible: =AppVersaoAtual <> UltimaVersaoPublicada && !IsBlank(UltimaVersaoPublicada)
+        Width: =Parent.Width
+        Y: =1280
+        ZIndex: =32
+
+    Btn_PasseSimples As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Registro_PS_e_PSCriancas,ScreenTransition.Cover)
+        Size: =24
+        Text: ="Passe Simples"
+        Width: =250
+        X: =(App.MinScreenWidth/4)*3 - Self.Width/2
+        Y: =Btn_Cadastro_Assistidos.Y + 440 
+        ZIndex: =33
+

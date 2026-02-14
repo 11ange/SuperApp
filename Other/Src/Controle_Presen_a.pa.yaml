@@ -1,0 +1,1388 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  Controle_Presença:
+    Properties:
+      Fill: =RGBA(232, 232, 232, 1)
+      LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: |-
+        =//Variáveis para assistência encerrada, fora do dia, fora do prazo ou mesmo dia
+        Set(Assist_Encerrada,  false);
+        Set(Assist_fora_dia,   false);
+        Set(Assist_fora_prazo, false);
+        Set(Assist_mesmo_dia,  false);
+
+        // Traz o registro apenas UMA vez para a memória
+        UpdateContext({ ctxAssistenciaAtual: LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada) });
+
+        Set(Assist_Encerrada, ctxAssistenciaAtual.Finalizada = "Sim");
+        Set(Assist_fora_dia, Text(ctxAssistenciaAtual.'Dia Semana') <> DiaComPeriodo);
+        /*
+        //Valida se assistência está encerrada - o filtro da tela anterior deve ter restringido
+        If(LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).Finalizada="Sim",
+            Set(Assist_Encerrada, true),
+            Set(Assist_Encerrada, false)
+        );
+
+        //Valida se assistido veio no dia da entrevista
+        If(Text(LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).'Dia Semana')=DiaComPeriodo,
+            Set(Assist_fora_dia, false),
+            Set(Assist_fora_dia, true)
+        );
+        */
+        //Exibição dos campos de data:
+        Set(Semana1, false);
+        Set(Semana2, false);
+        Set(Semana3, false);
+        Set(Semana4, false);
+
+        UpdateContext({ registroAssistencia: LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada) });
+        Switch(true,
+            IsBlank(registroAssistencia.'Semana 1'), Set(Semana1, true),
+            IsBlank(registroAssistencia.'Semana 2'), Set(Semana2, true),
+            IsBlank(registroAssistencia.'Semana 3'), Set(Semana3, true),
+            IsBlank(registroAssistencia.'Semana 4'), Set(Semana4, true)
+        );
+
+        //Validações de data
+        //Compara com a data do sistema e não com a data da caixa de data
+        //Fora do prazo 1a semana
+        If(Semana1,
+            Set(
+                Assist_fora_prazo,
+                DateDiff(registroAssistencia.'Data Entrevista', Now()) > tolerancia * 7
+            )
+        );
+        // Na primeira semana não compara com data entrevista, senão não registra presença no mesmo dia da entrevista
+
+        //Fora do prazo 2a semana
+        If(Semana2,
+            UpdateContext({diasDesdeSemana1: DateDiff(registroAssistencia.'Semana 1', Now())});
+            Set(Assist_fora_prazo, diasDesdeSemana1 > tolerancia * 7);
+            Set(Assist_mesmo_dia, diasDesdeSemana1 < 1);
+        );
+
+        //Fora do prazo 3a semana
+        If(Semana3,
+            UpdateContext({diasDesdeSemana2: DateDiff(registroAssistencia.'Semana 2', Now())});
+            Set(Assist_fora_prazo, diasDesdeSemana2 > tolerancia * 7);
+            Set(Assist_mesmo_dia, diasDesdeSemana2 < 1);
+        );
+
+        //Fora do prazo 4a semana
+        If(Semana4,
+            UpdateContext({diasDesdeSemana3: DateDiff(registroAssistencia.'Semana 3', Now())});
+            Set(Assist_fora_prazo, diasDesdeSemana3 > tolerancia * 7);
+            Set(Assist_mesmo_dia, diasDesdeSemana3 < 1);
+        );
+
+        UpdateContext({ registroAssistencia: ctxAssistenciaAtual });
+        Set(AssistenciaAtual, ctxAssistenciaAtual.'Assistência (cr4f5_assistencia)');
+        Set(DataEntrevistaAtual, ctxAssistenciaAtual.'Data Entrevista');
+        /*
+        Set(AssistenciaAtual, LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).'Assistência (cr4f5_assistencia)');
+        Set(DataEntrevistaAtual, LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).'Data Entrevista');
+        */
+        UpdateContext(
+            {MostraPopUp: false,
+            PopupConfirmaEnvioDialogo: false,
+            PopupConfirmaExcedente: false,
+            PopUpConfirmaPresença: false,
+            PopupDialogoSemanaQueVem: false,
+            PopupDataMesmoDia: false
+            }
+        );
+    Children:
+      - HTML_Assistencia:
+          Control: HtmlViewer@2.1.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            Color: =RGBA(0, 89, 178, 1)
+            DisabledBorderColor: =RGBA(56, 56, 56, 1)
+            Font: =Font.'Open Sans'
+            Height: =60
+            HtmlText: |+
+              =//"Exiba seu texto <b><font color=blue>HTML</font></b> aqui."
+              "<div style='display: flex; justify-content: center; align-items: center;'>
+                  <b>Assistência: " & AssistenciaAtual & "</b>
+              </div>"
+              //"<div style='text-align: center;'>
+              //    <b>Assistência: " & AssistenciaAtual & "</b>
+              //</div>"
+            Size: =24
+            Width: =450
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =Form_Controle.Height + Form_Controle.Y
+      - RectQuickActionBar3_3:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Height: =88
+            Width: =Parent.Width
+      - Icone_Cancela_Controle:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =88
+            Icon: =Icon.CancelBadge
+            OnSelect: |-
+              =ResetForm(Form_Controle);
+              UpdateContext({ MostraPopUp: false });
+              Back()
+            PaddingBottom: =22
+            PaddingLeft: =22
+            PaddingRight: =22
+            PaddingTop: =22
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Cancel item"
+            Width: =88
+      - Icone_Salva_Controle:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =88
+            Icon: =Icon.Save
+            OnSelect: =
+            PaddingBottom: =22
+            PaddingLeft: =22
+            PaddingRight: =22
+            PaddingTop: =22
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Submit item"
+            Visible: =false
+            Width: =88
+            X: =Parent.Width - Self.Width
+      - LblAppName3_3:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =RGBA(58, 58, 58, 0)
+            Font: =Font.'Open Sans'
+            Height: =88
+            Size: =27
+            Text: ="Controle Frequência"
+            Width: =Parent.Width - Icone_Cancela_Controle.Width - Icone_Salva_Controle.Width
+            Wrap: =false
+            X: =80
+      - Form_Controle:
+          Control: Form@2.4.4
+          Variant: Classic
+          Layout: Horizontal
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            DataSource: =Assistências
+            Height: ='Numero do Assistido'.Height + Data_Entrevista.Height + 'Dia Semana'.Height + Semana_1.Height + Semana_2.Height + Semana_3.Height + Semana_4.Height + 'Presencas Extras'.Height
+            Item: =LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada)
+            OnSuccess: =
+            Width: =Parent.Width
+            Y: =RectQuickActionBar3_3.Height + 1
+          Children:
+            - Numero do Assistido:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_idpessoa"
+                  Default: =ThisItem.'ID Pessoa'
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'ID Pessoa')
+                  Height: =110
+                  Required: =true
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =0
+                Children:
+                  - DataCardKey107:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        Align: =Align.Center
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =54
+                        Size: =24
+                        Text: ="Número do Assistido"
+                        Width: =Parent.Width
+                        Y: =10
+                  - DataCardValue49:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        Align: =Align.Center
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =24
+                        Text: =Parent.Default
+                        Width: =Parent.Width
+                        Y: =DataCardKey107.Height + DataCardKey107.Y
+                  - Borda Texto Numero Assistido_1:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: |-
+                          =//ColorFade(Self.Fill; -15%)
+                          RGBA(0, 89, 178, 1)
+                        BorderThickness: =3
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Font: =Font.'Open Sans'
+                        Height: =Parent.Height - 3
+                        HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+                        PressedBorderColor: =Self.Fill
+                        PressedColor: =Self.Fill
+                        PressedFill: =Self.Color
+                        Text: =
+                        Width: =Parent.Width * 0.5
+                        X: =Parent.Width/2 - Self.Width/2
+                        Y: =2
+            - Data_Entrevista:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_dataentrevista"
+                  Default: =ThisItem.'Data Entrevista'
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Data Entrevista')
+                  Height: =65
+                  Required: =false
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =1
+                Children:
+                  - DataCardKey108:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =40
+                        Text: ="Data da Entrevista"
+                        Width: =(Parent.Width - 40) * 0.5
+                        X: =20
+                        Y: =Parent.Height/2 - Self.Height/2
+                  - DataCardValue81:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =42
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Concatenate(Text(ThisItem.'Data Entrevista', "dd-mmm-yyyy", "pt-br")," - ",Proper(Text(ThisItem.'Data Entrevista',"ddd")))
+                        Width: =(Parent.Width - 40) * 0.5
+                        X: =DataCardKey108.X + DataCardKey108.Width + 20
+                        Y: =Parent.Height/2 - Self.Height/2
+            - Dia Semana:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                IsLocked: true
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_diasemana"
+                  Default: =ThisItem.'Dia Semana'
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Dia Semana')
+                  Required: =true
+                  Width: =720
+                  X: =0
+                  Y: =2
+                Children:
+                  - DataCardKey7:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 40) * 0.5
+                        Wrap: =false
+                        X: =20
+                        Y: =Parent.Height/2 - Self.Height/2
+                  - DataCardValue7:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey7.X + DataCardKey7.Width + 20
+                        Y: =10
+            - Semana_1:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicDateTimeEdit
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_semana1"
+                  Default: =ThisItem.'Semana 1'
+                  DisplayMode: =DisplayMode.View
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Semana 1')
+                  Fill: |-
+                    =If(Semana1 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                        Color.LightGreen,
+                        Color.Transparent
+                    )
+                    //If(Semana1;Color.PaleGoldenRod;Color.Transparent)
+                  Height: =65
+                  Required: =false
+                  Update: =DateValue4.SelectedDate
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =3
+                Children:
+                  - DataCardKey50:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =50
+                        Text: ="1ª Semana"
+                        Width: =(Parent.Width - 40) * 0.5
+                        X: =20
+                        Y: |-
+                          =//10
+                          Parent.Height/2 - Self.Height/2
+                  - DateValue4:
+                      Control: Classic/DatePicker@2.6.0
+                      MetadataKey: DateFieldValue
+                      Properties:
+                        BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                        DefaultDate: |-
+                          =If(Semana1 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                              Now(),
+                              Parent.Default
+                          )
+                        DisplayMode: =Parent.DisplayMode
+                        EndYear: =Year(Today())+100
+                        Fill: |-
+                          =If(Semana1 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                              Color.LightGreen,
+                              Color.Transparent
+                          )
+                          //If(Semana1;Color.PaleGoldenRod;Color.Transparent)
+                        Font: =Font.'Open Sans'
+                        Height: =50
+                        IconBackground: =RGBA(0, 51, 102, 1)
+                        IconFill: =RGBA(255, 255, 255, 1)
+                        InputTextPlaceholder: =Self.SelectedDate
+                        IsEditable: =true
+                        PaddingBottom: =0
+                        PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                        Size: =21
+                        StartYear: =2023
+                        Tooltip: =Parent.DisplayName
+                        Width: =(Parent.Width - 40) * 0.5
+                        X: =DataCardKey50.X + DataCardKey50.Width + 20
+                        Y: |-
+                          =//10
+                          Parent.Height/2 - Self.Height/2
+                  - ErrorMessage41:
+                      Control: Label@2.5.1
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(168, 0, 0, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =10
+                        Live: =Live.Assertive
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Error
+                        Visible: =Parent.DisplayMode=DisplayMode.Edit
+                        Width: =Parent.Width - 60
+                        X: =30
+                        Y: =DateValue4.Y + DateValue4.Height
+                  - StarVisible41:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: =Align.Center
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =DataCardKey50.Height
+                        Size: =19
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Wrap: =false
+                        Y: =DataCardKey50.Y
+            - Semana_2:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicDateTimeEdit
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_semana2"
+                  Default: =ThisItem.'Semana 2'
+                  DisplayMode: =DisplayMode.View
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Semana 2')
+                  Fill: |-
+                    =If(Semana2 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                        Color.LightGreen,
+                        Color.Transparent
+                    )
+                    //If(Semana2;Color.PaleGoldenRod;Color.Transparent)
+                  Height: =65
+                  Required: =false
+                  Update: =DateValue5.SelectedDate
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =4
+                Children:
+                  - DataCardKey51:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =50
+                        Text: ="2ª Semana"
+                        Width: =(Parent.Width - 40) * 0.5
+                        Wrap: =false
+                        X: =20
+                        Y: |-
+                          =//10
+                          Parent.Height/2 - Self.Height/2
+                  - DateValue5:
+                      Control: Classic/DatePicker@2.6.0
+                      MetadataKey: DateFieldValue
+                      Properties:
+                        BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                        DefaultDate: |-
+                          =If(Semana2 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                              Now(),
+                              Parent.Default
+                          )
+                        DisplayMode: =Parent.DisplayMode
+                        EndYear: =Year(Today())+100
+                        Fill: |-
+                          =If(Semana2 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                              Color.LightGreen,
+                              Color.Transparent
+                          )
+                          //If(Semana2;Color.PaleGoldenRod;Color.Transparent)
+                        Font: =Font.'Open Sans'
+                        Height: =50
+                        IconBackground: =RGBA(0, 51, 102, 1)
+                        IconFill: =RGBA(255, 255, 255, 1)
+                        InputTextPlaceholder: =Self.SelectedDate
+                        IsEditable: =true
+                        PaddingBottom: =0
+                        PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                        Size: =21
+                        StartYear: =1899
+                        Tooltip: =Parent.DisplayName
+                        Width: =(Parent.Width - 40) * 0.5
+                        X: =DataCardKey51.X + DataCardKey51.Width + 20
+                        Y: |-
+                          =//10
+                          Parent.Height/2 - Self.Height/2
+                  - ErrorMessage42:
+                      Control: Label@2.5.1
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(168, 0, 0, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =10
+                        Live: =Live.Assertive
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Error
+                        Visible: =Parent.DisplayMode=DisplayMode.Edit
+                        Width: =Parent.Width - 60
+                        X: =30
+                        Y: =DateValue5.Y + DateValue5.Height
+                  - StarVisible42:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: =Align.Center
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =DataCardKey51.Height
+                        Size: =19
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Wrap: =false
+                        Y: =DataCardKey51.Y
+            - Semana_3:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicDateTimeEdit
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_semana3"
+                  Default: =ThisItem.'Semana 3'
+                  DisplayMode: =DisplayMode.View
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Semana 3')
+                  Fill: |-
+                    =If(Semana3 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                        Color.LightGreen,
+                        Color.Transparent
+                    )
+                    //If(Semana3;Color.PaleGoldenRod;Color.Transparent)
+                  Height: =65
+                  Required: =false
+                  Update: =DateValue6.SelectedDate
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =5
+                Children:
+                  - DataCardKey52:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =50
+                        Text: ="3ª Semana"
+                        Width: =(Parent.Width - 40) * 0.5
+                        Wrap: =false
+                        X: =20
+                        Y: |-
+                          =//10
+                          Parent.Height/2 - Self.Height/2
+                  - DateValue6:
+                      Control: Classic/DatePicker@2.6.0
+                      MetadataKey: DateFieldValue
+                      Properties:
+                        BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                        DefaultDate: |-
+                          =If(Semana3 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                              Now(),
+                              Parent.Default
+                          )
+                        DisplayMode: =Parent.DisplayMode
+                        EndYear: =Year(Today())+100
+                        Fill: |-
+                          =If(Semana3 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                              Color.LightGreen,
+                              Color.Transparent
+                          )
+                          //If(Semana3;Color.PaleGoldenRod;Color.Transparent)
+                        Font: =Font.'Open Sans'
+                        Height: =50
+                        IconBackground: =RGBA(0, 51, 102, 1)
+                        IconFill: =RGBA(255, 255, 255, 1)
+                        InputTextPlaceholder: =Self.SelectedDate
+                        IsEditable: =true
+                        PaddingBottom: =0
+                        PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                        Size: =21
+                        StartYear: =1899
+                        Tooltip: =Parent.DisplayName
+                        Width: =(Parent.Width - 40) * 0.5
+                        X: =DataCardKey52.X + DataCardKey52.Width + 20
+                        Y: |-
+                          =//10
+                          Parent.Height/2 - Self.Height/2
+                  - ErrorMessage44:
+                      Control: Label@2.5.1
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(168, 0, 0, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =10
+                        Live: =Live.Assertive
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =24
+                        Text: =Parent.Error
+                        Visible: =Parent.DisplayMode=DisplayMode.Edit
+                        Width: =Parent.Width - 60
+                        X: =30
+                        Y: =DateValue6.Y + DateValue6.Height
+                  - StarVisible44:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: =Align.Center
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =DataCardKey52.Height
+                        Size: =19
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Wrap: =false
+                        Y: =DataCardKey52.Y
+            - Semana_4:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicDateTimeEdit
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_semana4"
+                  Default: =ThisItem.'Semana 4'
+                  DisplayMode: =DisplayMode.View
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Semana 4')
+                  Fill: |-
+                    =If(Semana4 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                        Color.LightGreen,
+                        Color.Transparent
+                    )
+                    //If(Semana4;Color.PaleGoldenRod;Color.Transparent)
+                  Height: =65
+                  Required: =false
+                  Update: =DateValue7.SelectedDate
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =6
+                Children:
+                  - DataCardKey53:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =50
+                        Text: ="4ª Semana"
+                        Width: =(Parent.Width - 40) * 0.5
+                        Wrap: =false
+                        X: =20
+                        Y: |-
+                          =//10
+                          Parent.Height/2 - Self.Height/2
+                  - DateValue7:
+                      Control: Classic/DatePicker@2.6.0
+                      MetadataKey: DateFieldValue
+                      Properties:
+                        BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                        DefaultDate: |-
+                          =If(Semana4 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                              Now(),
+                              Parent.Default
+                          )
+                        DisplayMode: =Parent.DisplayMode
+                        EndYear: =Year(Today())+100
+                        Fill: |-
+                          =If(Semana4 && !Assist_Encerrada && !Assist_fora_dia && !Assist_fora_prazo && !Assist_mesmo_dia,
+                              Color.LightGreen,
+                              Color.Transparent
+                          )
+                          //If(Semana4;Color.PaleGoldenRod;Color.Transparent)
+                        Font: =Font.'Open Sans'
+                        Height: =50
+                        IconBackground: =RGBA(0, 51, 102, 1)
+                        IconFill: =RGBA(255, 255, 255, 1)
+                        InputTextPlaceholder: =Self.SelectedDate
+                        IsEditable: =true
+                        PaddingBottom: =0
+                        PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                        Size: =21
+                        StartYear: =1899
+                        Tooltip: =Parent.DisplayName
+                        Width: =(Parent.Width - 40) * 0.5
+                        X: =DataCardKey53.X + DataCardKey53.Width + 20
+                        Y: |-
+                          =//10
+                          Parent.Height/2 - Self.Height/2
+                  - ErrorMessage45:
+                      Control: Label@2.5.1
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(168, 0, 0, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =10
+                        Live: =Live.Assertive
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Error
+                        Visible: =Parent.DisplayMode=DisplayMode.Edit
+                        Width: =Parent.Width - 60
+                        X: =30
+                        Y: =DateValue7.Y + DateValue7.Height
+                  - StarVisible45:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: =Align.Center
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =DataCardKey53.Height
+                        Size: =19
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Wrap: =false
+                        Y: =DataCardKey53.Y
+            - Presencas Extras:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_extra"
+                  Default: =ThisItem.Extra
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,Extra)
+                  Height: =65
+                  Required: =false
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =7
+                Children:
+                  - DataCardKey9:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =50
+                        Text: |-
+                          =//Parent.DisplayName
+                          "Presenças Extras:"
+                        Width: =(Parent.Width - 40) * 0.5
+                        X: =20
+                        Y: |-
+                          =//10
+                          Parent.Height/2 - Self.Height/2
+                  - DataCardValue9:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =50
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 40) * 0.5
+                        X: =DataCardKey9.X + DataCardKey9.Width + 20
+                        Y: |-
+                          =//25
+                          Parent.Height/2 - Self.Height/2
+      - Lbl_Mensagem:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =If("Fora" in Self.Text Or "encerrada" in Self.Text Or "realizou" in Self.Text,Color.Yellow,Color.WhiteSmoke)
+            Fill: =If("Fora" in Self.Text Or "encerrada" in Self.Text Or "realizou" in Self.Text,Color.Red,Color.Green)
+            Font: =Font.'Open Sans'
+            FontWeight: =If("Fora" in Self.Text Or "encerrada" in Self.Text Or "realizou" in Self.Text, FontWeight.Bold,FontWeight.Normal)
+            Text: |-
+              =If(Assist_Encerrada=true,"Assistencia encerrada, encaminhar para diálogo",
+                  (Assist_fora_dia=true),"Assistido fora do dia de atendimento",
+                      (Assist_fora_prazo=true),"Assistido fora do prazo, encaminhar para diálogo",
+                          (Assist_mesmo_dia=true),"Assistido já realizou a Assistência desta semana",
+              "Liberado para assistência"
+              )
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =HTML_Assistencia.Height + HTML_Assistencia.Y + ((Parent.Height - HTML_Assistencia.Height - HTML_Assistencia.Y)/4)*(0 + 1/2) - Self.Height/2
+      - Btn_Confirma_Assistência:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({ PopUpConfirmaPresença: true })
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Confirma Assistência"
+            Visible: |-
+              =If(Assist_Encerrada=false And Assist_fora_dia=false And Assist_fora_prazo=false And Assist_mesmo_dia=false, 
+                  true,
+                  false
+              )
+            Width: =380
+            X: =Parent.Width/2 - Self.Width/2
+            Y: |-
+              =Form_Controle.Height + Form_Controle.Y + ((Parent.Height - Form_Controle.Height - Form_Controle.Y)/4)*(1
+               + 1/2) - Self.Height/2
+      - Btn_Confirma_Envio_Dialogo:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =If(
+                  DateValue(DataEntrevistaAtual) = Today(),
+                  UpdateContext({PopupDataMesmoDia: true}),
+                  UpdateContext({PopupConfirmaEnvioDialogo: true})
+                  //Set(TextoPopUpDialogo, ""),
+                  //Set(TextoPopUpDialogo, "Deseja confirmar o Diálogo no dia de hoje?")
+              );
+              //UpdateContext({PopupConfirmaEnvioDialogo: true})
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Enviar p/ Diálogo"
+            Visible: |-
+              =//If(Assist_Encerrada=false And Assist_fora_dia=false And Assist_fora_prazo=true And Assist_mesmo_dia=false; 
+              //    true;
+              //    false
+              //)
+              //If(Assist_Encerrada=true Or Assist_mesmo_dia=true; 
+              //    false;
+              //    true
+              //)
+              true
+            Width: =380
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =Form_Controle.Height + Form_Controle.Y + ((Parent.Height - Form_Controle.Height - Form_Controle.Y)/4)*(2 + 1/2) - Self.Height/2
+      - Btn_Registra_Excedente:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({PopupConfirmaExcedente: true});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Registra Extra?"
+            Visible: |+
+              =(Assist_Encerrada || Assist_fora_dia || Assist_fora_prazo)
+            Width: =380
+            X: =Parent.Width/2 - Self.Width/2
+            Y: |-
+              =Form_Controle.Height + Form_Controle.Y + ((Parent.Height - Form_Controle.Height - Form_Controle.Y)/4)*(3
+               + 1/2) - Self.Height/2
+      - Fundo_Popup:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(100, 118, 132, 0.6)
+            Height: =Parent.Height - RectQuickActionBar3_3.Height
+            Visible: =MostraPopUp Or PopupConfirmaEnvioDialogo Or PopupConfirmaExcedente Or PopupDialogoSemanaQueVem Or PopupDataMesmoDia
+            Width: =Parent.Width
+            Y: =88
+      - Retangulo_Popup_Confirma_Envio_Dialogo:
+          Control: Rectangle@2.3.0
+          Group: Popup_Confirma_Envio_Dialogo
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =PopupConfirmaEnvioDialogo
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - lbl_Aviso_popup_Confirma_Envio_Dialogo:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Envio_Dialogo
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =Color.Red
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Text: ="Aviso"
+            Visible: =PopupConfirmaEnvioDialogo
+            Width: =Retangulo_Popup_Confirma_Envio_Dialogo.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - lbl_Texto_popup_Confirma_Envio_Dialogo:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Envio_Dialogo
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =84
+            Text: ="Deseja confirmar o Diálogo no dia de hoje?"
+            Visible: =PopupConfirmaEnvioDialogo
+            Width: =Retangulo_Popup_Confirma_Envio_Dialogo.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =505
+      - Btn_Sim_Confirma_Envio_Dialogo:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Envio_Dialogo
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |+
+              =
+              Patch(Assistências,
+                  LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),
+                  {
+                      Finalizada: "Sim"
+                  }
+              );
+
+              UpdateContext({PopupConfirmaEnvioDialogo: false});
+
+              Set(PessoaSelecionada, PessoaSelecionada);
+
+              Patch(
+                  Logs,
+                  Defaults(Logs),
+                  {
+                      DataeHora: Now(),
+                      DeviceID: DeviceID,
+                      Ação: "Confirmada assistência encerrada ID:" & PessoaSelecionada
+                  }
+              );
+
+              Navigate(Infos_Entrevista_Dialogo, ScreenTransition.None);
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Sim"
+            Visible: =PopupConfirmaEnvioDialogo
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo.X + (Retangulo_Popup_Confirma_Envio_Dialogo.Width/4)*3 - Self.Width/2
+            Y: =630
+      - Btn_Nao_Confirma_Envio_Dialogo:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Envio_Dialogo
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({PopupConfirmaEnvioDialogo: false})
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Não"
+            Visible: =PopupConfirmaEnvioDialogo
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo.X + (Retangulo_Popup_Confirma_Envio_Dialogo.Width/4) - Self.Width/2
+            Y: =630
+      - Retangulo_Popup_Confirma_Envio_Dialogo_1:
+          Control: Rectangle@2.3.0
+          Group: Popup_Confirma_Excedente
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =PopupConfirmaExcedente
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - lbl_Aviso_popup_Confirma_Envio_Dialogo_1:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Excedente
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =Color.Red
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Text: ="Aviso"
+            Visible: =PopupConfirmaExcedente
+            Width: =464
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_1.X
+            Y: =428
+      - lbl_Texto_popup_Confirma_Envio_Dialogo_1:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Excedente
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =84
+            Text: ="Deseja confirmar presença extra para hoje?"
+            Visible: =PopupConfirmaExcedente
+            Width: =464
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_1.X
+            Y: =505
+      - Btn_Sim_Confirma_Excedente:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Excedente
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: "=//------------------------------------------------------------------------------------------\r\n//Incrementa excedente do assistido\r\nSet(Qtde_Nova,LookUp(Assistências,'ID Pessoa'= PessoaSelecionada,Extra)+1);\r\n\r\nPatch(Assistências,\r\n    LookUp(Assistências,'ID Pessoa'= PessoaSelecionada),\r\n    {Extra: Qtde_Nova}\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\n//------------------------------------------------------------------------------------------\r\n// Log\r\nPatch(\r\n    Logs,\r\n    Defaults(Logs),\r\n    {\r\n        DataeHora: Now(),\r\n        DeviceID: DeviceID,\r\n        Ação: \"Registrado Excedente ID:\" & PessoaSelecionada & \" - \" & AssistenciaAtual\r\n    }\r\n);\r\n//------------------------------------------------------------------------------------------\r\n// 1. Variáveis Iniciais\r\nSet(Hoje, Text(Today(), \"[$-pt-BR]dd/mm/yyyy\"));\r\n\r\n// 2. Trazemos os dados para a memória APENAS PARA LEITURA\r\nSet(RegExcedenteAtual, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo));\r\n\r\n// 3. Se o registro para hoje e esse período ainda não existe, criamos a linha vazia\r\nIf(\r\n    IsBlank(RegExcedenteAtual),\r\n    Patch(Excedentes, Defaults(Excedentes), {Data: Hoje, PeriodoDia: Periodo});\r\n    \r\n    // Agora que criamos a linha, atualizamos a nossa variável para enxergar ela\r\n    Set(RegExcedenteAtual, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo))\r\n);\r\n\r\n// 4. Fazemos a soma e atualizamos o banco.\r\n// NOTA: No 2º argumento usamos o LookUp (evita o erro do Dataverse).\r\n// No 3º argumento usamos a Variável + Value() (Deixa muito rápido e dispensa dezenas de IsBlanks).\r\nSwitch(\r\n    AssistenciaAtual,\r\n    \"A1\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {A1: Value(RegExcedenteAtual.A1) + 1}),\r\n    \"A2\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {A2: Value(RegExcedenteAtual.A2) + 1}),\r\n    \"A3\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {A3: Value(RegExcedenteAtual.A3) + 1}),\r\n    \"C1\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {C1: Value(RegExcedenteAtual.C1) + 1}),\r\n    \"C2\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {C2: Value(RegExcedenteAtual.C2) + 1}),\r\n    \"C3\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {C3: Value(RegExcedenteAtual.C3) + 1}),\r\n    \r\n    // Casos Duplos\r\n    \"A3/A1\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        A3: Value(RegExcedenteAtual.A3) + 1,\r\n        A1: Value(RegExcedenteAtual.A1) + 1\r\n    }),\r\n    \"C3/C1\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        C3: Value(RegExcedenteAtual.C3) + 1,\r\n        C1: Value(RegExcedenteAtual.C1) + 1\r\n    }),\r\n    \"A3/A2\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        A3: Value(RegExcedenteAtual.A3) + 1,\r\n        A2: Value(RegExcedenteAtual.A2) + 1\r\n    }),\r\n    \"C3/C2\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        C3: Value(RegExcedenteAtual.C3) + 1,\r\n        C2: Value(RegExcedenteAtual.C2) + 1\r\n    }),\r\n    \"A3/A2-Casa\", Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), {\r\n        A3: Value(RegExcedenteAtual.A3) + 1\r\n    })\r\n);\r\n/*\r\n//------------------------------------------------------------------------------------------\r\n// Registra na tabela Presenças_Excedentes um excedente na data atual e na assistência\r\n// Verificar se a data atual já existe na tabela Presenças_Excedentes\r\nSet(Hoje, Text(Today(), \"[$-pt-BR]dd/mm/yyyy\"));\r\n\r\nSet(ExistingRecord, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo));\r\n\r\n// Se não existir, criar um novo registro\r\nIf(\r\n    IsBlank(ExistingRecord),\r\n    Patch(Excedentes, Defaults(Excedentes), {Data: Hoje, PeriodoDia: Periodo})\r\n);\r\n\r\nIf(\r\n    AssistenciaAtual = \"A1\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),\r\n    AssistenciaAtual = \"A2\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),\r\n    AssistenciaAtual = \"A3\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)}),\r\n    AssistenciaAtual = \"C1\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\r\n    AssistenciaAtual = \"C2\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\r\n    AssistenciaAtual = \"C3\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\r\n    AssistenciaAtual = \"A3/A1\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),\r\n             A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),\r\n    AssistenciaAtual = \"C3/C1\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\r\n             C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),\r\n    AssistenciaAtual = \"A3/A2\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),\r\n             A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),\r\n    AssistenciaAtual = \"C3/C2\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\r\n             C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1),\r\n            'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),\r\n    AssistenciaAtual = \"A3/A2-Casa\",\r\n    Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), \r\n            {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)})\r\n);\r\n//------------------------------------------------------------------------------------------\r\n*/\r\n//------------------------------------------------------------------------------------------\r\n//Salva na tabela Pessoas a data atual na coluna 'Ultima Assistência' (para poder fazer a\r\n//limpeza por tempo que não comparece à assistência.\r\nPatch(\r\n    Pessoas,\r\n    LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada),\r\n    {'Ultima Assistência': Today()}\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\n//------------------------------------------------------------------------------------------\r\n//Salva na tabela Assistências a data atual na coluna 'Ultimo Comparecimento' (para poder\r\n//fazer a limpeza por tempo que não comparece à assistência.\r\nPatch(\r\n    Assistências,\r\n    LookUp(Assistências, 'ID Assistência' = AssistenciaSelecionada),\r\n    {'Ultimo Comparecimento': Today()}\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\nUpdateContext({PopupConfirmaExcedente: false});\r\n\r\nBack();"
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Sim"
+            Visible: =PopupConfirmaExcedente
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Presença.X + (Retangulo_Popup_Confirma_Presença.Width/4)*3 - Self.Width/2
+            Y: =630
+      - Btn_Nao_Confirma_Excedente:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Excedente
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({PopupConfirmaExcedente: false});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Não"
+            Visible: =PopupConfirmaExcedente
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Presença.X + (Retangulo_Popup_Confirma_Presença.Width/4) - Self.Width/2
+            Y: =630
+      - Retangulo_Popup_Dialogo_Semana_que_vem:
+          Control: Rectangle@2.3.0
+          Group: Popup_Dialogo_Semana_que_vem
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =PopupDialogoSemanaQueVem
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - lbl_Aviso_popup_Dialogo_Semana_que_vem:
+          Control: Label@2.5.1
+          Group: Popup_Dialogo_Semana_que_vem
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(0, 134, 208, 1)
+            Fill: =RGBA(255, 255, 0, 1)
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Text: ="ATENÇÃO"
+            Visible: =PopupDialogoSemanaQueVem
+            Width: =464
+            X: =Retangulo_Popup_Dialogo_Semana_que_vem.X
+            Y: =429
+      - lbl_Texto_popup_Dialogo_Semana_que_vem:
+          Control: Label@2.5.1
+          Group: Popup_Dialogo_Semana_que_vem
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =105
+            Text: ="Assistência encerrada, encaminhar para diálogo na próxima semana"
+            Visible: =PopupDialogoSemanaQueVem
+            Width: =464
+            X: =Retangulo_Popup_Dialogo_Semana_que_vem.X
+            Y: =505
+      - Btn_Ok_Dialogo_Semana_que_vem:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Dialogo_Semana_que_vem
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |+
+              =Patch(
+                  Assistências,
+                  LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),
+                  {
+                      Finalizada: "Sim"
+                  }
+              );
+
+              Patch(
+                  Logs,
+                  Defaults(Logs),
+                  {
+                      DataeHora: Now(),
+                      DeviceID: DeviceID,
+                      Ação: "Dialogo Próxima Semana ID:" & PessoaSelecionada
+                  }
+              );
+
+              UpdateContext({PopupDialogoSemanaQueVem: false});
+              UpdateContext({PopUpConfirmaPresença: false});
+
+              Back();
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Ok"
+            Visible: =PopupDialogoSemanaQueVem
+            Width: =157
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =632
+      - Retangulo_Popup_Confirma_Presença:
+          Control: Rectangle@2.3.0
+          Group: Popup_Confirma_Presença
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =PopUpConfirmaPresença
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - lbl_Aviso_popup_Confirma_Presença:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Presença
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =Color.Red
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Text: ="Aviso"
+            Visible: =PopUpConfirmaPresença
+            Width: =Retangulo_Popup_Confirma_Presença.Width
+            X: =Retangulo_Popup_Confirma_Presença.X
+            Y: =428
+      - lbl_Texto_popup_Confirma_Presença:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Presença
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =84
+            Text: ="Deseja confirmar a presença no dia de hoje?"
+            Visible: =PopUpConfirmaPresença
+            Width: =Retangulo_Popup_Confirma_Presença.Width
+            X: =Retangulo_Popup_Confirma_Presença.X
+            Y: =505
+      - Btn_Sim_Confirma_Presença:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Presença
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: "=SubmitForm(Form_Controle);\nPatch(\n    Logs,\n    Defaults(Logs),\n    {\n        DataeHora: Now(),\n        DeviceID: DeviceID,\n        Ação: \"Confirmada Presença ID:\" & PessoaSelecionada & \" - \" & AssistenciaAtual\n    }\n);\nPatch(\n    Assistências,\n    registroAssistencia, // Usa a variável que já está na memória!\n    {\n        'Semana 1': If(Semana1, Today(), registroAssistencia.'Semana 1'),\n        'Semana 2': If(Semana2, Today(), registroAssistencia.'Semana 2'),\n        'Semana 3': If(Semana3, Today(), registroAssistencia.'Semana 3'),\n        'Semana 4': If(Semana4, Today(), registroAssistencia.'Semana 4'),\n        'Ultimo Comparecimento': Today()\n    }\n);\n/*\nIf(Semana1,\n    Patch(Assistências,\n        LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),\n        {\n            'Semana 1': Today()\n        }\n    )\n);\nIf(Semana2,\n    Patch(Assistências,\n        LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),\n        {\n            'Semana 2': Today()\n        }\n    )\n);\nIf(Semana3,\n    Patch(Assistências,\n        LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),\n        {\n            'Semana 3': Today()\n        }\n    )\n);\nIf(Semana4,\n    Patch(Assistências,\n        LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada),\n        {\n            'Semana 4': Today()\n        }\n    )\n);*/\n// 1. Variáveis Iniciais\nSet(Hoje, Text(Today(), \"[$-pt-BR]dd/mm/yyyy\"));\n\n// 2. Trazemos os dados para a memória APENAS PARA LEITURA\nSet(RegPresençaAtual, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo));\n\n// 3. Se o registro para hoje e esse período ainda não existe, criamos a linha vazia\nIf(\n    IsBlank(RegPresençaAtual),\n    Patch(Presenças, Defaults(Presenças), {Data: Hoje, PeriodoDia: Periodo});\n    \n    // Agora que criamos a linha, atualizamos a nossa variável para enxergar ela\n    Set(RegPresençaAtual, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo))\n);\n\n// 4. Fazemos a soma e atualizamos o banco.\n// NOTA: No 2º argumento usamos o LookUp (evita o erro do Dataverse).\n// No 3º argumento usamos a Variável + Value() (Deixa muito rápido e dispensa dezenas de IsBlanks).\nSwitch(\n    AssistenciaAtual,\n    \"A1\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {A1: Value(RegPresençaAtual.A1) + 1}),\n    \"A2\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {A2: Value(RegPresençaAtual.A2) + 1}),\n    \"A3\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {A3: Value(RegPresençaAtual.A3) + 1}),\n    \"C1\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {C1: Value(RegPresençaAtual.C1) + 1}),\n    \"C2\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {C2: Value(RegPresençaAtual.C2) + 1}),\n    \"C3\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {C3: Value(RegPresençaAtual.C3) + 1}),\n    \n    // Casos Duplos\n    \"A3/A1\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        A3: Value(RegPresençaAtual.A3) + 1,\n        A1: Value(RegPresençaAtual.A1) + 1\n    }),\n    \"C3/C1\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        C3: Value(RegPresençaAtual.C3) + 1,\n        C1: Value(RegPresençaAtual.C1) + 1\n    }),\n    \"A3/A2\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        A3: Value(RegPresençaAtual.A3) + 1,\n        A2: Value(RegPresençaAtual.A2) + 1\n    }),\n    \"C3/C2\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        C3: Value(RegPresençaAtual.C3) + 1,\n        C2: Value(RegPresençaAtual.C2) + 1\n    }),\n    \"A3/A2-Casa\", Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), {\n        A3: Value(RegPresençaAtual.A3) + 1\n    })\n);\n/*\n// Registra na tabela Presenças na data e assistência atual\n// Verificar se a data atual já existe na tabela Presenças\nSet(Hoje, Text(Today(), \"[$-pt-BR]dd/mm/yyyy\"));\n\nSet(ExistingRecord, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo));\n\n// Se não existir, criar um novo registro\nIf(\n    IsBlank(ExistingRecord),\n    Patch(Presenças, Defaults(Presenças), {Data: Hoje, PeriodoDia: Periodo})\n);\n\nIf(\n    AssistenciaAtual = \"A1\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),\n    AssistenciaAtual = \"A2\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),\n    AssistenciaAtual = \"A3\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1)}),\n    AssistenciaAtual = \"C1\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\n    AssistenciaAtual = \"C2\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\n    AssistenciaAtual = \"C3\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),\n    AssistenciaAtual = \"A3/A1\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1),\n             A1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),\n    AssistenciaAtual = \"C3/C1\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\n            C1: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C1 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),\n    AssistenciaAtual = \"A3/A2\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1),\n             A2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),\n    AssistenciaAtual = \"C3/C2\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {C3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C3 + 1),\n            C2: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).C2 + 1),\n            'PS Crianças': If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),\n    AssistenciaAtual = \"A3/A2-Casa\",\n    Patch(Presenças, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo), \n            {A3: If(IsBlank(LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Presenças, Data = Hoje && PeriodoDia = Periodo).A3 + 1)})\n);\n*/\n//Salva na tabela Pessoas a data atual na coluna 'Ultima Assistência' (para poder fazer a\n//limpeza por tempo que não comparece à assistência.\nPatch(\n    Pessoas,\n    LookUp(\n        Pessoas,\n        'ID Pessoa' = PessoaSelecionada\n    ),\n    {'Ultima Assistência': Today()}\n);\n\n//Salva na tabela Assistências a data atual na coluna 'Ultimo Comparecimento' (para poder\n//fazer a limpeza por tempo que não comparece à assistência.\nPatch(\n    Assistências,\n    LookUp(\n        Assistências,\n        'ID Assistência' = AssistenciaSelecionada\n    ),\n    {'Ultimo Comparecimento': Today()}\n);\n\nUpdateContext({PopUpConfirmaPresença: false});\nIf(\n    Semana4,\n    UpdateContext({PopupDialogoSemanaQueVem: true}),\n    UpdateContext({PopupDialogoSemanaQueVem: false}) && Back()\n);\n"
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Sim"
+            Visible: =PopUpConfirmaPresença
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Presença.X + (Retangulo_Popup_Confirma_Presença.Width/4)*3 - Self.Width/2
+            Y: =630
+      - Btn_Nao_Confirma_Presença:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Presença
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({ PopUpConfirmaPresença: false })
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Não"
+            Visible: =PopUpConfirmaPresença
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Presença.X + (Retangulo_Popup_Confirma_Presença.Width/4) - Self.Width/2
+            Y: =630
+      - Retangulo_Popup_Mesmo_Dia:
+          Control: Rectangle@2.3.0
+          Group: Popup_Encerrar_Mesmo_Dia
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =PopupDataMesmoDia
+            Width: =500
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =448
+      - lbl_Aviso_popup_Mesmo_Dia:
+          Control: Label@2.5.1
+          Group: Popup_Encerrar_Mesmo_Dia
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =Color.Red
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Text: ="Aviso"
+            Visible: =PopupDataMesmoDia
+            Width: =Retangulo_Popup_Mesmo_Dia.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =448
+      - lbl_Texto_popup_Mesmo_Dia:
+          Control: Label@2.5.1
+          Group: Popup_Encerrar_Mesmo_Dia
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =84
+            Text: ="Não é possível encerrar assistências realizadas no mesmo dia"
+            Visible: =PopupDataMesmoDia
+            Width: =Retangulo_Popup_Mesmo_Dia.Width
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =525
+      - Btn_Ok_Mesmo_Dia:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Encerrar_Mesmo_Dia
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({PopupDataMesmoDia: false})
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Ok"
+            Visible: =PopupDataMesmoDia
+            Width: =157
+            X: |-
+              =//Retangulo_Popup_Mesmo_Dia.X + (Retangulo_Popup_Mesmo_Dia.Width/4) - Self.Width/2
+              //Parent.Width/2 - Self.Width/2
+              Retangulo_Popup_Mesmo_Dia.X + (Retangulo_Popup_Mesmo_Dia.Width/2 - Self.Width/2)
+            Y: =650

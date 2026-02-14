@@ -158,7 +158,7 @@
         DisabledColor: =RGBA(244, 244, 244, 1)
         Height: =88
         Icon: =Icon.ChevronLeft
-        OnSelect: =Navigate(Tela_Principal, ScreenTransition.CoverRight)
+        OnSelect: =Navigate(Principal, ScreenTransition.CoverRight)
         PaddingBottom: =24
         PaddingLeft: =24
         PaddingRight: =24

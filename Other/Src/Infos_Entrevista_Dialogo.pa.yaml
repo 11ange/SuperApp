@@ -1,0 +1,1108 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  Infos_Entrevista_Dialogo:
+    Properties:
+      Fill: =RGBA(232, 232, 232, 1)
+      LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
+      OnVisible: |+
+        =Set(AnotacoesEntrevista,LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada).'Anotações Entrevista');
+        Set(Assistencia_Salvo,LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada).'Assistência (cr4f5_assistencia)');
+        Set(DiaSemana_Salvo, LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada).'Dia Semana');
+        Set(TratMedico_Salvo, LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada).'Tratamento Médico');
+        Set(AssistenciaAtual, LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada).'Assistência (cr4f5_assistencia)');
+        UpdateContext({PopupConfirmaExcedente: false})
+    Children:
+      - RectQuickActionBar3_8:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            Height: =88
+            Width: =Parent.Width
+      - Icone_Cancela_Infos_Entrevista:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =88
+            Icon: =Icon.CancelBadge
+            OnSelect: =ResetForm(Infos_Entrevista);ResetForm(Infos_Assisitido_Dialogo); Back(); //Navigate(Tela_Busca_Dialogos;ScreenTransition.None);; //Navigate(Tela_Principal;ScreenTransition.None)
+            PaddingBottom: =22
+            PaddingLeft: =22
+            PaddingRight: =22
+            PaddingTop: =22
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Cancel item"
+            Width: =88
+      - Icone_Salva_Entrevista_1:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            AccessibleLabel: =Self.Tooltip
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =88
+            Icon: =Icon.Save
+            OnSelect: =SubmitForm(Infos_Entrevista)
+            PaddingBottom: =22
+            PaddingLeft: =22
+            PaddingRight: =22
+            PaddingTop: =22
+            PressedFill: =RGBA(255, 255, 255, 0.3)
+            TabIndex: =0
+            Tooltip: ="Submit item"
+            Visible: =false
+            Width: =88
+            X: =Parent.Width - Self.Width
+      - Lbl_Titulo_Infos_Entrevista:
+          Control: Label@2.5.1
+          Properties:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =RGBA(58, 58, 58, 0)
+            Font: =Font.'Open Sans'
+            Height: =88
+            Size: =27
+            Text: ="Informações da Entrevista"
+            Width: =Parent.Width - Icone_Cancela_Infos_Entrevista.Width - Icone_Salva_Entrevista_1.Width
+            Wrap: =false
+            X: =80
+      - Infos_Entrevista:
+          Control: Form@2.4.4
+          Variant: Classic
+          Layout: Horizontal
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            DataSource: =Assistências
+            DefaultMode: =FormMode.View
+            Height: =Btn_Realiza_Dialogo.Y - Self.Y - 60
+            Item: =LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada)
+            OnSuccess: =Back()
+            Width: =Parent.Width
+            Y: =Infos_Assisitido_Dialogo.Y + Infos_Assisitido_Dialogo.Height + Linha_Divisoria.Height
+          Children:
+            - Entrevistador_DataCard4:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                IsLocked: true
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_entrevistador"
+                  Default: =ThisItem.Entrevistador
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,Entrevistador)
+                  Required: =false
+                  Width: =720
+                  X: =0
+                  Y: =0
+                Children:
+                  - DataCardKey64:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue82.Height / 2) - (Self.Height / 2)
+                  - DataCardValue82:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey64.X + DataCardKey64.Width
+                        Y: =10
+            - Data_Entrevista_DataCard5:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_dataentrevista"
+                  Default: =ThisItem.'Data Entrevista'
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,'Data Entrevista')
+                  Height: =85
+                  Required: =false
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =1
+                Children:
+                  - DataCardKey123:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: ="Data da Entrevista"
+                        Width: =(Parent.Width - 60) * 0.4
+                        X: =30
+                        Y: =10 + (DataCardValue108.Height / 2) - (Self.Height / 2)
+                  - DataCardValue108:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: |-
+                          =//Text(ThisItem.Data_Entrevista; "d-mmm-yyyy"; "pt-br")
+                          Concatenate(Text(ThisItem.'Data Entrevista', "dd-mmm-yyyy", "pt-br")," - ",Proper(Text(ThisItem.'Data Entrevista',"ddd")))
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey123.X + DataCardKey123.Width
+                        Y: =10
+            - Dia Semana_DataCard5:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                IsLocked: true
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_diasemana"
+                  Default: =ThisItem.'Dia Semana'
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,'Dia Semana')
+                  Required: =false
+                  Width: =720
+                  X: =0
+                  Y: =2
+                Children:
+                  - DataCardKey79:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue87.Height / 2) - (Self.Height / 2)
+                  - DataCardValue87:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey79.X + DataCardKey79.Width
+                        Y: =10
+            - Primeira Assistência_DataCard13:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                IsLocked: true
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_primeiraassistencia"
+                  Default: =ThisItem.'Primeira Assistência'
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Primeira Assistência')
+                  Required: =false
+                  Width: =720
+                  X: =0
+                  Y: =3
+                Children:
+                  - DataCardKey176:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue164.Height / 2) - (Self.Height / 2)
+                  - DataCardValue164:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey176.X + DataCardKey176.Width
+                        Y: =10
+            - Assistência_DataCard4:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_assistencia"
+                  Default: =ThisItem.'Assistência (cr4f5_assistencia)'
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Assistência (cr4f5_assistencia)')
+                  Required: =true
+                  Width: =720
+                  X: =0
+                  Y: =4
+                Children:
+                  - DataCardKey37:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue36.Height / 2) - (Self.Height / 2)
+                  - DataCardValue36:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey37.X + DataCardKey37.Width
+                        Y: =10
+            - Semana_1_DataCard4:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_semana1"
+                  Default: =ThisItem.'Semana 1'
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,'Semana 1')
+                  Height: =85
+                  Required: =false
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =5
+                Children:
+                  - DataCardKey120:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: ="1ª Semana"
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue104.Height / 2) - (Self.Height / 2)
+                  - DataCardValue104:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Text(ThisItem.'Semana 1', "d-mmm-yyyy", "pt-br")
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey120.X + DataCardKey120.Width
+                        Y: =10
+            - Semana_2_DataCard4:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_semana2"
+                  Default: =ThisItem.'Semana 2'
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,'Semana 2')
+                  Height: =85
+                  Required: =false
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =6
+                Children:
+                  - DataCardKey117:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: ="2ª Semana"
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue94.Height / 2) - (Self.Height / 2)
+                  - DataCardValue94:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Text(ThisItem.'Semana 2', "d-mmm-yyyy", "pt-br")
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey117.X + DataCardKey117.Width
+                        Y: =10
+            - Semana_3_DataCard4:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_semana3"
+                  Default: =ThisItem.'Semana 3'
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,'Semana 3')
+                  Height: =85
+                  Required: =false
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =7
+                Children:
+                  - DataCardKey119:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: ="3ª Semana"
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue103.Height / 2) - (Self.Height / 2)
+                  - DataCardValue103:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Text(ThisItem.'Semana 3', "d-mmm-yyyy", "pt-br")
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey119.X + DataCardKey119.Width
+                        Y: =10
+            - Semana_4_DataCard5:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_semana4"
+                  Default: =ThisItem.'Semana 4'
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,'Semana 4')
+                  Required: =false
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =8
+                Children:
+                  - DataCardKey74:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: ="4ª Semana"
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue71.Height / 2) - (Self.Height / 2)
+                  - DataCardValue71:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Text(ThisItem.'Semana 4', "d-mmm-yyyy", "pt-br")
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey74.X + DataCardKey74.Width
+                        Y: =10
+            - Tratamento Médico_DataCard8:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                IsLocked: true
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_tratamentomedico"
+                  Default: =ThisItem.'Tratamento Médico'
+                  DisplayName: =DataSourceInfo([@Assistências],DataSourceInfo.DisplayName,'Tratamento Médico')
+                  Required: =false
+                  Width: =720
+                  X: =0
+                  Y: =9
+                Children:
+                  - DataCardKey175:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue163.Height / 2) - (Self.Height / 2)
+                  - DataCardValue163:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey175.X + DataCardKey175.Width
+                        Y: =10
+            - Extra_DataCard3:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                IsLocked: true
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_extra"
+                  Default: =ThisItem.Extra
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,Extra)
+                  Required: =false
+                  Width: =720
+                  X: =0
+                  Y: =10
+                Children:
+                  - DataCardKey98:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue92.Height / 2) - (Self.Height / 2)
+                  - DataCardValue92:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey98.X + DataCardKey98.Width
+                        Y: =10
+            - Anotações Entrevista_DataCard4:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                IsLocked: true
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_anotacoesentrevista"
+                  Default: =ThisItem.'Anotações Entrevista'
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,'Anotações Entrevista')
+                  Required: =false
+                  Width: =720
+                  X: =0
+                  Y: =11
+                Children:
+                  - DataCardKey95:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue90.Height / 2) - (Self.Height / 2)
+                  - DataCardValue90:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey95.X + DataCardKey95.Width
+                        Y: =10
+            - ID Assistência_DataCard2:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                IsLocked: true
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_identrevista"
+                  Default: =ThisItem.'ID Assistência'
+                  DisplayName: =DataSourceInfo([@Assistências_Encerradas],DataSourceInfo.DisplayName,'ID Assistência')
+                  Required: =false
+                  Visible: =false
+                  Width: =720
+                  X: =0
+                  Y: =12
+                Children:
+                  - DataCardKey31:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue73.Height / 2) - (Self.Height / 2)
+                  - DataCardValue73:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey31.X + DataCardKey31.Width
+                        Y: =10
+      - Btn_Realiza_Dialogo:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =100
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =Patch(
+                  Logs,
+                  Defaults(Logs),
+                  {
+                      DataeHora: Now(),
+                      DeviceID: DeviceID,
+                      Ação: "Aberto Diálogo do Assistido ID:" & PessoaSelecionada
+                  }
+              );
+              Navigate(Dialogo, ScreenTransition.None);
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Realizar Diálogo"
+            Width: =240
+            X: =App.MinScreenWidth/4 - Self.Width/2
+            Y: =Parent.Height - Self.Height - 60
+      - Infos_Assisitido_Dialogo:
+          Control: Form@2.4.4
+          Variant: Classic
+          Layout: Horizontal
+          Properties:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            DataSource: =Pessoas
+            DefaultMode: =FormMode.View
+            Height: =Infos_Entrevista_Assistido_ID_Pessoa.Height + Infos_Entrevista_Assistido_Nome_Pessoa.Height + Infos_Entrevista_Assistido_Nome_Social.Height + ConhDoutrina_DataCard7.Height + 10
+            Item: =LookUp(Pessoas,'ID Pessoa' = PessoaSelecionada)
+            OnSuccess: =Back()
+            Width: =Parent.Width
+            Y: =95
+          Children:
+            - Infos_Entrevista_Assistido_ID_Pessoa:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_idpessoa"
+                  Default: =ThisItem.'ID Pessoa'
+                  DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'ID Pessoa')
+                  Height: =85
+                  Required: =false
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =0
+                Children:
+                  - DataCardKey23:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =90
+                        Text: ="Número do Assistido"
+                        Width: =(Parent.Width - 60) * 0.4
+                        X: =30
+                        Y: =10 + (DataCardValue23.Height / 2) - (Self.Height / 2)
+                  - DataCardValue23:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Int(Parent.Default)
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey23.X + DataCardKey23.Width
+                        Y: =10
+            - Infos_Entrevista_Assistido_Nome_Pessoa:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_nomepessoa"
+                  Default: =ThisItem.'Nome Pessoa'
+                  DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'Nome Pessoa')
+                  Height: =85
+                  Required: =true
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =1
+                Children:
+                  - DataCardKey25:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =98
+                        Text: ="Nome do Assistido"
+                        Width: =(Parent.Width - 60) * 0.4
+                        X: =30
+                        Y: =10 + (DataCardValue26.Height / 2) - (Self.Height / 2)
+                  - DataCardValue26:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey25.X + DataCardKey25.Width
+                        Y: =10
+            - Infos_Entrevista_Assistido_Nome_Social:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_nomesocial"
+                  Default: =ThisItem.'Nome Social'
+                  DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'Nome Social')
+                  Height: =85
+                  Required: =false
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =2
+                Children:
+                  - DataCardKey40:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =93
+                        Text: ="Nome Social"
+                        Width: =(Parent.Width - 60) * 0.4
+                        X: =30
+                        Y: =10 + (DataCardValue39.Height / 2) - (Self.Height / 2)
+                  - DataCardValue39:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey40.X + DataCardKey40.Width
+                        Y: =10
+            - ConhDoutrina_DataCard7:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicTextualView
+                IsLocked: true
+                Properties:
+                  BorderColor: =RGBA(0, 89, 178, 1)
+                  DataField: ="cr4f5_conhdoutrina"
+                  Default: =ThisItem.ConhDoutrina
+                  DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,ConhDoutrina)
+                  Required: =true
+                  Width: =720
+                  X: =0
+                  Y: =3
+                Children:
+                  - DataCardKey177:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(0, 89, 178, 1)
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        Height: =48
+                        Text: =Parent.DisplayName
+                        Width: =(Parent.Width - 60) * 0.4
+                        Wrap: =false
+                        X: =30
+                        Y: =10 + (DataCardValue165.Height / 2) - (Self.Height / 2)
+                  - DataCardValue165:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldValue
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 89, 178, 1)
+                        DisplayMode: =Parent.DisplayMode
+                        Font: =Font.'Open Sans'
+                        Height: =40
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Text: =Parent.Default
+                        Width: =(Parent.Width - 60) * 0.6
+                        X: =DataCardKey177.X + DataCardKey177.Width
+                        Y: =10
+      - Linha_Divisoria:
+          Control: Rectangle@2.3.0
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderThickness: =1
+            Fill: =RGBA(0, 51, 102, 1)
+            Height: =1
+            Width: =Parent.Width
+            Y: =Infos_Assisitido_Dialogo.Y + Infos_Assisitido_Dialogo.Height
+      - Btn_Registra_Extra_Dialogo:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =100
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: =UpdateContext({PopupConfirmaExcedente:true});
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Registrar Extra?"
+            Width: =Btn_Realiza_Dialogo.Width
+            X: =(App.MinScreenWidth/4)*3 - Self.Width/2
+            Y: =Parent.Height - Self.Height - 60
+      - Retangulo_Popup_Confirma_Envio_Dialogo_2:
+          Control: Rectangle@2.3.0
+          Group: Popup_Confirma_Excedente_Dialogo
+          Properties:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =281
+            Visible: =PopupConfirmaExcedente
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =428
+      - lbl_Aviso_popup_Confirma_Envio_Dialogo_2:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Excedente_Dialogo
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(255, 255, 255, 1)
+            Fill: =Color.Red
+            Font: =Font.'Open Sans'
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Text: ="Aviso"
+            Visible: =PopupConfirmaExcedente
+            Width: =464
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_2.X
+            Y: =428
+      - lbl_Texto_popup_Confirma_Envio_Dialogo_2:
+          Control: Label@2.5.1
+          Group: Popup_Confirma_Excedente_Dialogo
+          Properties:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Font: =Font.'Open Sans'
+            Height: =84
+            Text: ="Deseja confirmar presença extra para hoje?"
+            Visible: =PopupConfirmaExcedente
+            Width: =464
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_2.X
+            Y: =505
+      - Btn_Sim_Confirma_Excedente_1:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Excedente_Dialogo
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =//------------------------------------------------------------------------------------------
+              //Incrementa excedente do assistido
+              Set(Qtde_Nova,LookUp(Assistências,'ID Pessoa'=PessoaSelecionada,Extra)+1);
+
+              Patch(Assistências,
+                  LookUp(Assistências,'ID Pessoa'=PessoaSelecionada),
+                  {Extra: Qtde_Nova}
+              );
+              //------------------------------------------------------------------------------------------
+
+              //------------------------------------------------------------------------------------------
+              // Log
+              Patch(
+                  Logs,
+                  Defaults(Logs),
+                  {
+                      DataeHora: Now(),
+                      DeviceID: DeviceID,
+                      Ação: "Registrado Excedente ID:" & PessoaSelecionada & " - " & AssistenciaAtual
+                  }
+              );
+              //------------------------------------------------------------------------------------------
+
+              //------------------------------------------------------------------------------------------
+              // Registra na tabela Presenças_Excedentes um excedente na data atual e na assistência
+              // Verificar se a data atual já existe na tabela Presenças_Excedentes
+              Set(Hoje, Text(Today(), "[$-pt-BR]dd/mm/yyyy"));
+
+              Set(ExistingRecord, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo));
+
+              // Se não existir, criar um novo registro
+              If(
+                  IsBlank(ExistingRecord),
+                  Patch(Excedentes, Defaults(Excedentes), {Data: Hoje, PeriodoDia: Periodo})
+              );
+
+              If(
+                  AssistenciaAtual = "A1",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),
+                  AssistenciaAtual = "A2",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),
+                  AssistenciaAtual = "A3",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)}),
+                  AssistenciaAtual = "C1",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),
+                  AssistenciaAtual = "C2",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),
+                  AssistenciaAtual = "C3",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 1)}),
+                  AssistenciaAtual = "A3/A1",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
+                           A1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A1 + 1)}),
+                  AssistenciaAtual = "C3/C1",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
+                           C1: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C1 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),
+                  AssistenciaAtual = "A3/A2",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1),
+                           A2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A2 + 1)}),
+                  AssistenciaAtual = "C3/C2",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {C3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C3 + 1),
+                           C2: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).C2 + 1),
+                          'PS Crianças': If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças'), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).'PS Crianças' + 2)}),
+                  AssistenciaAtual = "A3/A2-Casa",
+                  Patch(Excedentes, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo), 
+                          {A3: If(IsBlank(LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3), 1, LookUp(Excedentes, Data = Hoje && PeriodoDia = Periodo).A3 + 1)})
+              );
+              //------------------------------------------------------------------------------------------
+
+              //------------------------------------------------------------------------------------------
+              //Salva na tabela Pessoas a data atual na coluna 'Ultima Assistência' (para poder fazer a
+              //limpeza por tempo que não comparece à assistência.
+              Patch(
+                  Pessoas,
+                  LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada),
+                  {'Ultima Assistência': Today()}
+              );
+              //------------------------------------------------------------------------------------------
+
+              //------------------------------------------------------------------------------------------
+              //Salva na tabela Assistências a data atual na coluna 'Ultimo Comparecimento' (para poder
+              //fazer a limpeza por tempo que não comparece à assistência.
+              Patch(
+                  Assistências,
+                  LookUp(Assistências, 'ID Assistência' = AssistenciaSelecionada),
+                  {'Ultimo Comparecimento': Today()}
+              );
+              //------------------------------------------------------------------------------------------
+
+              UpdateContext({PopupConfirmaExcedente: false});
+
+              //Navigate(Tela_Principal);;
+              Back();
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Sim"
+            Visible: =PopupConfirmaExcedente
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_2.X + (Retangulo_Popup_Confirma_Envio_Dialogo_2.Width/4)*3 - Self.Width/2
+            Y: =630
+      - Btn_Nao_Confirma_Excedente_1:
+          Control: Classic/Button@2.2.0
+          Group: Popup_Confirma_Excedente_Dialogo
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =55
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+              =UpdateContext({PopupConfirmaExcedente: false})
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            Text: ="Não"
+            Visible: =PopupConfirmaExcedente
+            Width: =157
+            X: =Retangulo_Popup_Confirma_Envio_Dialogo_2.X + (Retangulo_Popup_Confirma_Envio_Dialogo_2.Width/4) - Self.Width/2
+            Y: =630
