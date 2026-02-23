@@ -14,13 +14,14 @@ EditorState:
     - Limpeza
     - Orientação
     - Corrige_Dialogo
-    - Busca_Assistidos
-    - Consulta_Assistidos
-    - Edita_Assistidos
-    - Busca_Tarefeiros
+    - Busca_Assistido
+    - Consulta_Assistido
+    - Edita_Assistido
+    - Busca_Tarefeiro
     - Consulta_Tarefeiros
     - Edita_Tarefeiros
     - Busca_Todos
+    - Busca_Pessoas
     - Consulta_Todos
     - Edita_Todos
     - Busca_Entrevistas_Presença

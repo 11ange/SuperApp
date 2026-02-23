@@ -262,5 +262,6 @@ Screens:
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
+            Visible: =false
             X: =440
             Y: =1376

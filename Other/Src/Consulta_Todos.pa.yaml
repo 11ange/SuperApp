@@ -12,8 +12,9 @@ Screens:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
       OnVisible: |-
-        =//Set(PopupApagaTodos; false)
-        false
+        =UpdateContext({ 
+            ctxPessoaAtual: LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada) 
+        });
     Children:
       - RectQuickActionBar2_3:
           Control: Rectangle@2.3.0
@@ -125,7 +126,7 @@ Screens:
             BorderColor: =RGBA(0, 89, 178, 1)
             DataSource: =Pessoas
             Height: =692
-            Item: =LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)
+            Item: =ctxPessoaAtual//LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)
             Width: =Parent.Width
             Y: =RectQuickActionBar2_3.Height
           Children:
@@ -937,10 +938,23 @@ Screens:
               );
             Text: |-
               =If(
+                  !IsBlank(
+                      LookUp(
+                          Assistências,
+                          'ID Pessoa' = PessoaSelecionada && Finalizada = "Não",
+                          'ID Assistência'
+                      )
+                  ),
+                  "Com Assistência em Andamento",
+                  "Sem Assistência em Andamento"
+              )
+              /*
+              If(
                   (CountIf(Assistências, ('ID Pessoa'=PessoaSelecionada) && (Finalizada="Não")))>0,
                   "Com Assistência em Andamento",
                   "Sem Assistência em Andamento"
               )
+              */
             Visible: |-
               =If(LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada).'Em Assistência' = "Sim", true, false)
               //true

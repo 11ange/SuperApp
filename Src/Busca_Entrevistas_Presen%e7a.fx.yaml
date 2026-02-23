@@ -21,6 +21,15 @@
             =SortByColumns(
                 Filter(
                     Assistências,
+                    IsBlank(Campo_Busca_Entrevista_Presença.Text) Or StartsWith('ID Pessoa Texto', Campo_Busca_Entrevista_Presença.Text)
+                ),
+                "cr4f5_idpessoa",
+                If(Sort_Presenca, SortOrder.Descending, SortOrder.Ascending)
+            )
+            /*
+            SortByColumns(
+                Filter(
+                    Assistências,
                     IsBlank(Campo_Busca_Entrevista_Presença.Text) || StartsWith('ID Pessoa Texto', Campo_Busca_Entrevista_Presença.Text),
                     !Toggle_Dia.Value || 'Dia Semana' = DiaComPeriodo,
                     !Toggle_Todas_Abertas.Value || 
@@ -29,27 +38,26 @@
                 "cr4f5_idpessoa",
                 If(Sort_Presenca, SortOrder.Descending, SortOrder.Ascending)
             )
+            */
             /*
             SortByColumns(
                 Filter(
-                    Search(
-                        Assistências,
-                        Campo_Busca_Entrevista_Presença.Text,
-                        'ID Pessoa Texto'
-                    ),
-                    //Finalizada = "Não" &&
-                    ( !Toggle_Dia.Value || 'Dia Semana' = DiaComPeriodo ) &&
-                    ( !Toggle_Todas_Abertas.Value || DateValue('Ultimo Comparecimento') <> Today())
+                    Assistências,
+                    Finalizada = "Não",
+                    IsBlank(Campo_Busca_Entrevista.Text) Or StartsWith('ID Pessoa Texto', Campo_Busca_Entrevista.Text)
                 ),
                 "cr4f5_idpessoa",
-                If(Sort_Presenca, SortOrder.Descending, SortOrder.Ascending)
-            )*/
+                If(Sort_Entrevista, SortOrder.Descending, SortOrder.Ascending)
+            )
+            
+            */
         Layout: =Layout.Vertical
         LoadingSpinner: =LoadingSpinner.Data
         OnSelect: |-
-            =//Set(PresencaSelecionada, ThisItem.'ID Pessoa');
-            Set(AssistenciaSelecionada,ThisItem.'ID Assistência');
-            Set(PessoaSelecionada,ThisItem.'ID Pessoa');
+            =Concurrent(
+                Set(AssistenciaSelecionada, ThisItem.'ID Assistência'),
+                Set(PessoaSelecionada, ThisItem.'ID Pessoa')
+            );
             
             If(ThisItem.Finalizada = "Não",
                 Navigate(Controle_Presença, ScreenTransition.None),
@@ -65,7 +73,7 @@
         TemplatePadding: =0
         TemplateSize: =90
         Width: =Parent.Width
-        Y: =Toggle_Todas_Abertas.Y + Toggle_Todas_Abertas.Height + 5
+        Y: =Btn_Le_Qrcode.Y + Btn_Le_Qrcode.Height + 15
         ZIndex: =1
 
         Title2 As label:
@@ -284,95 +292,21 @@
         Width: =88
         ZIndex: =9
 
-    Grupo_Seleciona_Dia_Assistencia As group:
-        Height: =5
-        Width: =5
-        X: =40
-        Y: =40
-        ZIndex: =13
-
-        Toggle_Dia As toggleSwitch:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Color: =RGBA(0, 0, 0, 1)
-            FalseFill: =RGBA(128, 130, 133, 1)
-            HandleFill: =RGBA(255, 255, 255, 1)
-            Height: =40
-            ShowLabel: =false
-            Size: =21
-            TextPosition: =TextPosition.Left
-            TrueFill: =RGBA(0, 51, 102, 1)
-            Width: =70
-            X: =(Parent.Width - Self.Width) / 2
-            Y: =Campo_Busca_Entrevista_Presença.Y + Campo_Busca_Entrevista_Presença.Height + 10
-            ZIndex: =10
-
-        Label3 As label:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Color: =RGBA(0, 0, 0, 1)
-            DisabledColor: =RGBA(166, 166, 166, 1)
-            FontWeight: =If( Toggle_Dia.Value = true, FontWeight.Normal,  FontWeight.Bold)
-            Size: =21
-            Text: ="Todas Assistências"
-            Width: =270
-            X: =50
-            Y: =Toggle_Dia.Y
-            ZIndex: =11
-
-        Label3_1 As label:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Color: =RGBA(0, 0, 0, 1)
-            DisabledColor: =RGBA(166, 166, 166, 1)
-            FontWeight: =If( Toggle_Dia.Value = true, FontWeight.Bold,  FontWeight.Normal)
-            Size: =21
-            Text: ="Apenas do dia"
-            Width: =210
-            X: =410
-            Y: =Toggle_Dia.Y
-            ZIndex: =12
-
-    Grupo_Seleciona_Todas_Abertas As group:
-        Height: =5
-        Width: =5
-        X: =20
-        Y: =186
+    Btn_Le_Qrcode As Button:
+        Align: =Align.Center
+        BasePaletteColor: =RGBA(5, 102, 178, 1)
+        BorderColor: =
+        BorderRadius: =10
+        DisplayMode: =DisplayMode.Edit
+        Font: =Font.'Open Sans'
+        FontColor: =
+        FontSize: =27
+        Height: =80
+        IconStyle: ='ButtonCanvas.IconStyle'.Filled
+        Text: ="QR CODE"
+        Visible: =false
+        Width: =250
+        X: =(Parent.Width - Self.Width)/2
+        Y: =Campo_Busca_Entrevista_Presença.Y + Campo_Busca_Entrevista_Presença.Height + 10
         ZIndex: =16
-
-        Toggle_Todas_Abertas As toggleSwitch:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Color: =RGBA(0, 0, 0, 1)
-            FalseFill: =RGBA(128, 130, 133, 1)
-            HandleFill: =RGBA(255, 255, 255, 1)
-            Height: =40
-            ShowLabel: =false
-            Size: =21
-            TextPosition: =TextPosition.Left
-            TrueFill: =RGBA(0, 51, 102, 1)
-            Width: =70
-            X: =(Parent.Width - Self.Width) / 2
-            Y: =Toggle_Dia.Y + 60
-            ZIndex: =13
-
-        Label3_2 As label:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Color: =RGBA(0, 0, 0, 1)
-            DisabledColor: =RGBA(166, 166, 166, 1)
-            FontWeight: =If( Toggle_Todas_Abertas.Value = true, FontWeight.Normal,  FontWeight.Bold)
-            Size: =21
-            Text: ="Todas"
-            Width: =100
-            X: =209
-            Y: =Toggle_Todas_Abertas.Y
-            ZIndex: =14
-
-        Label3_3 As label:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Color: =RGBA(0, 0, 0, 1)
-            DisabledColor: =RGBA(166, 166, 166, 1)
-            FontWeight: =If( Toggle_Todas_Abertas.Value = true, FontWeight.Bold,  FontWeight.Normal)
-            Size: =21
-            Text: ="Em Aberto"
-            Width: =225
-            X: =407
-            Y: =Toggle_Todas_Abertas.Y
-            ZIndex: =15
 

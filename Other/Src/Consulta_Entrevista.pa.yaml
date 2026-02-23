@@ -12,7 +12,10 @@ Screens:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
       OnVisible: |-
-        =UpdateContext({ MostraPopUp: false })
+        =UpdateContext({ MostraPopUp: false });
+        UpdateContext({ 
+            ctxAssistenciaAtual: LookUp(Assistências,'ID Assistência' = AssistenciaSelecionada) 
+        });
     Children:
       - RectQuickActionBar2_4:
           Control: Rectangle@2.3.0
@@ -121,11 +124,7 @@ Screens:
             BorderColor: =RGBA(0, 89, 178, 1)
             DataSource: =Assistências
             Height: =Parent.Height-Self.Y
-            Item: |-
-              =LookUp(
-                  Assistências,
-                  'ID Assistência' = AssistenciaSelecionada
-              )
+            Item: =ctxAssistenciaAtual//LookUp(Assistências,'ID Assistência' = AssistenciaSelecionada)
             SnapToColumns: =false
             Width: =Parent.Width
             Y: =95

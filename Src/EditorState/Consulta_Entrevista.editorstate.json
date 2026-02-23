@@ -11126,7 +11126,7 @@
       "MetaDataIDKey": "%TemplatePhoneIconEdit.ID%",
       "Name": "Icone_Edita_Entrevista",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -12332,7 +12332,7 @@
       "MetaDataIDKey": "%TemplatePhoneLblAppName.ID%",
       "Name": "Lbl_Titulo_Consulta_Entevista",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

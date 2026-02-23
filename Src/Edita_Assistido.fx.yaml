@@ -1,0 +1,1301 @@
+"Edita_Assistido As screen.'phoneDetailEditLayout_ver3.0'":
+    Fill: =RGBA(232, 232, 232, 1)
+    OnVisible: |
+        =UpdateContext({PopupInformaNumero: false});
+        
+        If(!CriaAssistido,
+            Patch(
+                Logs,
+                Defaults(Logs),
+                {
+                    DataeHora: Now(),
+                    DeviceID: DeviceID,
+                    Ação: "Editando Pessoa ID:" & PessoaSelecionada
+                }
+            )
+        );
+        
+        UpdateContext({ MostraMensagem: false});
+
+    RectQuickActionBar_Tela_Edicao_Assistidos As rectangle:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        Height: =88
+        Width: =Parent.Width
+        ZIndex: =1
+
+    Icone_Cancela_Criacao_Assistido As icon.Cancel:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.CancelBadge
+        OnSelect: |-
+            =If(CriaAssistido = false,
+                Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: "Cancelando Edição Pessoa ID:" & PessoaSelecionada
+                    }
+                ),
+                Patch(
+                Logs,
+                Defaults(Logs),
+                {
+                    DataeHora: Now(),
+                    DeviceID: DeviceID,
+                    Ação: "Cancelando criação novo assistivo"
+                }
+                )
+            );
+            
+            //ResetForm(Form_Edita_Assistidos);;
+            
+            //Set(PopupInformaNumero; false);;
+            UpdateContext({PopupInformaNumero: false});
+            
+            Set(CriaAssistido,false);
+            
+            Back()
+        PaddingBottom: =22
+        PaddingLeft: =22
+        PaddingRight: =22
+        PaddingTop: =22
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Botão para cancelar a edição/criação do assistido"
+        Width: =88
+        ZIndex: =2
+
+    Icone_Salva_Assistido As icon.Check:
+        AccessibleLabel: =Self.Tooltip
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(244, 244, 244, 1)
+        Height: =88
+        Icon: =Icon.Save
+        OnSelect: |-
+            =If(
+                !Form_Edita_Assistidos.Valid,
+                Notify("Preencha todos os campos obrigatórios!", NotificationType.Error),
+                If(
+                    CartaoDuplicado,
+                    Notify("Número do cartão já está cadastrado.", NotificationType.Error),
+                    SubmitForm(Form_Edita_Assistidos)
+                )
+            )
+            
+            /*If(
+                Form_Edita_Assistidos.Valid,
+                SubmitForm(Form_Edita_Assistidos),
+                Notify("Preencha todos os campos obrigatórios!", NotificationType.Error)
+            );*/
+            //SubmitForm(Form_Edita_Assistidos);;
+        PaddingBottom: =22
+        PaddingLeft: =22
+        PaddingRight: =22
+        PaddingTop: =22
+        PressedFill: =RGBA(255, 255, 255, 0.3)
+        TabIndex: =0
+        Tooltip: ="Botão de salvar o cadastro"
+        Visible: =Not(MostraMensagem)
+        Width: =88
+        X: =632
+        ZIndex: =3
+
+    Lbl_Titulo_Edita_Assistido As label:
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Fill: =RGBA(58, 58, 58, 0)
+        Height: =88
+        Size: =27
+        Text: =If(Form_Edita_Assistidos.Mode=FormMode.Edit,"Editar Assistido","Criar Assistido")
+        Width: =Parent.Width - Icone_Cancela_Criacao_Assistido.Width - Icone_Salva_Assistido.Width
+        Wrap: =false
+        X: =80
+        ZIndex: =4
+
+    Form_Edita_Assistidos As form:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        DataSource: =Pessoas
+        Height: =845
+        Item: |-
+            =If(
+                Form_Edita_Assistidos.Mode = FormMode.Edit && CriaAssistido = false,
+                LookUp(
+                    Pessoas,
+                    'ID Pessoa' = PessoaSelecionada
+                ),
+                Form_Edita_Assistidos.LastSubmit
+            )
+        NumberOfColumns: =1
+        OnFailure: |+
+            =UpdateContext({PopupInformaNumero: false});
+            
+            
+        OnSuccess: |-
+            =UpdateContext({UltimoID: Form_Edita_Assistidos.LastSubmit.id});
+            
+            Set(varRegistroOriginalPessoas,Form_Edita_Assistidos.LastSubmit);
+            
+            LogAlteracaoCampos.Run(
+                Concatenate(
+                    "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
+                    "NomeSocial:", varRegistroOriginalPessoas.'Nome Social', "|",
+                    "Idade:", varRegistroOriginalPessoas.Idade, "|",
+                    "Cartao:", varRegistroOriginalPessoas.'Número Cartão', "|",
+                    "Ativo:", varRegistroOriginalPessoas.Ativo, "|",
+                    "EmAssistencia:", varRegistroOriginalPessoas.'Em Assistência', "|",
+                    "Tarefeiro:", varRegistroOriginalPessoas.Tarefeiro
+            
+                ),
+                Concatenate(
+                    "Nomepessoa:", Form_Edita_Assistidos.LastSubmit.'Nome Pessoa', "|",
+                    "NomeSocial:", Form_Edita_Assistidos.LastSubmit.'Nome Social', "|",
+                    "Idade:", Form_Edita_Assistidos.LastSubmit.Idade, "|",
+                    "Cartao:", Form_Edita_Assistidos.LastSubmit.'Número Cartão', "|",
+                    "Ativo:", Form_Edita_Assistidos.LastSubmit.Ativo, "|",
+                    "EmAssistencia:", Form_Edita_Assistidos.LastSubmit.'Em Assistência', "|",
+                    "Tarefeiro:", Form_Edita_Assistidos.LastSubmit.Tarefeiro
+                ),
+                PessoaSelecionada,
+                DeviceID,
+                "Pessoas"
+            );
+            
+            If(CriaAssistido, UpdateContext({PopupInformaNumero: true}), Back());
+            
+            Set(CriaAssistido,false);
+        Width: =Parent.Width
+        Y: =RectQuickActionBar_Tela_Edicao_Assistidos.Height
+        ZIndex: =5
+
+        Card_Edita_Assistido_ID_Pessoa As typedDataCard.textualViewCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_idpessoa"
+            Default: =ThisItem.'ID Pessoa'
+            DisplayMode: =DisplayMode.Edit
+            DisplayName: ="Número da Pessoa"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Visible: =If(CriaAssistido, false, true)
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            DataCardKey30_1 As label:
+                Align: =Align.Center
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Bold
+                Height: =48
+                Size: =24
+                Text: |-
+                    ="Número do Assistido"
+                    //Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue28_1 As label:
+                Align: =Align.Center
+                AutoHeight: =true
+                BorderColor: =RGBA(0, 89, 178, 1)
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Parent.DisplayMode
+                FontWeight: =FontWeight.Semibold
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =28
+                Text: =Int(Parent.Default)
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey30_1.Y + DataCardKey30_1.Height + 5
+                ZIndex: =2
+
+        Card_Edita_Assistido_Nome_Social As typedDataCard.textualEditCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_nomesocial"
+            Default: =ThisItem.'Nome Social'
+            DisplayMode: =Parent.DisplayMode
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'Nome Social')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            MaxLength: =DataSourceInfo([@Pessoas], DataSourceInfo.MaxLength, 'Nome Social')
+            Required: =false
+            Update: =DataCardValue31.Text
+            Width: =Parent.Width * 0.9
+            X: =0
+            Y: =2
+            ZIndex: =1
+
+            DataCardKey34 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: ="Nome Social"
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue31 As text:
+                AccessibleLabel: ="Nome Social da Pesso Assistido"
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                BorderThickness: =2
+                Color: =RGBA(0, 0, 0, 1)
+                Default: =Parent.Default
+                DelayOutput: =true
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                DisplayMode: =Parent.DisplayMode
+                FocusedBorderThickness: =4
+                Height: =70
+                HintText: ="Nome Social"
+                HoverBorderColor: =RGBA(0, 89, 178, 1)
+                HoverColor: =RGBA(0, 0, 0, 1)
+                HoverFill: =RGBA(153, 205, 255, 1)
+                MaxLength: =Parent.MaxLength
+                PaddingLeft: =5
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =21
+                Tooltip: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey34.Y + DataCardKey34.Height + 5
+                ZIndex: =2
+
+            ErrorMessage1 As label:
+                AutoHeight: =true
+                Color: =RGBA(168, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Semibold
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =24
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue31.Y + DataCardValue31.Height
+                ZIndex: =3
+
+            StarVisible1 As label:
+                Align: =Align.Center
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =DataCardKey34.Height
+                Size: =21
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey34.Y
+                ZIndex: =4
+
+        Idade_DataCard7 As typedDataCard.numberEditCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_idade"
+            Default: =ThisItem.Idade
+            DisplayMode: =Parent.DisplayMode
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,Idade)
+            Fill: |
+                =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =Value(DataCardValue58.Text)
+            Width: =Parent.Width
+            X: =0
+            Y: =3
+            ZIndex: =1
+
+            DataCardKey90 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue58 As text:
+                AccessibleLabel: ="Idade do Assistido"
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                BorderThickness: =2
+                Color: =RGBA(0, 0, 0, 1)
+                Default: =Parent.Default
+                DelayOutput: =true
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                DisplayMode: =Parent.DisplayMode
+                Fill: |
+                    =//RGBA(255; 255; 255; 1)
+                    If(
+                        IsBlank(Self.Text),
+                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 255, 255, 1) // Fundo branco se preenchido
+                    )
+                FocusedBorderThickness: =4
+                Format: =TextFormat.Number
+                Height: =70
+                HintText: ="Idade"
+                HoverBorderColor: =RGBA(0, 89, 178, 1)
+                HoverColor: =RGBA(0, 0, 0, 1)
+                HoverFill: =RGBA(153, 205, 255, 1)
+                PaddingLeft: =5
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =21
+                Tooltip: =Parent.DisplayName
+                Width: =Parent.Width * 0.4 - 60
+                X: =30
+                Y: =DataCardKey90.Y + DataCardKey90.Height + 5
+                ZIndex: =2
+
+            ErrorMessage76 As label:
+                AutoHeight: =true
+                Color: =RGBA(168, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Semibold
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =24
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue58.Y + DataCardValue58.Height
+                ZIndex: =3
+
+            StarVisible76 As label:
+                Align: =Align.Center
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =DataCardKey90.Height
+                Size: =21
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey90.Y
+                ZIndex: =4
+
+        "'Número Cartão_DataCard2' As typedDataCard.numberEditCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_numerocartao"
+            Default: =ThisItem.'Número Cartão'
+            DisplayMode: =Parent.DisplayMode
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'Número Cartão')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =Value(DataCardValue11.Text)
+            Width: =Parent.Width
+            X: =0
+            Y: =3
+            ZIndex: =1
+
+            DataCardKey11 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: ="Número QRCODE" //Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue11 As text:
+                AccessibleLabel: ="Número do QRCODE"
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                BorderThickness: =2
+                Color: =RGBA(0, 0, 0, 1)
+                Default: =Parent.Default
+                DelayOutput: =true
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                DisplayMode: =Parent.DisplayMode
+                Fill: |-
+                    =//RGBA(255, 255, 255, 1)
+                    If(
+                        IsBlank(Self.Text),
+                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 255, 255, 1) // Fundo branco se preenchido
+                    )
+                FocusedBorderThickness: =4
+                Format: =TextFormat.Number
+                Height: =70
+                HintText: ="Num. Cartão"
+                HoverBorderColor: =RGBA(0, 89, 178, 1)
+                HoverColor: =RGBA(0, 0, 0, 1)
+                HoverFill: =RGBA(153, 205, 255, 1)
+                OnChange: |-
+                    =Set(
+                        CartaoDuplicado,
+                        !IsBlank(
+                            LookUp(
+                                Pessoas,
+                                'Número Cartão' = Value(Self.Text) &&
+                                (
+                                    Form_Edita_Assistidos.Mode = FormMode.New ||
+                                    id <> Form_Edita_Assistidos.LastSubmit.id
+                                )
+                            )
+                        )
+                    )
+                    //false
+                PaddingLeft: =5
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =21
+                Tooltip: =Parent.DisplayName
+                Width: =Parent.Width * 0.4 - 60
+                X: =30
+                Y: =DataCardKey11.Y + DataCardKey11.Height + 5
+                ZIndex: =2
+
+            ErrorMessage8 As label:
+                AutoHeight: =true
+                Color: =RGBA(168, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Semibold
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =24
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue11.Y + DataCardValue11.Height
+                ZIndex: =3
+
+            StarVisible8 As label:
+                Align: =Align.Center
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =DataCardKey11.Height
+                Size: =21
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey11.Y
+                ZIndex: =4
+
+        Ativo_DataCard5 As typedDataCard.textualEditCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_ativo"
+            Default: ="Sim"
+            DisplayMode: =Parent.DisplayMode
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,Ativo)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            MaxLength: =DataSourceInfo([@Pessoas], DataSourceInfo.MaxLength, Ativo)
+            Required: =true
+            Update: =DataCardValue136.Text
+            Visible: =false
+            Width: =720
+            X: =0
+            Y: =3
+            ZIndex: =1
+
+            DataCardKey148 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue136 As text:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                BorderThickness: =2
+                Color: =RGBA(0, 0, 0, 1)
+                Default: =Parent.Default
+                DelayOutput: =true
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                DisplayMode: =Parent.DisplayMode
+                FocusedBorderThickness: =4
+                Height: =70
+                HoverBorderColor: =RGBA(0, 89, 178, 1)
+                HoverColor: =RGBA(0, 0, 0, 1)
+                HoverFill: =RGBA(153, 205, 255, 1)
+                MaxLength: =Parent.MaxLength
+                PaddingLeft: =5
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =21
+                Tooltip: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey148.Y + DataCardKey148.Height + 5
+                ZIndex: =2
+
+            ErrorMessage70 As label:
+                AutoHeight: =true
+                Color: =RGBA(168, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Semibold
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =24
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue136.Y + DataCardValue136.Height
+                ZIndex: =3
+
+            StarVisible70 As label:
+                Align: =Align.Center
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =DataCardKey148.Height
+                Size: =21
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey148.Y
+                ZIndex: =4
+
+        Tarefeiro_DataCard5 As typedDataCard.textualEditCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_tarefeiro"
+            Default: ="Não"
+            DisplayMode: =Parent.DisplayMode
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,Tarefeiro)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            MaxLength: =DataSourceInfo([@Pessoas], DataSourceInfo.MaxLength, Tarefeiro)
+            Required: =true
+            Update: =DataCardValue137.Text
+            Visible: =false
+            Width: =720
+            X: =0
+            Y: =4
+            ZIndex: =1
+
+            DataCardKey149 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue137 As text:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                BorderThickness: =2
+                Color: =RGBA(0, 0, 0, 1)
+                Default: ="Não"
+                DelayOutput: =true
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                DisplayMode: =Parent.DisplayMode
+                FocusedBorderThickness: =4
+                Height: =70
+                HoverBorderColor: =RGBA(0, 89, 178, 1)
+                HoverColor: =RGBA(0, 0, 0, 1)
+                HoverFill: =RGBA(153, 205, 255, 1)
+                MaxLength: =Parent.MaxLength
+                PaddingLeft: =5
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =21
+                Tooltip: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey149.Y + DataCardKey149.Height + 5
+                ZIndex: =2
+
+            ErrorMessage81 As label:
+                AutoHeight: =true
+                Color: =RGBA(168, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Semibold
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =24
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue137.Y + DataCardValue137.Height
+                ZIndex: =3
+
+            StarVisible81 As label:
+                Align: =Align.Center
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =DataCardKey149.Height
+                Size: =21
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey149.Y
+                ZIndex: =4
+
+        ConhDoutrina_DataCard5 As typedDataCard.allowedValuesStringEditCard:
+            AllowedValues: =DataSourceInfo([@Pessoas], DataSourceInfo.AllowedValues, ConhDoutrina)
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_conhdoutrina"
+            Default: |
+                =If(Form_Edita_Assistidos.Mode = FormMode.Edit,
+                    ThisItem.ConhDoutrina,
+                    First(ConhecDoutrina).Value
+                )
+                //ThisItem.ConhDoutrina
+            DisplayMode: =Parent.DisplayMode
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,ConhDoutrina)
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =true
+            Update: =Dropdown_Conhec_Doutrina.Selected.Value
+            Width: =Parent.Width * 0.6
+            X: =0
+            Y: =5
+            ZIndex: =1
+
+            DataCardKey5 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: ="Conhecimento da doutrina"//Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            Dropdown_Conhec_Doutrina As dropdown:
+                AccessibleLabel: ="Conhecimento da doutrina"
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                ChevronBackground: =RGBA(0, 51, 102, 1)
+                ChevronDisabledBackground: =RGBA(166, 166, 166, 1)
+                ChevronDisabledFill: =RGBA(244, 244, 244, 1)
+                ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+                ChevronHoverFill: =RGBA(255, 255, 255, 1)
+                Default: =Parent.Default
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                DisplayMode: =Parent.DisplayMode
+                Fill: |-
+                    =If(Self.Selected.Value = " ",//IsBlank(Self.Selected);
+                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 255, 255, 1) // Fundo branco se preenchido
+                    )
+                    //RGBA(255; 255; 255; 1)
+                Height: =70
+                HoverColor: =RGBA(0, 0, 0, 1)
+                HoverFill: =RGBA(153, 205, 255, 1)
+                Items: =ConhecDoutrina
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =RGBA(0, 89, 178, 1)
+                SelectionFill: =RGBA(0, 51, 102, 1)
+                Size: =21
+                Tooltip: ="Conhec. doutrina"//Parent.DisplayName
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey5.Y + DataCardKey5.Height + 5
+                ZIndex: =2
+
+            ErrorMessage3 As label:
+                AutoHeight: =true
+                Color: =RGBA(168, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Semibold
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =24
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =Dropdown_Conhec_Doutrina.Y + Dropdown_Conhec_Doutrina.Height
+                ZIndex: =3
+
+            StarVisible3 As label:
+                Align: =Align.Center
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =DataCardKey5.Height
+                Size: =21
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey5.Y
+                ZIndex: =4
+
+        "'Em Assistência_DataCard6' As typedDataCard.textualEditCard":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_emassistencia"
+            Default: ="Sim"
+            DisplayMode: =Parent.DisplayMode
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'Em Assistência')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            MaxLength: =DataSourceInfo([@Pessoas], DataSourceInfo.MaxLength, 'Em Assistência')
+            Required: =true
+            Update: =DataCardValue139.Text
+            Visible: =false
+            Width: =720
+            X: =0
+            Y: =6
+            ZIndex: =1
+
+            DataCardKey151 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue139 As text:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                BorderThickness: =2
+                Color: =RGBA(0, 0, 0, 1)
+                Default: =Parent.Default
+                DelayOutput: =true
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                DisplayMode: =Parent.DisplayMode
+                FocusedBorderThickness: =4
+                Height: =70
+                HoverBorderColor: =RGBA(0, 89, 178, 1)
+                HoverColor: =RGBA(0, 0, 0, 1)
+                HoverFill: =RGBA(153, 205, 255, 1)
+                MaxLength: =Parent.MaxLength
+                PaddingLeft: =5
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =21
+                Tooltip: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey151.Y + DataCardKey151.Height + 5
+                ZIndex: =2
+
+            ErrorMessage86 As label:
+                AutoHeight: =true
+                Color: =RGBA(168, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Semibold
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =24
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue139.Y + DataCardValue139.Height
+                ZIndex: =3
+
+            StarVisible86 As label:
+                Align: =Align.Center
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =DataCardKey151.Height
+                Size: =21
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey151.Y
+                ZIndex: =4
+
+        Card_Edita_Assistido_Nome_Pessoa As typedDataCard.textualEditCard:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="cr4f5_nomepessoa"
+            Default: =ThisItem.'Nome Pessoa'
+            DisplayMode: =Parent.DisplayMode
+            DisplayName: =DataSourceInfo([@Pessoas],DataSourceInfo.DisplayName,'Nome Pessoa')
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =150
+            MaxLength: =DataSourceInfo([@Pessoas], DataSourceInfo.MaxLength, 'Nome Pessoa')
+            Required: =true
+            Update: =DataCardValue25_1.Text
+            Width: =Parent.Width * 0.9
+            X: =0
+            Y: =1
+            ZIndex: =6
+
+            DataCardKey27_1 As label:
+                AutoHeight: =true
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =48
+                Size: =21
+                Text: ="Nome do Assistido"
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue25_1 As text:
+                AccessibleLabel: ="Nome do Assistido"
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                BorderThickness: =2
+                Color: =RGBA(0, 0, 0, 1)
+                Default: |-
+                    =If(Len(NomeTemp) > 0,
+                        NomeTemp,
+                        Parent.Default
+                    )
+                DelayOutput: =true
+                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                DisplayMode: =Parent.DisplayMode
+                Fill: |-
+                    =If(
+                        IsBlank(Self.Text),
+                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 255, 255, 1) // Fundo branco se preenchido
+                    )
+                    //RGBA(255; 255; 255; 1)
+                FocusedBorderThickness: =4
+                Height: =70
+                HintText: ="Nome do Assistido"
+                HoverBorderColor: =RGBA(0, 89, 178, 1)
+                HoverColor: =RGBA(0, 0, 0, 1)
+                HoverFill: =RGBA(153, 205, 255, 1)
+                MaxLength: =Parent.MaxLength
+                OnChange: |
+                    =false
+                PaddingLeft: =5
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =21
+                Tooltip: ="Nome do Assistido" //Parent.DisplayName
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey27_1.Y + DataCardKey27_1.Height + 5
+                ZIndex: =2
+
+            ErrorMessage16_1 As label:
+                AutoHeight: =true
+                Color: =RGBA(168, 0, 0, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FontWeight: =FontWeight.Semibold
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =24
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue25_1.Y + DataCardValue25_1.Height
+                ZIndex: =3
+
+            StarVisible16_1 As label:
+                Align: =Align.Center
+                Color: =RGBA(0, 89, 178, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Height: =DataCardKey27_1.Height
+                Size: =21
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey27_1.Y
+                ZIndex: =4
+
+    Pop_Informa_Numero_Assistido As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =14
+
+        Fundo_Popup_Informa_Numero As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =RGBA(100, 118, 132, 0.6)
+            Height: =Parent.Height - RectQuickActionBar_Tela_Edicao_Assistidos.Height
+            Visible: =PopupInformaNumero
+            Width: =Parent.Width
+            Y: =88
+            ZIndex: =6
+
+        Popup_Informa_Numero As rectangle:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Fill: =Color.White
+            Height: =406
+            Visible: =PopupInformaNumero
+            Width: =464
+            X: =Parent.Width/2 - Self.Width/2
+            Y: =320
+            ZIndex: =7
+
+        lbl_Aviso_Informa_Numero As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(0, 89, 178, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Fill: =Color.YellowGreen
+            FontWeight: =FontWeight.Bold
+            Height: =72
+            Size: =21
+            Text: ="Aviso"
+            Visible: =PopupInformaNumero
+            Width: =464
+            X: =Popup_Informa_Numero.X
+            Y: =320
+            ZIndex: =8
+
+        lbl_Texto_popup_Informa_Numero As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Height: =84
+            Size: =21
+            Text: ="O Número do Assistido é"
+            Visible: =PopupInformaNumero
+            Width: =464
+            X: =Popup_Informa_Numero.X
+            Y: =392
+            ZIndex: =9
+
+        Btn_Retorna As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =// Versão completa e robusta
+                Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: "Criado Assistido ID:" & Int(Form_Edita_Assistidos.LastSubmit.id) & " retornado para tela principal"
+                    }
+                );
+                
+                Notify(UltimoID, NotificationType.Information);
+                
+                With(
+                    {
+                        registroParaAtualizar: LookUp(Pessoas, id = UltimoID)
+                    },
+                    If(
+                        !IsBlank(registroParaAtualizar),
+                        Patch(
+                            Pessoas,
+                            registroParaAtualizar,
+                            {
+                                'ID Pessoa Texto': Text(UltimoID),
+                                'ID Pessoa': Value(UltimoID)
+                            }
+                        ),
+                        Notify("Registro não encontrado", NotificationType.Error)
+                    )
+                );
+                /*
+                UpdateIf(
+                    Pessoas,
+                    id = UltimoID,//Form_Edita_Assistidos.LastSubmit.'ID Pessoa';
+                    {
+                        'ID Pessoa Texto': Text(UltimoID),//Text('ID Pessoa')
+                        'ID Pessoa': Int(UltimoID)
+                    }
+                );*/
+                
+                UpdateContext({PopupInformaNumero: false});
+                Back();
+            Size: =24
+            Text: ="Retornar"
+            Visible: =PopupInformaNumero
+            Width: =180
+            X: =Popup_Informa_Numero.X + (Popup_Informa_Numero.Width/4) - Self.Width/2
+            Y: =648
+            ZIndex: =10
+
+        Btn_Confirma_Entrevista As button:
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FontWeight: =FontWeight.Semibold
+            Height: =55
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: |-
+                =Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: "Criado Pessoa ID:" & Int(Form_Edita_Assistidos.LastSubmit.id) & " e avançado para criar entrevista"
+                    }
+                );
+                
+                With(
+                    {
+                        registroParaAtualizar: LookUp(Pessoas, id = UltimoID)
+                    },
+                    If(
+                        !IsBlank(registroParaAtualizar),
+                        Patch(
+                            Pessoas,
+                            registroParaAtualizar,
+                            {
+                                'ID Pessoa Texto': Text(UltimoID),
+                                'ID Pessoa': Value(UltimoID)
+                            }
+                        ),
+                        Notify("Registro não encontrado", NotificationType.Error)
+                    )
+                );
+                
+                UpdateContext({PopupInformaNumero: false});
+                
+                Set(PessoaSelecionada,Int(UltimoID));
+                
+                NewForm(Form_Cria_Entrevista);
+                Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None);
+            Size: =24
+            Text: ="Entrevista"
+            Visible: =PopupInformaNumero
+            Width: =180
+            X: =Popup_Informa_Numero.X + (Popup_Informa_Numero.Width/4)*3 - Self.Width/2
+            Y: =648
+            ZIndex: =11
+
+        lbl_Texto_popup_Numero As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FontWeight: =FontWeight.Bold
+            Height: =84
+            Size: =26
+            Text: =Form_Edita_Assistidos.LastSubmit.id
+            Visible: =PopupInformaNumero
+            Width: =464
+            X: =Popup_Informa_Numero.X
+            Y: =459
+            ZIndex: =12
+
+        lbl_Texto_popup_Informa_Numero_Entrevista As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            Height: =84
+            Size: =21
+            Text: ="Deseja cadastrar uma entrevista?"
+            Visible: |-
+                =false
+                //PopupInformaNumero
+            Width: =464
+            X: =88
+            Y: =543
+            ZIndex: =13
+
+    lbl_Nomes_Similares As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 89, 178, 1)
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FontWeight: =FontWeight.Bold
+        Height: =70
+        Size: =24
+        Text: ="Nomes Similares Já Existentes"
+        Visible: =If(Form_Edita_Assistidos.Mode=FormMode.Edit || IsBlank(DataCardValue25_1.Text), false, true)
+        Width: =Parent.Width
+        Y: =Form_Edita_Assistidos.Y + Form_Edita_Assistidos. Height + 20
+        ZIndex: =17
+
+    "'Mensagem Status' As group":
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =17
+
+        "'Timer Mensagem' As timer":
+            AutoPause: =false
+            Duration: =3000
+            Fill: =RGBA(0, 51, 102, 1)
+            Height: =63
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnTimerEnd: |-
+                =UpdateContext({ MostraMensagem: false, timerStart: false });
+            Start: =timerStart
+            Visible: =false
+            Width: =99
+            X: =501
+            Y: =12
+            ZIndex: =14
+
+        "'Fundo Mensagem' As rectangle":
+            BorderColor: =RGBA(0, 89, 178, 1)
+            DisplayMode: =DisplayMode.View
+            Fill: =RGBA(0, 51, 102, 1)
+            Height: =Lbl_Titulo_Edita_Assistido.Height
+            Visible: =MostraMensagem
+            Width: =Lbl_Titulo_Edita_Assistido.Width
+            X: =Lbl_Titulo_Edita_Assistido.X
+            Y: =Lbl_Titulo_Edita_Assistido.Y
+            ZIndex: =15
+
+        Mensagem As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FontWeight: =FontWeight.Bold
+            Height: ='Fundo Mensagem'.Height
+            Size: =27
+            Text: =
+            Visible: =MostraMensagem
+            Width: ='Fundo Mensagem'.Width
+            X: ='Fundo Mensagem'.X
+            Y: ='Fundo Mensagem'.Y
+            ZIndex: =16
+
+    Gallery6 As gallery.galleryVertical:
+        BorderColor: =RGBA(0, 89, 178, 1)
+        DelayItemLoading: =true
+        Height: =423
+        Items: =Search(Pessoas, DataCardValue25_1.Text, 'Nome Pessoa')
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        TemplateSize: |-
+            =60
+            //If(Self.Layout = Layout.Horizontal; Min(280; Self.Width - 60); Min(280; Self.Height - 60))
+        Visible: =lbl_Nomes_Similares.Visible
+        Width: =Parent.Width
+        Y: =lbl_Nomes_Similares.Y + lbl_Nomes_Similares.Height
+        ZIndex: =18
+
+        Label5 As label:
+            BorderColor: =RGBA(0, 89, 178, 1)
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            OnSelect: =Select(Parent)
+            Size: =21
+            Text: =ThisItem.'Nome Pessoa'
+            Width: =Parent.Width
+            Y: =10
+            ZIndex: =1
+

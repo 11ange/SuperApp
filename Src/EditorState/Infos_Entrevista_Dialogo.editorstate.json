@@ -350,7 +350,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Nao_Confirma_Excedente_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 10,
+      "ParentIndex": 12,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -635,7 +635,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Realiza_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 12,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -916,7 +916,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Registra_Extra_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 13,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1188,7 +1188,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Sim_Confirma_Excedente_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 11,
+      "ParentIndex": 13,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -11860,7 +11860,7 @@
       "MetaDataIDKey": "%TemplatePhoneIconAccept.ID%",
       "Name": "Icone_Salva_Entrevista_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -12281,7 +12281,7 @@
       "MetaDataIDKey": "",
       "Name": "Infos_Assisitido_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 6,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -12449,7 +12449,7 @@
       "MetaDataIDKey": "%DetailEditContainer.ID%",
       "Name": "Infos_Entrevista",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 6,
+      "ParentIndex": 8,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -13175,7 +13175,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Aviso_popup_Confirma_Envio_Dialogo_2",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 8,
+      "ParentIndex": 10,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -13471,7 +13471,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Texto_popup_Confirma_Envio_Dialogo_2",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 9,
+      "ParentIndex": 11,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -13745,7 +13745,7 @@
       "MetaDataIDKey": "%TemplatePhoneLblAppName.ID%",
       "Name": "Lbl_Titulo_Infos_Entrevista",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 5,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -14010,7 +14010,7 @@
       "MetaDataIDKey": "",
       "Name": "Linha_Divisoria",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 5,
+      "ParentIndex": 7,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -14444,7 +14444,7 @@
       "MetaDataIDKey": "",
       "Name": "Retangulo_Popup_Confirma_Envio_Dialogo_2",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 7,
+      "ParentIndex": 9,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

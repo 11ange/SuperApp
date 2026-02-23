@@ -57,7 +57,7 @@
 
         Step12 As TestStep:
             Description: ="Verificar campos da tabela"
-            Screen: =Busca_Assistidos
+            Screen: =Busca_Assistido
             Value: |-
                 =Assert(LookUp(Pessoas, 'ID Pessoa' = 1).'Nome Pessoa' = NomeAssistido);
                 //--------------
@@ -119,7 +119,7 @@
 
         Step4 As TestStep:
             Description: ="Clicar Botão cria Tarefeiro"
-            Screen: =Busca_Assistidos
+            Screen: =Busca_Assistido
             Value: =Select(Icone_Cria_Tarefeiro)
 
         Step5 As TestStep:
@@ -154,12 +154,12 @@
 
         Step11 As TestStep:
             Description: ="Salva"
-            Screen: =Edita_Assistidos
+            Screen: =Edita_Assistido
             Value: =Select(Icone_Salva_Tarefeiro)
 
         Step12 As TestStep:
             Description: ="Verifica campos da tabela"
-            Screen: =Busca_Tarefeiros
+            Screen: =Busca_Tarefeiro
             Value: |-
                 =Assert(LookUp(Pessoas, 'ID Pessoa' = 2).'Nome Pessoa' = NomeTarefeiro);
                 //--------------

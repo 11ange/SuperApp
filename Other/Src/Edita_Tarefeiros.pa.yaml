@@ -11,74 +11,6 @@ Screens:
     Properties:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
-      OnVisible: |-
-        =/*Clear(TempMaiorIDPessoas);
-        Clear(TempMaiorID);
-
-        // Inicializa o TempMaiorID com 0
-        ClearCollect(TempMaiorID, Table({ID: 0}));
-
-        // Define o tamanho do bloco de leitura
-        Set(TamanhoBloco, 1000);
-
-        Set(MaiorIDAtual, 0);
-        Set(MaiorIDPessoaAtual, 0);
-
-        // Número máximo de blocos a serem buscados
-        Set(MaxBlocos, RoundUp(CountIf(Pessoas, true) / TamanhoBloco, 0));
-
-        // Itera sobre os blocos e armazena os maiores valores
-        ForAll(
-            Sequence(MaxBlocos),
-            Collect(
-                TempMaiorID,
-                {
-                    ID: Max(
-                        Filter(
-                            FirstN(
-                                Sort(Pessoas, id, SortOrder.Descending),
-                                Value(ThisRecord.Value) * TamanhoBloco
-                            ),
-                            !IsBlank(id) // Ignora IDs vazios
-                        ),
-                        id
-                    )
-                }
-            )
-        );
-
-        // Define o maior ID após coletar os valores
-        Set(MaiorIDAtual, Max(TempMaiorID, ID));
-
-        // Define o próximo ID como MaiorIDAtual + 1
-        Set(NovoID, MaiorIDAtual + 1);
-
-        // Itera sobre os blocos e armazena os maiores valores
-        ForAll(
-            Sequence(MaxBlocos),
-            Collect(
-                TempMaiorIDPessoas,
-                {
-                    ID: Max(
-                        Filter(
-                            FirstN(
-                                Sort(Pessoas, 'ID Pessoa', SortOrder.Descending),
-                                Value(ThisRecord.Value) * TamanhoBloco
-                            ),
-                            !IsBlank('ID Pessoa') // Ignora IDs vazios
-                        ),
-                        'ID Pessoa'
-                    )
-                }
-            )
-        );
-
-        // Define o maior ID após coletar os valores
-        Set(MaiorIDPessoaAtual, Max(TempMaiorIDPessoas, ID));
-
-        // Define o próximo ID como MaiorIDAtual + 1
-        Set(NovoIDPessoa, MaiorIDPessoaAtual + 1);
-        */
     Children:
       - RectQuickActionBar3_4:
           Control: Rectangle@2.3.0
@@ -187,6 +119,8 @@ Screens:
             OnSuccess: |-
               =UpdateContext({UltimoID: Form_Edita_Tarefeiros.LastSubmit.id});
 
+              Set(varRegistroOriginalPessoas,Form_Edita_Tarefeiros.LastSubmit);
+
               LogAlteracaoCampos.Run(
                   Concatenate(
                       "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
@@ -212,9 +146,9 @@ Screens:
               );
 
 
-              Set(varRegistroOriginalPessoas,Form_Edita_Tarefeiros.LastSubmit);
+              If(CriaTarefeiro, UpdateContext({PopupInformaNumero: true}), Back());
 
-              If(CriaTarefeiro, UpdateContext({PopupInformaNumero: true}), Back())
+              Set(CriaTarefeiro,false);
             Width: =Parent.Width
             Y: =BtnTarefas.Y + BtnTarefas.Height + 20 //RectQuickActionBar3_4.Height
           Children:
@@ -544,7 +478,6 @@ Screens:
             - Número Cartão_DataCard3:
                 Control: TypedDataCard@1.0.7
                 Variant: ClassicNumberEdit
-                IsLocked: true
                 Properties:
                   BorderColor: =RGBA(0, 89, 178, 1)
                   DataField: ="cr4f5_numerocartao"
@@ -565,7 +498,7 @@ Screens:
                         Color: =RGBA(0, 89, 178, 1)
                         Font: =Font.'Open Sans'
                         Height: =48
-                        Text: =Parent.DisplayName
+                        Text: ="Numero QRCODE" //Parent.DisplayName
                         Width: =Parent.Width - 60
                         Wrap: =false
                         X: =30

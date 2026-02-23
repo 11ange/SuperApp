@@ -86,12 +86,13 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: =Navigate(Busca_Assistidos, ScreenTransition.Cover)
+            OnSelect: =Navigate(Busca_Assistido, ScreenTransition.Cover)
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
             Text: ="Assistidos"
             Tooltip: ="Acessa o cadastro dos Assistidos"
+            Visible: =false
             Width: =250
             X: =App.MinScreenWidth/4 - Self.Width/2
             Y: =600
@@ -128,6 +129,7 @@ Screens:
             PressedFill: =Self.Color
             TabIndex: =2
             Text: ="Todos"
+            Visible: =false
             Width: =250
             X: =App.MinScreenWidth/4 - Self.Width/2
             Y: =Btn_Cadastro_Assistidos.Y + 220
@@ -159,12 +161,13 @@ Screens:
             HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-            OnSelect: =Navigate(Busca_Tarefeiros, ScreenTransition.Cover)
+            OnSelect: =Navigate(Busca_Tarefeiro, ScreenTransition.Cover)
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
             TabIndex: =1
             Text: ="Tarefeiros"
+            Visible: =false
             Width: =250
             X: =App.MinScreenWidth/4 - Self.Width/2
             Y: =Btn_Cadastro_Assistidos.Y + 110
@@ -443,3 +446,25 @@ Screens:
             Width: =250
             X: =(App.MinScreenWidth/4)*3 - Self.Width/2
             Y: '=Btn_Cadastro_Assistidos.Y + 440 '
+      - Btn_Pessoas:
+          Control: Classic/Button@2.2.0
+          Properties:
+            BorderColor: =ColorFade(Self.Fill, -15%)
+            Color: =RGBA(255, 255, 255, 1)
+            DisabledBorderColor: =RGBA(166, 166, 166, 1)
+            Fill: =RGBA(0, 51, 102, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Open Sans'
+            Height: =80
+            HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+            OnSelect: =Navigate(Busca_Pessoas, ScreenTransition.Cover)
+            PressedBorderColor: =Self.Fill
+            PressedColor: =Self.Fill
+            PressedFill: =Self.Color
+            TabIndex: =2
+            Text: ="Pessoas"
+            Width: =250
+            X: =App.MinScreenWidth/4 - Self.Width/2
+            Y: =600

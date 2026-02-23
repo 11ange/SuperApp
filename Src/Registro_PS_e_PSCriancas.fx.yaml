@@ -553,6 +553,7 @@ Registro_PS_e_PSCriancas As screen:
             );
         Size: =24
         Text: ="Button"
+        Visible: =false
         Width: =280
         X: =440
         Y: =1376

@@ -601,7 +601,7 @@ Screens:
                         Color: =RGBA(0, 89, 178, 1)
                         Font: =Font.'Open Sans'
                         Height: =48
-                        Text: =Parent.DisplayName
+                        Text: ="Continua Assistência"//Parent.DisplayName
                         Width: =Parent.Width - 60
                         Wrap: =false
                         X: =30
@@ -1467,7 +1467,7 @@ Screens:
                         Color: =RGBA(0, 89, 178, 1)
                         Font: =Font.'Open Sans'
                         Height: =48
-                        Text: =Parent.DisplayName
+                        Text: ="Conhecimento da Doutrina"//Parent.DisplayName
                         Width: =Parent.Width - 60
                         Wrap: =false
                         X: =30

@@ -1,7 +1,10 @@
 "Consulta_Tarefeiros As screen.'phoneDetailViewLayout_ver3.0'":
     Fill: =RGBA(232, 232, 232, 1)
     OnVisible: |-
-        =UpdateContext({ MostraPopUp: false })
+        =UpdateContext({ MostraPopUp: false });
+        UpdateContext({ 
+            ctxPessoaAtual: LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada) 
+        });
 
     RectQuickActionBar2_1 As rectangle:
         BorderColor: =RGBA(0, 89, 178, 1)
@@ -23,8 +26,8 @@
             
             //Set(PessoaSelecionada;Blank());;
             //Set(PessoaSelecionada; 0);;
-            
-            Navigate(Busca_Tarefeiros, ScreenTransition.None)
+            Back();
+            //Navigate(Busca_Tarefeiro, ScreenTransition.None)
         PaddingBottom: =24
         PaddingLeft: =24
         PaddingRight: =24
@@ -114,11 +117,9 @@
         BorderColor: =RGBA(0, 89, 178, 1)
         DataSource: =[@Pessoas]
         Height: =800
-        Item: |-
-            =LookUp(
-                Pessoas,
-                'ID Pessoa' = PessoaSelecionada
-            )
+        Item: |
+            =ctxPessoaAtual
+            //LookUp(Pessoas,'ID Pessoa' = PessoaSelecionada)
         Width: =Parent.Width
         Y: =RectQuickActionBar2_1.Height
         ZIndex: =6

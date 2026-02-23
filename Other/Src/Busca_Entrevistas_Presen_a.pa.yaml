@@ -33,6 +33,15 @@ Screens:
               =SortByColumns(
                   Filter(
                       Assistências,
+                      IsBlank(Campo_Busca_Entrevista_Presença.Text) Or StartsWith('ID Pessoa Texto', Campo_Busca_Entrevista_Presença.Text)
+                  ),
+                  "cr4f5_idpessoa",
+                  If(Sort_Presenca, SortOrder.Descending, SortOrder.Ascending)
+              )
+              /*
+              SortByColumns(
+                  Filter(
+                      Assistências,
                       IsBlank(Campo_Busca_Entrevista_Presença.Text) || StartsWith('ID Pessoa Texto', Campo_Busca_Entrevista_Presença.Text),
                       !Toggle_Dia.Value || 'Dia Semana' = DiaComPeriodo,
                       !Toggle_Todas_Abertas.Value || 
@@ -41,25 +50,24 @@ Screens:
                   "cr4f5_idpessoa",
                   If(Sort_Presenca, SortOrder.Descending, SortOrder.Ascending)
               )
+              */
               /*
               SortByColumns(
                   Filter(
-                      Search(
-                          Assistências,
-                          Campo_Busca_Entrevista_Presença.Text,
-                          'ID Pessoa Texto'
-                      ),
-                      //Finalizada = "Não" &&
-                      ( !Toggle_Dia.Value || 'Dia Semana' = DiaComPeriodo ) &&
-                      ( !Toggle_Todas_Abertas.Value || DateValue('Ultimo Comparecimento') <> Today())
+                      Assistências,
+                      Finalizada = "Não",
+                      IsBlank(Campo_Busca_Entrevista.Text) Or StartsWith('ID Pessoa Texto', Campo_Busca_Entrevista.Text)
                   ),
                   "cr4f5_idpessoa",
-                  If(Sort_Presenca, SortOrder.Descending, SortOrder.Ascending)
-              )*/
+                  If(Sort_Entrevista, SortOrder.Descending, SortOrder.Ascending)
+              )
+
+              */
             OnSelect: |-
-              =//Set(PresencaSelecionada, ThisItem.'ID Pessoa');
-              Set(AssistenciaSelecionada,ThisItem.'ID Assistência');
-              Set(PessoaSelecionada,ThisItem.'ID Pessoa');
+              =Concurrent(
+                  Set(AssistenciaSelecionada, ThisItem.'ID Assistência'),
+                  Set(PessoaSelecionada, ThisItem.'ID Pessoa')
+              );
 
               If(ThisItem.Finalizada = "Não",
                   Navigate(Controle_Presença, ScreenTransition.None),
@@ -73,7 +81,7 @@ Screens:
               )
               //RGBA(0; 0; 0; 0)
             Width: =Parent.Width
-            Y: =Toggle_Todas_Abertas.Y + Toggle_Todas_Abertas.Height + 5
+            Y: =Btn_Le_Qrcode.Y + Btn_Le_Qrcode.Height + 15
           Children:
             - Title2:
                 Control: Label@2.5.1
@@ -275,77 +283,18 @@ Screens:
             PaddingTop: =24
             PressedFill: =RGBA(255, 255, 255, 0.3)
             Width: =88
-      - Toggle_Dia:
-          Control: Classic/Toggle@2.1.0
-          Group: Grupo_Seleciona_Dia_Assistencia
+      - Btn_Le_Qrcode:
+          Control: Button@0.0.45
           Properties:
-            BorderColor: =RGBA(0, 89, 178, 1)
+            Align: =Align.Center
+            BasePaletteColor: =RGBA(5, 102, 178, 1)
+            BorderRadius: =10
             Font: =Font.'Open Sans'
-            Height: =40
-            ShowLabel: =false
-            TextPosition: =TextPosition.Left
-            TrueFill: =RGBA(0, 51, 102, 1)
-            Width: =70
-            X: =(Parent.Width - Self.Width) / 2
+            FontSize: =27
+            Height: =80
+            IconStyle: ='ButtonCanvas.IconStyle'.Filled
+            Text: ="QR CODE"
+            Visible: =false
+            Width: =250
+            X: =(Parent.Width - Self.Width)/2
             Y: =Campo_Busca_Entrevista_Presença.Y + Campo_Busca_Entrevista_Presença.Height + 10
-      - Label3:
-          Control: Label@2.5.1
-          Group: Grupo_Seleciona_Dia_Assistencia
-          Properties:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Font: =Font.'Open Sans'
-            FontWeight: =If( Toggle_Dia.Value = true, FontWeight.Normal,  FontWeight.Bold)
-            Height: =40
-            Text: ="Todas Assistências"
-            Width: =270
-            X: =50
-            Y: =Toggle_Dia.Y
-      - Label3_1:
-          Control: Label@2.5.1
-          Group: Grupo_Seleciona_Dia_Assistencia
-          Properties:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Font: =Font.'Open Sans'
-            FontWeight: =If( Toggle_Dia.Value = true, FontWeight.Bold,  FontWeight.Normal)
-            Height: =40
-            Text: ="Apenas do dia"
-            Width: =210
-            X: =410
-            Y: =Toggle_Dia.Y
-      - Toggle_Todas_Abertas:
-          Control: Classic/Toggle@2.1.0
-          Group: Grupo_Seleciona_Todas_Abertas
-          Properties:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Font: =Font.'Open Sans'
-            Height: =40
-            ShowLabel: =false
-            TextPosition: =TextPosition.Left
-            TrueFill: =RGBA(0, 51, 102, 1)
-            Width: =70
-            X: =(Parent.Width - Self.Width) / 2
-            Y: =Toggle_Dia.Y + 60
-      - Label3_2:
-          Control: Label@2.5.1
-          Group: Grupo_Seleciona_Todas_Abertas
-          Properties:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Font: =Font.'Open Sans'
-            FontWeight: =If( Toggle_Todas_Abertas.Value = true, FontWeight.Normal,  FontWeight.Bold)
-            Height: =40
-            Text: ="Todas"
-            Width: =100
-            X: =209
-            Y: =Toggle_Todas_Abertas.Y
-      - Label3_3:
-          Control: Label@2.5.1
-          Group: Grupo_Seleciona_Todas_Abertas
-          Properties:
-            BorderColor: =RGBA(0, 89, 178, 1)
-            Font: =Font.'Open Sans'
-            FontWeight: =If( Toggle_Todas_Abertas.Value = true, FontWeight.Bold,  FontWeight.Normal)
-            Height: =40
-            Text: ="Em Aberto"
-            Width: =225
-            X: =407
-            Y: =Toggle_Todas_Abertas.Y

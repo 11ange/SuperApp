@@ -31,7 +31,7 @@
                 }
             );
             
-            Navigate(Busca_Assistidos, Transition.None) //Back()
+            Navigate(Busca_Assistido, Transition.None) //Back()
         PaddingBottom: =22
         PaddingLeft: =22
         PaddingRight: =22

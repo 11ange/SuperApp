@@ -1,8 +1,9 @@
 "Consulta_Todos As screen.'phoneDetailViewLayout_ver3.0'":
     Fill: =RGBA(232, 232, 232, 1)
     OnVisible: |-
-        =//Set(PopupApagaTodos; false)
-        false
+        =UpdateContext({ 
+            ctxPessoaAtual: LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada) 
+        });
 
     RectQuickActionBar2_3 As rectangle:
         BorderColor: =RGBA(0, 89, 178, 1)
@@ -116,7 +117,7 @@
         BorderColor: =RGBA(0, 89, 178, 1)
         DataSource: =Pessoas
         Height: =692
-        Item: =LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)
+        Item: =ctxPessoaAtual//LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)
         Width: =Parent.Width
         Y: =RectQuickActionBar2_3.Height
         ZIndex: =6
@@ -931,10 +932,23 @@
         Size: =21
         Text: |-
             =If(
+                !IsBlank(
+                    LookUp(
+                        Assistências,
+                        'ID Pessoa' = PessoaSelecionada && Finalizada = "Não",
+                        'ID Assistência'
+                    )
+                ),
+                "Com Assistência em Andamento",
+                "Sem Assistência em Andamento"
+            )
+            /*
+            If(
                 (CountIf(Assistências, ('ID Pessoa'=PessoaSelecionada) && (Finalizada="Não")))>0,
                 "Com Assistência em Andamento",
                 "Sem Assistência em Andamento"
             )
+            */
         Visible: |-
             =If(LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada).'Em Assistência' = "Sim", true, false)
             //true

@@ -68,10 +68,11 @@
         Height: =80
         HoverColor: =RGBA(255, 255, 255, 1)
         HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-        OnSelect: =Navigate(Busca_Assistidos, ScreenTransition.Cover)
+        OnSelect: =Navigate(Busca_Assistido, ScreenTransition.Cover)
         Size: =24
         Text: ="Assistidos"
         Tooltip: ="Acessa o cadastro dos Assistidos"
+        Visible: =false
         Width: =250
         X: =App.MinScreenWidth/4 - Self.Width/2
         Y: =600
@@ -106,6 +107,7 @@
         Size: =24
         TabIndex: =2
         Text: ="Todos"
+        Visible: =false
         Width: =250
         X: =App.MinScreenWidth/4 - Self.Width/2
         Y: =Btn_Cadastro_Assistidos.Y + 220
@@ -136,10 +138,11 @@
         Height: =80
         HoverColor: =RGBA(255, 255, 255, 1)
         HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
-        OnSelect: =Navigate(Busca_Tarefeiros, ScreenTransition.Cover)
+        OnSelect: =Navigate(Busca_Tarefeiro, ScreenTransition.Cover)
         Size: =24
         TabIndex: =1
         Text: ="Tarefeiros"
+        Visible: =false
         Width: =250
         X: =App.MinScreenWidth/4 - Self.Width/2
         Y: =Btn_Cadastro_Assistidos.Y + 110
@@ -415,4 +418,23 @@
         X: =(App.MinScreenWidth/4)*3 - Self.Width/2
         Y: =Btn_Cadastro_Assistidos.Y + 440 
         ZIndex: =33
+
+    Btn_Pessoas As button:
+        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 51, 102, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FontWeight: =FontWeight.Semibold
+        Height: =80
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
+        OnSelect: =Navigate(Busca_Pessoas, ScreenTransition.Cover)
+        Size: =24
+        TabIndex: =2
+        Text: ="Pessoas"
+        Width: =250
+        X: =App.MinScreenWidth/4 - Self.Width/2
+        Y: =600
+        ZIndex: =34
 

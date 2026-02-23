@@ -87,7 +87,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Nao_Confirma_Envio_Dialogo_2",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 14,
+      "ParentIndex": 15,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -387,7 +387,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Registra_Orientação_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 16,
+      "ParentIndex": 17,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -666,7 +666,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Sim_Confirma_Orientação_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 15,
+      "ParentIndex": 16,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1042,7 +1042,7 @@
       "MetaDataIDKey": "",
       "Name": "Date_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 5,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1373,7 +1373,7 @@
       "MetaDataIDKey": "",
       "Name": "Drop_ID_a_Corrigir",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 6,
+      "ParentIndex": 7,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1705,7 +1705,7 @@
       "MetaDataIDKey": "",
       "Name": "Dropdown_Tarefeiro",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 13,
+      "ParentIndex": 14,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1987,7 +1987,7 @@
       "MetaDataIDKey": "",
       "Name": "Fundo_Popup_4",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2148,7 +2148,7 @@
       "MetaDataIDKey": "",
       "Name": "HtmlDialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 10,
+      "ParentIndex": 11,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2370,7 +2370,7 @@
       "MetaDataIDKey": "",
       "Name": "HtmlEntrevista",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 9,
+      "ParentIndex": 10,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2537,7 +2537,7 @@
       "MetaDataIDKey": "",
       "Name": "HtmlText1_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 11,
+      "ParentIndex": 12,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2989,7 +2989,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Aviso_popup_Confirma_Envio_Dialogo_5",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 8,
+      "ParentIndex": 9,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3281,7 +3281,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Data_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3653,7 +3653,7 @@
       "MetaDataIDKey": "",
       "Name": "Lbl_IDAssistido",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 5,
+      "ParentIndex": 6,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3942,7 +3942,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Tarefeiro_Correto",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 12,
+      "ParentIndex": 13,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -4343,7 +4343,7 @@
       "MetaDataIDKey": "",
       "Name": "Lbl_Titulo_7",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -4689,7 +4689,7 @@
       "MetaDataIDKey": "",
       "Name": "Lbl_Usuario_Logado_7",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 17,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -5008,7 +5008,7 @@
       "MetaDataIDKey": "",
       "Name": "Retangulo_Popup_Confirma_Envio_Dialogo_4",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 7,
+      "ParentIndex": 8,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

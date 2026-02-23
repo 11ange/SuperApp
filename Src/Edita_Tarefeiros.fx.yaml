@@ -1,73 +1,6 @@
 "Edita_Tarefeiros As screen.'phoneDetailEditLayout_ver3.0'":
     Fill: =RGBA(232, 232, 232, 1)
-    OnVisible: |-
-        =/*Clear(TempMaiorIDPessoas);
-        Clear(TempMaiorID);
-        
-        // Inicializa o TempMaiorID com 0
-        ClearCollect(TempMaiorID, Table({ID: 0}));
-        
-        // Define o tamanho do bloco de leitura
-        Set(TamanhoBloco, 1000);
-        
-        Set(MaiorIDAtual, 0);
-        Set(MaiorIDPessoaAtual, 0);
-        
-        // Número máximo de blocos a serem buscados
-        Set(MaxBlocos, RoundUp(CountIf(Pessoas, true) / TamanhoBloco, 0));
-        
-        // Itera sobre os blocos e armazena os maiores valores
-        ForAll(
-            Sequence(MaxBlocos),
-            Collect(
-                TempMaiorID,
-                {
-                    ID: Max(
-                        Filter(
-                            FirstN(
-                                Sort(Pessoas, id, SortOrder.Descending),
-                                Value(ThisRecord.Value) * TamanhoBloco
-                            ),
-                            !IsBlank(id) // Ignora IDs vazios
-                        ),
-                        id
-                    )
-                }
-            )
-        );
-        
-        // Define o maior ID após coletar os valores
-        Set(MaiorIDAtual, Max(TempMaiorID, ID));
-        
-        // Define o próximo ID como MaiorIDAtual + 1
-        Set(NovoID, MaiorIDAtual + 1);
-        
-        // Itera sobre os blocos e armazena os maiores valores
-        ForAll(
-            Sequence(MaxBlocos),
-            Collect(
-                TempMaiorIDPessoas,
-                {
-                    ID: Max(
-                        Filter(
-                            FirstN(
-                                Sort(Pessoas, 'ID Pessoa', SortOrder.Descending),
-                                Value(ThisRecord.Value) * TamanhoBloco
-                            ),
-                            !IsBlank('ID Pessoa') // Ignora IDs vazios
-                        ),
-                        'ID Pessoa'
-                    )
-                }
-            )
-        );
-        
-        // Define o maior ID após coletar os valores
-        Set(MaiorIDPessoaAtual, Max(TempMaiorIDPessoas, ID));
-        
-        // Define o próximo ID como MaiorIDAtual + 1
-        Set(NovoIDPessoa, MaiorIDPessoaAtual + 1);
-        */
+    OnVisible: =
 
     RectQuickActionBar3_4 As rectangle:
         BorderColor: =RGBA(0, 89, 178, 1)
@@ -176,6 +109,8 @@
         OnSuccess: |-
             =UpdateContext({UltimoID: Form_Edita_Tarefeiros.LastSubmit.id});
             
+            Set(varRegistroOriginalPessoas,Form_Edita_Tarefeiros.LastSubmit);
+            
             LogAlteracaoCampos.Run(
                 Concatenate(
                     "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
@@ -201,9 +136,9 @@
             );
             
             
-            Set(varRegistroOriginalPessoas,Form_Edita_Tarefeiros.LastSubmit);
+            If(CriaTarefeiro, UpdateContext({PopupInformaNumero: true}), Back());
             
-            If(CriaTarefeiro, UpdateContext({PopupInformaNumero: true}), Back())
+            Set(CriaTarefeiro,false);
         Width: =Parent.Width
         Y: =BtnTarefas.Y + BtnTarefas.Height + 20 //RectQuickActionBar3_4.Height
         ZIndex: =6
@@ -465,7 +400,7 @@
                 DisabledColor: =RGBA(166, 166, 166, 1)
                 Height: =48
                 Size: =21
-                Text: =Parent.DisplayName
+                Text: ="Numero QRCODE" //Parent.DisplayName
                 Width: =Parent.Width - 60
                 Wrap: =false
                 X: =30

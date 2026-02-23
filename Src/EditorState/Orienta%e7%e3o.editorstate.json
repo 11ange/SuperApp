@@ -80,7 +80,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Nao_Confirma_Envio_Dialogo_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 9,
+      "ParentIndex": 10,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -380,7 +380,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Registra_Orientação",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 7,
+      "ParentIndex": 8,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -652,7 +652,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Sim_Confirma_Orientação",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 10,
+      "ParentIndex": 11,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -958,7 +958,7 @@
       "MetaDataIDKey": "",
       "Name": "Dropdown_Orientação",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 5,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1240,7 +1240,7 @@
       "MetaDataIDKey": "",
       "Name": "Fundo_Popup_2",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1402,7 +1402,7 @@
       "MetaDataIDKey": "",
       "Name": "HtmlText1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 8,
+      "ParentIndex": 9,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1852,7 +1852,7 @@
       "MetaDataIDKey": "",
       "Name": "Label10",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2166,7 +2166,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Aviso_popup_Confirma_Envio_Dialogo_3",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 6,
+      "ParentIndex": 7,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2517,7 +2517,7 @@
       "MetaDataIDKey": "",
       "Name": "Lbl_Titulo_5",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2863,7 +2863,7 @@
       "MetaDataIDKey": "",
       "Name": "Lbl_Usuario_Logado_5",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 11,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3257,7 +3257,7 @@
       "MetaDataIDKey": "",
       "Name": "Retangulo_Popup_Confirma_Envio_Dialogo_3",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 5,
+      "ParentIndex": 6,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

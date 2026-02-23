@@ -7,7 +7,7 @@ App As appinfo:
     OnStart: |
         =Set(DeviceID, Text(RandBetween(1,999999))); // GUID() & "-" & Text(RandBetween(1;999999)));;
         
-        Set(AppVersaoAtual, "1.0.23");
+        Set(AppVersaoAtual, "1.1.2");
         Set(
             UltimaVersaoPublicada,
             LookUp(ControleVersoes, AppNome = "SuperApp", VersaoPublicada)
