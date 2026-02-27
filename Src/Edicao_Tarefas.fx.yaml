@@ -147,7 +147,7 @@
                 {
                     DataeHora: Now(),
                     DeviceID: DeviceID,
-                    Ação: "Volta Edição Atividades Tarefeiro ID:" & PessoaSelecionada
+                    Ação: $"Voltando da Edição Atividades Tarefeiro ID: {PessoaSelecionada}"
                 }
             );
             Back()
@@ -345,7 +345,7 @@
                 {
                     DataeHora: Now(),
                     DeviceID: DeviceID,
-                    Ação: "Atualizando Atividades Tarefeiro ID:" & PessoaSelecionada
+                    Ação: $"Atualizando Atividades Tarefeiro ID: {PessoaSelecionada}"
                 }
             );
         Size: =24
@@ -385,7 +385,7 @@
                 {
                     DataeHora: Now(),
                     DeviceID: DeviceID,
-                    Ação: "Inserindo Nova Atividade Tarefeiro ID:" & PessoaSelecionada
+                    Ação: $"Inserindo Nova Atividade: {Dropdown_Tarefa.Selected.'Nome Tarefa'} - {Dropdown_Dia_da_Semana.Selected.Value} p/ tarefeiro ID: {PessoaSelecionada}"
                 }
             );
         Size: =24
@@ -413,7 +413,7 @@
                 {
                     DataeHora: Now(),
                     DeviceID: DeviceID,
-                    Ação: "Apagando Atividade Tarefeiro ID:" & PessoaSelecionada
+                    Ação: $"Apagando Atividade Tarefeiro ID:{PessoaSelecionada}"
                 }
             );
         Size: =24

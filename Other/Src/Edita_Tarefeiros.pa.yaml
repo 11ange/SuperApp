@@ -70,13 +70,7 @@ Screens:
             Color: =RGBA(255, 255, 255, 1)
             Height: =88
             Icon: =Icon.Save
-            OnSelect: |+
-              =//SubmitForm(Form_Edita_Tarefeiros)
-              If(
-                  Form_Edita_Tarefeiros.Valid,
-                  SubmitForm(Form_Edita_Tarefeiros),
-                  Notify("Preencha todos os campos obrigatórios!", NotificationType.Error)
-              );
+            OnSelect: "=//SubmitForm(Form_Edita_Tarefeiros)\r\nIf(\r\n    !Form_Edita_Tarefeiros.Valid,\r\n    Notify(\"Preencha todos os campos obrigatórios!\", NotificationType.Error),\r\n\r\n    CartaoDuplicado,\r\n    Notify(\"Número do cartão já está cadastrado.\", NotificationType.Error),\r\n    \r\n    // Ação Final: Se passou por todas as validações, envia o formulário\r\n    SubmitForm(Form_Edita_Tarefeiros)\r\n);\r\n/*\r\nIf(\r\n    Form_Edita_Tarefeiros.Valid,\r\n    SubmitForm(Form_Edita_Tarefeiros),\r\n    Notify(\"Preencha todos os campos obrigatórios!\", NotificationType.Error)\r\n);\r\n*/"
             PaddingBottom: =22
             PaddingLeft: =22
             PaddingRight: =22
@@ -109,46 +103,23 @@ Screens:
             Height: =Parent.Height - Self.Y //RectQuickActionBar3_4.Height
             Item: |-
               =If(
+                  Form_Edita_Tarefeiros.Mode = FormMode.New,
+                  Defaults(Pessoas), // Traz a estrutura vazia
+                  LookUp(
+                      Pessoas,
+                      'ID Pessoa' = PessoaSelecionada
+                  ) // Traz o registro selecionado direto da memória do tablet!
+              )
+              /*
+              If(
                   Form_Edita_Tarefeiros.Mode = FormMode.Edit && CriaTarefeiro = false,
                   LookUp(
                       Pessoas,
                       'ID Pessoa' = PessoaSelecionada
                   ),
                   Form_Edita_Tarefeiros.LastSubmit
-              )
-            OnSuccess: |-
-              =UpdateContext({UltimoID: Form_Edita_Tarefeiros.LastSubmit.id});
-
-              Set(varRegistroOriginalPessoas,Form_Edita_Tarefeiros.LastSubmit);
-
-              LogAlteracaoCampos.Run(
-                  Concatenate(
-                      "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
-                      "NomeSocial:", varRegistroOriginalPessoas.'Nome Social', "|",
-                      "Idade:", varRegistroOriginalPessoas.Idade, "|",
-                      "Cartao:", varRegistroOriginalPessoas.'Número Cartão', "|",
-                      "Ativo:", varRegistroOriginalPessoas.Ativo, "|",
-                      "EmAssistencia:", varRegistroOriginalPessoas.'Em Assistência', "|",
-                      "Tarefeiro:", varRegistroOriginalPessoas.Tarefeiro
-                  ),
-                  Concatenate(
-                      "Nomepessoa:", Form_Edita_Tarefeiros.LastSubmit.'Nome Pessoa', "|",
-                      "NomeSocial:", Form_Edita_Tarefeiros.LastSubmit.'Nome Social', "|",
-                      "Idade:", Form_Edita_Tarefeiros.LastSubmit.Idade, "|",
-                      "Cartao:", Form_Edita_Tarefeiros.LastSubmit.'Número Cartão', "|",
-                      "Ativo:", Form_Edita_Tarefeiros.LastSubmit.Ativo, "|",
-                      "EmAssistencia:", Form_Edita_Tarefeiros.LastSubmit.'Em Assistência', "|",
-                      "Tarefeiro:", Form_Edita_Tarefeiros.LastSubmit.Tarefeiro
-                  ),
-                  PessoaSelecionada,
-                  DeviceID,
-                  "Pessoas"
-              );
-
-
-              If(CriaTarefeiro, UpdateContext({PopupInformaNumero: true}), Back());
-
-              Set(CriaTarefeiro,false);
+              )*/
+            OnSuccess: "=With(\r\n    {\r\n        // Pega os dados que acabaram de ser salvos (O \"Para\")\r\n        regNovo: Form_Edita_Tarefeiros.LastSubmit,\r\n        \r\n        // Pega os dados antigos que já estavam na memória antes de editar (O \"De\")\r\n        // Se for um cadastro novo, isso estará vazio, o que é correto para o Log.\r\n        regAntigo: RegistroPessoaSelecionada,\r\n\r\n        eraNovo: CriaTarefeiro\r\n    },\r\n\r\n    Concurrent(\r\n        Set(PessoaSelecionada, regNovo.'ID Pessoa'),\r\n        //Set(EmAssistencia, ThisItem.'Em Assistência'),\r\n        Set(RegistroPessoaSelecionada,regNovo),\r\n        Set(CriaTarefeiro, false)\r\n    );\r\n\r\n    UpdateContext({ IDNovo: regNovo.id });\r\n\r\n    // Dispara o Fluxo de Log usando Interpolação (Muito mais limpo que Concatenate)\r\n    LogAlteracaoCampos.Run(\r\n        // Texto 1: Como era antes\r\n        $\"Nomepessoa: {regAntigo.'Nome Pessoa'} | NomeSocial: {regAntigo.'Nome Social'} | Idade: {regAntigo.Idade} | Cartao: {regAntigo.'Número Cartão'} | Ativo: {regAntigo.Ativo} | EmAssistencia: {regAntigo.'Em Assistência'} | Tarefeiro: {regAntigo.Tarefeiro}\",\r\n        \r\n        // Texto 2: Como ficou agora\r\n        $\"Nomepessoa: {regNovo.'Nome Pessoa'} | NomeSocial: {regNovo.'Nome Social'} | Idade: {regNovo.Idade} | Cartao: {regNovo.'Número Cartão'} | Ativo: {regNovo.Ativo} | EmAssistencia: {regNovo.'Em Assistência'} | Tarefeiro: {regNovo.Tarefeiro}\",\r\n        \r\n        PessoaSelecionada,\r\n        DeviceID,\r\n        \"Pessoas\"\r\n    );\r\n\r\n    If(\r\n        eraNovo,\r\n        UpdateContext({ PopupInformaNumero: true }),\r\n        Back()\r\n    )\r\n)\r\n/*\r\nUpdateContext({UltimoID: Form_Edita_Tarefeiros.LastSubmit.id});\r\n\r\nSet(RegistroPessoaSelecionada,Form_Edita_Tarefeiros.LastSubmit);\r\n\r\nLogAlteracaoCampos.Run(\r\n    Concatenate(\r\n        \"Nomepessoa:\", RegistroPessoaSelecionada.'Nome Pessoa', \"|\",\r\n        \"NomeSocial:\", RegistroPessoaSelecionada.'Nome Social', \"|\",\r\n        \"Idade:\", RegistroPessoaSelecionada.Idade, \"|\",\r\n        \"Cartao:\", RegistroPessoaSelecionada.'Número Cartão', \"|\",\r\n        \"Ativo:\", RegistroPessoaSelecionada.Ativo, \"|\",\r\n        \"EmAssistencia:\", RegistroPessoaSelecionada.'Em Assistência', \"|\",\r\n        \"Tarefeiro:\", RegistroPessoaSelecionada.Tarefeiro\r\n    ),\r\n    Concatenate(\r\n        \"Nomepessoa:\", Form_Edita_Tarefeiros.LastSubmit.'Nome Pessoa', \"|\",\r\n        \"NomeSocial:\", Form_Edita_Tarefeiros.LastSubmit.'Nome Social', \"|\",\r\n        \"Idade:\", Form_Edita_Tarefeiros.LastSubmit.Idade, \"|\",\r\n        \"Cartao:\", Form_Edita_Tarefeiros.LastSubmit.'Número Cartão', \"|\",\r\n        \"Ativo:\", Form_Edita_Tarefeiros.LastSubmit.Ativo, \"|\",\r\n        \"EmAssistencia:\", Form_Edita_Tarefeiros.LastSubmit.'Em Assistência', \"|\",\r\n        \"Tarefeiro:\", Form_Edita_Tarefeiros.LastSubmit.Tarefeiro\r\n    ),\r\n    PessoaSelecionada,\r\n    DeviceID,\r\n    \"Pessoas\"\r\n);\r\n\r\n\r\nIf(CriaTarefeiro, UpdateContext({PopupInformaNumero: true}), Back());\r\n\r\nSet(CriaTarefeiro,false);\r\n*/"
             Width: =Parent.Width
             Y: =BtnTarefas.Y + BtnTarefas.Height + 20 //RectQuickActionBar3_4.Height
           Children:
@@ -247,7 +218,7 @@ Screens:
                         Fill: |-
                           =If(
                               IsBlank(Self.Text),
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                           //RGBA(255; 255; 255; 1)
@@ -423,7 +394,7 @@ Screens:
                         Fill: |-
                           =If(
                               IsBlank(Self.Text),
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                           //RGBA(255; 255; 255; 1)
@@ -511,10 +482,32 @@ Screens:
                         Default: =Parent.Default
                         DelayOutput: =true
                         DisplayMode: =Parent.DisplayMode
+                        Fill: |-
+                          =If(
+                              IsBlank(Self.Text),
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
+                              RGBA(255, 255, 255, 1) // Fundo branco se preenchido
+                          )
+                          //RGBA(255, 255, 255, 1)
                         Font: =Font.'Open Sans'
                         Format: =TextFormat.Number
                         HoverBorderColor: =RGBA(0, 89, 178, 1)
                         HoverFill: =RGBA(153, 205, 255, 1)
+                        OnChange: |-
+                          =UpdateContext({
+                              CartaoDuplicado: !IsBlank(
+                                  LookUp(
+                                      Pessoas,
+                                      'Número Cartão' = Value(Self.Text) &&
+                                      (
+                                          Form_Edita_Tarefeiros.Mode = FormMode.New ||
+                                          'ID Pessoa' <> PessoaSelecionada
+                                      ),
+                                      'ID Pessoa'
+                                  )
+                              )
+                          })
+                          //false
                         PaddingLeft: =5
                         RadiusBottomLeft: =0
                         RadiusBottomRight: =0
@@ -605,9 +598,10 @@ Screens:
                         Default: =Parent.Default
                         DisplayMode: =Parent.DisplayMode
                         Fill: |-
-                          =If(Self.Selected.Value = " ",//IsBlank(Self.Selected);
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
-                              RGBA(255, 255, 255, 1) // Fundo branco se preenchido
+                          =If(
+                              Self.Selected.Value = " ",
+                              RGBA(255, 102, 102, 1), // Fundo vermelho claro e SÓLIDO (1)
+                              RGBA(255, 255, 255, 1)  // Fundo branco sólido se preenchido
                           )
                           //RGBA(255; 255; 255; 1)
                         Font: =Font.'Open Sans'
@@ -704,7 +698,7 @@ Screens:
                         DisplayMode: =Parent.DisplayMode
                         Fill: |-
                           =If(Self.Selected.Value = " ",//IsBlank(Self.Selected);
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                           //RGBA(255; 255; 255; 1)
@@ -802,7 +796,7 @@ Screens:
                         DisplayMode: =Parent.DisplayMode
                         Fill: |-
                           =If(Self.Selected.Value = " ",//IsBlank(Self.Selected);
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                           //RGBA(255; 255; 255; 1)
@@ -1216,7 +1210,7 @@ Screens:
                   {
                       DataeHora: Now(),
                       DeviceID: DeviceID,
-                      Ação: "Inserindo Atividades Tarefeiro ID:" & PessoaSelecionada
+                      Ação: $"Editando Atividades Tarefeiro ID: {PessoaSelecionada}"
                   }
               );
 
@@ -1299,6 +1293,23 @@ Screens:
                   {
                       DataeHora: Now(),
                       DeviceID: DeviceID,
+                      Ação: $"Criado Tarefeiro ID: {IDNovo}"
+                  }
+              );
+
+              Concurrent(
+                  Set(CriaTarefeiro, false),
+                  UpdateContext({ PopupInformaNumero: false })
+              );
+
+              Back();
+              //====================
+              /*Patch(
+                  Logs,
+                  Defaults(Logs),
+                  {
+                      DataeHora: Now(),
+                      DeviceID: DeviceID,
                       Ação: "Criado Tarefeiro ID:" & Int(UltimoID)
                   }
               );
@@ -1323,7 +1334,7 @@ Screens:
 
               UpdateContext({PopupInformaNumero: false});
 
-              Back();
+              Back();*/
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color

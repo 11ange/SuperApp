@@ -44,13 +44,13 @@
                     }
                 ),
                 Patch(
-                Logs,
-                Defaults(Logs),
-                {
-                    DataeHora: Now(),
-                    DeviceID: DeviceID,
-                    Ação: "Cancelando criação novo assistivo"
-                }
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: "Cancelando criação novo assistivo"
+                    }
                 )
             );
             
@@ -84,13 +84,24 @@
             =If(
                 !Form_Edita_Assistidos.Valid,
                 Notify("Preencha todos os campos obrigatórios!", NotificationType.Error),
+            
+                CartaoDuplicado,
+                Notify("Número do cartão já está cadastrado.", NotificationType.Error),
+                
+                // Ação Final: Se passou por todas as validações, envia o formulário
+                SubmitForm(Form_Edita_Assistidos)
+            )
+            /*
+            If(
+                !Form_Edita_Assistidos.Valid,
+                Notify("Preencha todos os campos obrigatórios!", NotificationType.Error),
                 If(
                     CartaoDuplicado,
                     Notify("Número do cartão já está cadastrado.", NotificationType.Error),
                     SubmitForm(Form_Edita_Assistidos)
                 )
-            )
-            
+            );
+            */
             /*If(
                 Form_Edita_Assistidos.Valid,
                 SubmitForm(Form_Edita_Assistidos),
@@ -127,32 +138,85 @@
         Height: =845
         Item: |-
             =If(
-                Form_Edita_Assistidos.Mode = FormMode.Edit && CriaAssistido = false,
+                Form_Edita_Assistidos.Mode = FormMode.New,
+                Defaults(Pessoas), // Traz a estrutura vazia da tabela Pessoas
+                LookUp(
+                    Pessoas,
+                    'ID Pessoa' = PessoaSelecionada
+                ) // Traz o registro selecionado se for edição
+            )
+            /*
+            If(
+                Form_Edita_Assistidos.Mode = FormMode.Edit && !CriaAssistido,
                 LookUp(
                     Pessoas,
                     'ID Pessoa' = PessoaSelecionada
                 ),
                 Form_Edita_Assistidos.LastSubmit
-            )
+            )*/
         NumberOfColumns: =1
         OnFailure: |+
             =UpdateContext({PopupInformaNumero: false});
             
             
         OnSuccess: |-
-            =UpdateContext({UltimoID: Form_Edita_Assistidos.LastSubmit.id});
+            =With(
+                {
+                    regNovo: Form_Edita_Assistidos.LastSubmit,
+                    regAntigo: RegistroPessoaSelecionada,
+                    eraNovo: CriaAssistido 
+                },
+                
+                // Se for um cadastro novo, ele pega o ID recém-criado e espelha nas colunas de texto/número
+                If(
+                    eraNovo,
+                    Patch(
+                        Pessoas,
+                        regNovo,
+                        {
+                            'ID Pessoa Texto': Text(regNovo.id),
+                            'ID Pessoa': Value(regNovo.id)
+                        }
+                    )
+                );
             
-            Set(varRegistroOriginalPessoas,Form_Edita_Assistidos.LastSubmit);
+                UpdateContext({ IDNovo: regNovo.id });
+            
+                Concurrent(
+                    Set(PessoaSelecionada, regNovo.'ID Pessoa'),
+                    //Set(EmAssistencia, ThisItem.'Em Assistência'),
+                    Set(RegistroPessoaSelecionada,regNovo),
+                    Set(CriaAssistido, false)
+                );
+                
+                LogAlteracaoCampos.Run(
+                    $"Nomepessoa: {regAntigo.'Nome Pessoa'} | NomeSocial: {regAntigo.'Nome Social'} | Idade: {regAntigo.Idade} | Cartao: {regAntigo.'Número Cartão'} | Ativo: {regAntigo.Ativo} | EmAssistencia: {regAntigo.'Em Assistência'} | Tarefeiro: {regAntigo.Tarefeiro}",
+                    $"Nomepessoa: {regNovo.'Nome Pessoa'} | NomeSocial: {regNovo.'Nome Social'} | Idade: {regNovo.Idade} | Cartao: {regNovo.'Número Cartão'} | Ativo: {regNovo.Ativo} | EmAssistencia: {regNovo.'Em Assistência'} | Tarefeiro: {regNovo.Tarefeiro}",
+                    PessoaSelecionada,
+                    DeviceID,
+                    "Pessoas"
+                );
+                
+                If(
+                    eraNovo, 
+                    UpdateContext({ PopupInformaNumero: true }),
+                    Back()
+                )
+            )
+            
+            /*UpdateContext({UltimoID: Form_Edita_Assistidos.LastSubmit.id});
+            
+            Set(RegistroPessoaSelecionada,Form_Edita_Assistidos.LastSubmit);
             
             LogAlteracaoCampos.Run(
                 Concatenate(
-                    "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
-                    "NomeSocial:", varRegistroOriginalPessoas.'Nome Social', "|",
-                    "Idade:", varRegistroOriginalPessoas.Idade, "|",
-                    "Cartao:", varRegistroOriginalPessoas.'Número Cartão', "|",
-                    "Ativo:", varRegistroOriginalPessoas.Ativo, "|",
-                    "EmAssistencia:", varRegistroOriginalPessoas.'Em Assistência', "|",
-                    "Tarefeiro:", varRegistroOriginalPessoas.Tarefeiro
+                    "Nomepessoa:", RegistroPessoaSelecionada.'Nome Pessoa', "|",
+                    "NomeSocial:", RegistroPessoaSelecionada.'Nome Social', "|",
+                    "Idade:", RegistroPessoaSelecionada.Idade, "|",
+                    "Cartao:", RegistroPessoaSelecionada.'Número Cartão', "|",
+                    "Ativo:", RegistroPessoaSelecionada.Ativo, "|",
+                    "EmAssistencia:", RegistroPessoaSelecionada.'Em Assistência', "|",
+                    "Tarefeiro:", RegistroPessoaSelecionada.Tarefeiro
             
                 ),
                 Concatenate(
@@ -172,6 +236,7 @@
             If(CriaAssistido, UpdateContext({PopupInformaNumero: true}), Back());
             
             Set(CriaAssistido,false);
+            */
         Width: =Parent.Width
         Y: =RectQuickActionBar_Tela_Edicao_Assistidos.Height
         ZIndex: =5
@@ -364,7 +429,7 @@
                     =//RGBA(255; 255; 255; 1)
                     If(
                         IsBlank(Self.Text),
-                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                         RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                     )
                 FocusedBorderThickness: =4
@@ -462,7 +527,7 @@
                     =//RGBA(255, 255, 255, 1)
                     If(
                         IsBlank(Self.Text),
-                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                         RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                     )
                 FocusedBorderThickness: =4
@@ -473,7 +538,21 @@
                 HoverColor: =RGBA(0, 0, 0, 1)
                 HoverFill: =RGBA(153, 205, 255, 1)
                 OnChange: |-
-                    =Set(
+                    =UpdateContext({
+                        CartaoDuplicado: !IsBlank(
+                            LookUp(
+                                Pessoas,
+                                'Número Cartão' = Value(Self.Text) &&
+                                (
+                                    Form_Edita_Assistidos.Mode = FormMode.New ||
+                                    'ID Pessoa' <> PessoaSelecionada
+                                ),
+                                'ID Pessoa'
+                            )
+                        )
+                    })
+                    /*
+                    Set(
                         CartaoDuplicado,
                         !IsBlank(
                             LookUp(
@@ -485,7 +564,7 @@
                                 )
                             )
                         )
-                    )
+                    )*/
                     //false
                 PaddingLeft: =5
                 RadiusBottomLeft: =0
@@ -763,7 +842,7 @@
                 DisplayMode: =Parent.DisplayMode
                 Fill: |-
                     =If(Self.Selected.Value = " ",//IsBlank(Self.Selected);
-                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                         RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                     )
                     //RGBA(255; 255; 255; 1)
@@ -952,7 +1031,7 @@
                 Fill: |-
                     =If(
                         IsBlank(Self.Text),
-                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                         RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                     )
                     //RGBA(255; 255; 255; 1)
@@ -1076,7 +1155,37 @@
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
             OnSelect: |-
-                =// Versão completa e robusta
+                =Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: $"Criado Assistido ID: {IDNovo} e retornado para tela principal"
+                    }
+                );
+                /*
+                If(
+                    !IsBlank(RegistroPessoaSelecionada),
+                    Patch(
+                        Pessoas,
+                        RegistroPessoaSelecionada,
+                        {
+                            'ID Pessoa Texto': Text(UltimoID),
+                            'ID Pessoa': Value(UltimoID)
+                        }
+                    ),
+                    Notify("Registro não encontrado na memória", NotificationType.Error)
+                );*/
+                
+                Concurrent(
+                    Set(CriaAssistido, false),
+                    UpdateContext({ PopupInformaNumero: false })
+                );
+                
+                Back()
+                
+                /*
                 Patch(
                     Logs,
                     Defaults(Logs),
@@ -1087,7 +1196,7 @@
                     }
                 );
                 
-                Notify(UltimoID, NotificationType.Information);
+                //Notify(UltimoID, NotificationType.Information);
                 
                 With(
                     {
@@ -1106,18 +1215,11 @@
                         Notify("Registro não encontrado", NotificationType.Error)
                     )
                 );
-                /*
-                UpdateIf(
-                    Pessoas,
-                    id = UltimoID,//Form_Edita_Assistidos.LastSubmit.'ID Pessoa';
-                    {
-                        'ID Pessoa Texto': Text(UltimoID),//Text('ID Pessoa')
-                        'ID Pessoa': Int(UltimoID)
-                    }
-                );*/
                 
+                Set(CriaAssistido,false);
                 UpdateContext({PopupInformaNumero: false});
                 Back();
+                */
             Size: =24
             Text: ="Retornar"
             Visible: =PopupInformaNumero
@@ -1143,10 +1245,30 @@
                     {
                         DataeHora: Now(),
                         DeviceID: DeviceID,
-                        Ação: "Criado Pessoa ID:" & Int(Form_Edita_Assistidos.LastSubmit.id) & " e avançado para criar entrevista"
+                        Ação: $"Criado Pessoa ID: {Int(IDNovo)} e avançado para criar entrevista"
                     }
                 );
                 
+                Concurrent(
+                    UpdateContext({ PopupInformaNumero: false }),
+                    Set(PessoaSelecionada, Int(IDNovo)),
+                    Set(CriaAssistido, false)
+                );
+                
+                NewForm(Form_Cria_Entrevista);
+                Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None);
+                //=========================
+                /*
+                Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: "Criado Pessoa ID:" & Int(Form_Edita_Assistidos.LastSubmit.id) & " e avançado para criar entrevista"
+                    }
+                );*/
+                /*
                 With(
                     {
                         registroParaAtualizar: LookUp(Pessoas, id = UltimoID)
@@ -1164,13 +1286,16 @@
                         Notify("Registro não encontrado", NotificationType.Error)
                     )
                 );
-                
+                */
+                /*
                 UpdateContext({PopupInformaNumero: false});
                 
                 Set(PessoaSelecionada,Int(UltimoID));
                 
+                Set(CriaAssistido,false);
+                
                 NewForm(Form_Cria_Entrevista);
-                Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None);
+                Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None);*/
             Size: =24
             Text: ="Entrevista"
             Visible: =PopupInformaNumero

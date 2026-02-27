@@ -2914,6 +2914,36 @@
             {
               "logicalLocations": [
                 {
+                  "fullyQualifiedName": "Principal.Btn_Pessoas.TabIndex"
+                }
+              ],
+              "physicalLocation": {
+                "address": {
+                  "fullyQualifiedName": "Principal.Btn_Pessoas.TabIndex",
+                  "relativeAddress": 0
+                }
+              },
+              "properties": {
+                "member": "TabIndex",
+                "module": "Principal",
+                "type": "Principal.Btn_Pessoas"
+              }
+            }
+          ],
+          "message": {
+            "id": "issue"
+          },
+          "properties": {
+            "level": "Low"
+          },
+          "ruleId": "acc-TabOrderShouldBeChecked",
+          "ruleIndex": 4
+        },
+        {
+          "locations": [
+            {
+              "logicalLocations": [
+                {
                   "fullyQualifiedName": "Principal.Btn_Cadastro_Tarefeiros.TabIndex"
                 }
               ],
@@ -2987,36 +3017,6 @@
                 "member": "TabIndex",
                 "module": "Principal",
                 "type": "Principal.Btn_Limpeza"
-              }
-            }
-          ],
-          "message": {
-            "id": "issue"
-          },
-          "properties": {
-            "level": "Low"
-          },
-          "ruleId": "acc-TabOrderShouldBeChecked",
-          "ruleIndex": 4
-        },
-        {
-          "locations": [
-            {
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "Principal.Btn_Pessoas.TabIndex"
-                }
-              ],
-              "physicalLocation": {
-                "address": {
-                  "fullyQualifiedName": "Principal.Btn_Pessoas.TabIndex",
-                  "relativeAddress": 0
-                }
-              },
-              "properties": {
-                "member": "TabIndex",
-                "module": "Principal",
-                "type": "Principal.Btn_Pessoas"
               }
             }
           ],
@@ -8644,19 +8644,19 @@
             {
               "logicalLocations": [
                 {
-                  "fullyQualifiedName": "Busca_Pessoas.Galeria_Busca_Todos_1.AccessibleLabel"
+                  "fullyQualifiedName": "Busca_Pessoas.Galeria_Busca_Pessoas.AccessibleLabel"
                 }
               ],
               "physicalLocation": {
                 "address": {
-                  "fullyQualifiedName": "Busca_Pessoas.Galeria_Busca_Todos_1.AccessibleLabel",
+                  "fullyQualifiedName": "Busca_Pessoas.Galeria_Busca_Pessoas.AccessibleLabel",
                   "relativeAddress": 0
                 }
               },
               "properties": {
                 "member": "AccessibleLabel",
                 "module": "Busca_Pessoas",
-                "type": "Busca_Pessoas.Galeria_Busca_Todos_1"
+                "type": "Busca_Pessoas.Galeria_Busca_Pessoas"
               }
             }
           ],
@@ -8674,19 +8674,19 @@
             {
               "logicalLocations": [
                 {
-                  "fullyQualifiedName": "Busca_Pessoas.Galeria_Busca_Todos_1.TabIndex"
+                  "fullyQualifiedName": "Busca_Pessoas.Galeria_Busca_Pessoas.TabIndex"
                 }
               ],
               "physicalLocation": {
                 "address": {
-                  "fullyQualifiedName": "Busca_Pessoas.Galeria_Busca_Todos_1.TabIndex",
+                  "fullyQualifiedName": "Busca_Pessoas.Galeria_Busca_Pessoas.TabIndex",
                   "relativeAddress": 0
                 }
               },
               "properties": {
                 "member": "TabIndex",
                 "module": "Busca_Pessoas",
-                "type": "Busca_Pessoas.Galeria_Busca_Todos_1"
+                "type": "Busca_Pessoas.Galeria_Busca_Pessoas"
               }
             }
           ],
@@ -8698,36 +8698,6 @@
           },
           "ruleId": "acc-TabIndexShouldBeDefinedForInteractiveControl",
           "ruleIndex": 2
-        },
-        {
-          "locations": [
-            {
-              "logicalLocations": [
-                {
-                  "fullyQualifiedName": "App.AguardandoDialogos"
-                }
-              ],
-              "physicalLocation": {
-                "address": {
-                  "fullyQualifiedName": "App.AguardandoDialogos",
-                  "relativeAddress": 0
-                }
-              },
-              "properties": {
-                "member": "AguardandoDialogos",
-                "module": "App",
-                "type": "App"
-              }
-            }
-          ],
-          "message": {
-            "id": "issue"
-          },
-          "properties": {
-            "level": "Medium"
-          },
-          "ruleId": "app-UnusedVariables",
-          "ruleIndex": 5
         },
         {
           "locations": [

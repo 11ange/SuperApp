@@ -69,6 +69,19 @@
         OnSelect: |-
             =//------------------------------------------------------------------------------------------
             If(
+                // 1ª Validação: O formulário tem erros de preenchimento?
+                !FormDialogo.Valid,
+                Notify("Preencha todos os campos obrigatórios!", NotificationType.Error),
+            
+                // 2ª Validação: A resposta foi "Não"? (Só chega aqui se o form for válido)
+                DataCardValue169.Selected.Value = "Não",
+                UpdateContext({ MostraPopUp: true, Salvando: true }),
+            
+                // Ação Final: Se passou nas validações e a resposta não é "Não", envia o form!
+                SubmitForm(FormDialogo)
+            )
+            /*
+            If(
                 FormDialogo.Valid,
                 //SubmitForm(FormDialogo),
                 If(
@@ -80,7 +93,7 @@
                     "Preencha todos os campos obrigatórios!",
                     NotificationType.Error
                 )
-            );
+            );*/
         PaddingBottom: =22
         PaddingLeft: =22
         PaddingRight: =22
@@ -114,7 +127,64 @@
             =UpdateContext({Salvando: false})
             //false
         OnSuccess: |-
-            =//------------------------------------------------------------------------------------------
+            =With(
+                {
+                    regDialogo: FormDialogo.LastSubmit,
+                    
+                    continua: FormDialogo.LastSubmit.'Continua Tratamento' = "Sim" 
+                },
+                
+                Concurrent(
+                    Set(DialogoRealizado, true),
+                    Set(Dialogador_Salvo, regDialogo.Dialogador),
+                    Set(AnotacoesDialogo_Salvo, regDialogo.'Anotações Diálogo'),
+                    Set(DataDialogo_Salvo, regDialogo.'Data Diálogo'),
+                    UpdateContext({ Salvando: true })
+                );
+            
+                // --- PASSO 2: Atualiza o cadastro da Pessoa ---
+                Patch(
+                    Pessoas,
+                    LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada), 
+                    {
+                        'Ultima Assistência': DateValue(regDialogo.'Data Diálogo'),
+                        ConhDoutrina: DataCardValue167.Selected.Value,
+                        'Em Assistência': regDialogo.'Continua Tratamento'
+                    }
+                );
+            
+                // --- PASSO 3: Aciona o Flow do Power Automate ---
+                EncerrarAssistencia.Run(
+                    RegistroAssistencia.'ID Assistência', 
+                    regDialogo.Dialogador, 
+                    regDialogo.'Anotações Diálogo', 
+                    regDialogo.'Continua Tratamento', 
+                    RegistroAssistencia.'Assistência (cr4f5_assistenciaid)', 
+                    Text(regDialogo.'Data Diálogo', "yyyy-mm-dd") 
+                );
+            
+                Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: $"Dialogo Realizado, Assistido {If(continua, "continua", "finalizou")} assistência ID: {PessoaSelecionada} AssistenciaID: {RegistroAssistencia.'ID Assistência'}"
+                    }
+                );
+            
+                If(
+                    continua,
+                    // Se continuar: Reseta o form e vai para a criação
+                    NewForm(Form_Cria_Entrevista);
+                    Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None),
+                    
+                    // Se NÃO continuar: Volta pro menu principal
+                    Navigate(Principal, ScreenTransition.None)
+                )
+            )
+            /*
+            //------------------------------------------------------------------------------------------
             Set(DialogoRealizado, true);
             Set(DataDialogo_Salvo, FormDialogo.LastSubmit.'Data Diálogo');
             Set(Dialogador_Salvo, FormDialogo.LastSubmit.Dialogador);
@@ -187,6 +257,7 @@
                 Navigate(Principal) // Apenas uma ação neste caso
             )
             //------------------------------------------------------------------------------------------
+            */
         Width: =Parent.Width
         Y: =RectQuickActionBar3_2.Y + RectQuickActionBar3_2.Height
         ZIndex: =5
@@ -233,7 +304,7 @@
                 Fill: |-
                     =If(
                         IsBlank(Self.SelectedDate),
-                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                         RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                     )
                     //RGBA(255; 255; 255; 1)
@@ -329,7 +400,7 @@
                 Fill: |-
                     =If(
                         IsBlank(Self.SelectedText),
-                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                         RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                     )
                     //RGBA(255; 255; 255; 1)
@@ -511,7 +582,9 @@
                 BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
                 BorderThickness: =2
                 Color: =RGBA(0, 0, 0, 1)
-                Default: =AnotacoesEntrevista //Parent.Default
+                Default: |-
+                    =RegistroAssistenciaSelecionada.'Anotações Entrevista'
+                    //AnotacoesEntrevista //Parent.Default
                 DelayOutput: =true
                 DisabledBorderColor: =RGBA(166, 166, 166, 1)
                 DisabledColor: =RGBA(166, 166, 166, 1)
@@ -520,7 +593,7 @@
                 Fill: |-
                     =If(
                         IsBlank(Self.Text),
-                        RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                        RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                         RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                     )
                     //RGBA(255; 255; 255; 1)

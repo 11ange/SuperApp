@@ -107,15 +107,42 @@
         Height: =Parent.Height - RectQuickActionBar3_7.Height
         Item: =LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)
         OnSuccess: |-
-            =LogAlteracaoCampos.Run(
+            =With(
+                {
+                    // Pega os dados que acabaram de ser salvos (O "Para")
+                    regNovo: Form_Edita_Todos.LastSubmit,
+                    
+                    // Pega os dados antigos que estavam na memória (O "De")
+                    regAntigo: RegistroPessoaSelecionada 
+                },
+                
+                // 1. Dispara o Fluxo de Log usando Interpolação (Muito mais limpo que Concatenate)
+                LogAlteracaoCampos.Run(
+                    // Como era antes:
+                    $"Nomepessoa: {regAntigo.'Nome Pessoa'} | NomeSocial: {regAntigo.'Nome Social'} | Idade: {regAntigo.Idade} | Cartao: {regAntigo.'Número Cartão'} | Ativo: {regAntigo.Ativo} | EmAssistencia: {regAntigo.'Em Assistência'} | Tarefeiro: {regAntigo.Tarefeiro}",
+                    
+                    // Como ficou agora:
+                    $"Nomepessoa: {regNovo.'Nome Pessoa'} | NomeSocial: {regNovo.'Nome Social'} | Idade: {regNovo.Idade} | Cartao: {regNovo.'Número Cartão'} | Ativo: {regNovo.Ativo} | EmAssistencia: {regNovo.'Em Assistência'} | Tarefeiro: {regNovo.Tarefeiro}",
+                    
+                    PessoaSelecionada,
+                    DeviceID,
+                    "Pessoas"
+                );
+            
+                Set(RegistroPessoaSelecionada, regNovo);
+            
+                Back()
+            )
+            /*
+            LogAlteracaoCampos.Run(
                 Concatenate(
-                    "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
-                    "NomeSocial:", varRegistroOriginalPessoas.'Nome Social', "|",
-                    "Idade:", varRegistroOriginalPessoas.Idade, "|",
-                    "Cartao:", varRegistroOriginalPessoas.'Número Cartão', "|",
-                    "Ativo:", varRegistroOriginalPessoas.Ativo, "|",
-                    "EmAssistencia:", varRegistroOriginalPessoas.'Em Assistência', "|",
-                    "Tarefeiro:", varRegistroOriginalPessoas.Tarefeiro
+                    "Nomepessoa:", RegistroPessoaSelecionada.'Nome Pessoa', "|",
+                    "NomeSocial:", RegistroPessoaSelecionada.'Nome Social', "|",
+                    "Idade:", RegistroPessoaSelecionada.Idade, "|",
+                    "Cartao:", RegistroPessoaSelecionada.'Número Cartão', "|",
+                    "Ativo:", RegistroPessoaSelecionada.Ativo, "|",
+                    "EmAssistencia:", RegistroPessoaSelecionada.'Em Assistência', "|",
+                    "Tarefeiro:", RegistroPessoaSelecionada.Tarefeiro
                 ),
                 Concatenate(
                     "Nomepessoa:", Form_Edita_Todos.LastSubmit.'Nome Pessoa', "|",
@@ -131,9 +158,10 @@
                 "Pessoas"
             );
             
-            Set(varRegistroOriginalPessoas,Form_Edita_Todos.LastSubmit);
+            Set(RegistroPessoaSelecionada,Form_Edita_Todos.LastSubmit);
             
             Back()
+            */
         Width: =Parent.Width
         Y: =RectQuickActionBar3_7.Height
         ZIndex: =5

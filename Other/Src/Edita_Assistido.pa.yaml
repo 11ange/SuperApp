@@ -55,13 +55,13 @@ Screens:
                       }
                   ),
                   Patch(
-                  Logs,
-                  Defaults(Logs),
-                  {
-                      DataeHora: Now(),
-                      DeviceID: DeviceID,
-                      Ação: "Cancelando criação novo assistivo"
-                  }
+                      Logs,
+                      Defaults(Logs),
+                      {
+                          DataeHora: Now(),
+                          DeviceID: DeviceID,
+                          Ação: "Cancelando criação novo assistivo"
+                      }
                   )
               );
 
@@ -89,23 +89,7 @@ Screens:
             Color: =RGBA(255, 255, 255, 1)
             Height: =88
             Icon: =Icon.Save
-            OnSelect: |-
-              =If(
-                  !Form_Edita_Assistidos.Valid,
-                  Notify("Preencha todos os campos obrigatórios!", NotificationType.Error),
-                  If(
-                      CartaoDuplicado,
-                      Notify("Número do cartão já está cadastrado.", NotificationType.Error),
-                      SubmitForm(Form_Edita_Assistidos)
-                  )
-              )
-
-              /*If(
-                  Form_Edita_Assistidos.Valid,
-                  SubmitForm(Form_Edita_Assistidos),
-                  Notify("Preencha todos os campos obrigatórios!", NotificationType.Error)
-              );*/
-              //SubmitForm(Form_Edita_Assistidos);;
+            OnSelect: "=If(\r\n    !Form_Edita_Assistidos.Valid,\r\n    Notify(\"Preencha todos os campos obrigatórios!\", NotificationType.Error),\r\n\r\n    CartaoDuplicado,\r\n    Notify(\"Número do cartão já está cadastrado.\", NotificationType.Error),\r\n    \r\n    // Ação Final: Se passou por todas as validações, envia o formulário\r\n    SubmitForm(Form_Edita_Assistidos)\r\n)\r\n/*\r\nIf(\r\n    !Form_Edita_Assistidos.Valid,\r\n    Notify(\"Preencha todos os campos obrigatórios!\", NotificationType.Error),\r\n    If(\r\n        CartaoDuplicado,\r\n        Notify(\"Número do cartão já está cadastrado.\", NotificationType.Error),\r\n        SubmitForm(Form_Edita_Assistidos)\r\n    )\r\n);\r\n*/\r\n/*If(\r\n    Form_Edita_Assistidos.Valid,\r\n    SubmitForm(Form_Edita_Assistidos),\r\n    Notify(\"Preencha todos os campos obrigatórios!\", NotificationType.Error)\r\n);*/\r\n//SubmitForm(Form_Edita_Assistidos);;"
             PaddingBottom: =22
             PaddingLeft: =22
             PaddingRight: =22
@@ -139,50 +123,27 @@ Screens:
             Height: =845
             Item: |-
               =If(
-                  Form_Edita_Assistidos.Mode = FormMode.Edit && CriaAssistido = false,
+                  Form_Edita_Assistidos.Mode = FormMode.New,
+                  Defaults(Pessoas), // Traz a estrutura vazia da tabela Pessoas
+                  LookUp(
+                      Pessoas,
+                      'ID Pessoa' = PessoaSelecionada
+                  ) // Traz o registro selecionado se for edição
+              )
+              /*
+              If(
+                  Form_Edita_Assistidos.Mode = FormMode.Edit && !CriaAssistido,
                   LookUp(
                       Pessoas,
                       'ID Pessoa' = PessoaSelecionada
                   ),
                   Form_Edita_Assistidos.LastSubmit
-              )
+              )*/
             OnFailure: |+
               =UpdateContext({PopupInformaNumero: false});
 
 
-            OnSuccess: |-
-              =UpdateContext({UltimoID: Form_Edita_Assistidos.LastSubmit.id});
-
-              Set(varRegistroOriginalPessoas,Form_Edita_Assistidos.LastSubmit);
-
-              LogAlteracaoCampos.Run(
-                  Concatenate(
-                      "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
-                      "NomeSocial:", varRegistroOriginalPessoas.'Nome Social', "|",
-                      "Idade:", varRegistroOriginalPessoas.Idade, "|",
-                      "Cartao:", varRegistroOriginalPessoas.'Número Cartão', "|",
-                      "Ativo:", varRegistroOriginalPessoas.Ativo, "|",
-                      "EmAssistencia:", varRegistroOriginalPessoas.'Em Assistência', "|",
-                      "Tarefeiro:", varRegistroOriginalPessoas.Tarefeiro
-
-                  ),
-                  Concatenate(
-                      "Nomepessoa:", Form_Edita_Assistidos.LastSubmit.'Nome Pessoa', "|",
-                      "NomeSocial:", Form_Edita_Assistidos.LastSubmit.'Nome Social', "|",
-                      "Idade:", Form_Edita_Assistidos.LastSubmit.Idade, "|",
-                      "Cartao:", Form_Edita_Assistidos.LastSubmit.'Número Cartão', "|",
-                      "Ativo:", Form_Edita_Assistidos.LastSubmit.Ativo, "|",
-                      "EmAssistencia:", Form_Edita_Assistidos.LastSubmit.'Em Assistência', "|",
-                      "Tarefeiro:", Form_Edita_Assistidos.LastSubmit.Tarefeiro
-                  ),
-                  PessoaSelecionada,
-                  DeviceID,
-                  "Pessoas"
-              );
-
-              If(CriaAssistido, UpdateContext({PopupInformaNumero: true}), Back());
-
-              Set(CriaAssistido,false);
+            OnSuccess: "=With(\r\n    {\r\n        regNovo: Form_Edita_Assistidos.LastSubmit,\r\n        regAntigo: RegistroPessoaSelecionada,\r\n        eraNovo: CriaAssistido \r\n    },\r\n    \r\n    // Se for um cadastro novo, ele pega o ID recém-criado e espelha nas colunas de texto/número\r\n    If(\r\n        eraNovo,\r\n        Patch(\r\n            Pessoas,\r\n            regNovo,\r\n            {\r\n                'ID Pessoa Texto': Text(regNovo.id),\r\n                'ID Pessoa': Value(regNovo.id)\r\n            }\r\n        )\r\n    );\r\n\r\n    UpdateContext({ IDNovo: regNovo.id });\r\n\r\n    Concurrent(\r\n        Set(PessoaSelecionada, regNovo.'ID Pessoa'),\r\n        //Set(EmAssistencia, ThisItem.'Em Assistência'),\r\n        Set(RegistroPessoaSelecionada,regNovo),\r\n        Set(CriaAssistido, false)\r\n    );\r\n    \r\n    LogAlteracaoCampos.Run(\r\n        $\"Nomepessoa: {regAntigo.'Nome Pessoa'} | NomeSocial: {regAntigo.'Nome Social'} | Idade: {regAntigo.Idade} | Cartao: {regAntigo.'Número Cartão'} | Ativo: {regAntigo.Ativo} | EmAssistencia: {regAntigo.'Em Assistência'} | Tarefeiro: {regAntigo.Tarefeiro}\",\r\n        $\"Nomepessoa: {regNovo.'Nome Pessoa'} | NomeSocial: {regNovo.'Nome Social'} | Idade: {regNovo.Idade} | Cartao: {regNovo.'Número Cartão'} | Ativo: {regNovo.Ativo} | EmAssistencia: {regNovo.'Em Assistência'} | Tarefeiro: {regNovo.Tarefeiro}\",\r\n        PessoaSelecionada,\r\n        DeviceID,\r\n        \"Pessoas\"\r\n    );\r\n    \r\n    If(\r\n        eraNovo, \r\n        UpdateContext({ PopupInformaNumero: true }),\r\n        Back()\r\n    )\r\n)\r\n\r\n/*UpdateContext({UltimoID: Form_Edita_Assistidos.LastSubmit.id});\r\n\r\nSet(RegistroPessoaSelecionada,Form_Edita_Assistidos.LastSubmit);\r\n\r\nLogAlteracaoCampos.Run(\r\n    Concatenate(\r\n        \"Nomepessoa:\", RegistroPessoaSelecionada.'Nome Pessoa', \"|\",\r\n        \"NomeSocial:\", RegistroPessoaSelecionada.'Nome Social', \"|\",\r\n        \"Idade:\", RegistroPessoaSelecionada.Idade, \"|\",\r\n        \"Cartao:\", RegistroPessoaSelecionada.'Número Cartão', \"|\",\r\n        \"Ativo:\", RegistroPessoaSelecionada.Ativo, \"|\",\r\n        \"EmAssistencia:\", RegistroPessoaSelecionada.'Em Assistência', \"|\",\r\n        \"Tarefeiro:\", RegistroPessoaSelecionada.Tarefeiro\r\n\r\n    ),\r\n    Concatenate(\r\n        \"Nomepessoa:\", Form_Edita_Assistidos.LastSubmit.'Nome Pessoa', \"|\",\r\n        \"NomeSocial:\", Form_Edita_Assistidos.LastSubmit.'Nome Social', \"|\",\r\n        \"Idade:\", Form_Edita_Assistidos.LastSubmit.Idade, \"|\",\r\n        \"Cartao:\", Form_Edita_Assistidos.LastSubmit.'Número Cartão', \"|\",\r\n        \"Ativo:\", Form_Edita_Assistidos.LastSubmit.Ativo, \"|\",\r\n        \"EmAssistencia:\", Form_Edita_Assistidos.LastSubmit.'Em Assistência', \"|\",\r\n        \"Tarefeiro:\", Form_Edita_Assistidos.LastSubmit.Tarefeiro\r\n    ),\r\n    PessoaSelecionada,\r\n    DeviceID,\r\n    \"Pessoas\"\r\n);\r\n\r\nIf(CriaAssistido, UpdateContext({PopupInformaNumero: true}), Back());\r\n\r\nSet(CriaAssistido,false);\r\n*/"
             Width: =Parent.Width
             Y: =RectQuickActionBar_Tela_Edicao_Assistidos.Height
           Children:
@@ -285,7 +246,7 @@ Screens:
                         Fill: |-
                           =If(
                               IsBlank(Self.Text),
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                           //RGBA(255; 255; 255; 1)
@@ -471,7 +432,7 @@ Screens:
                           =//RGBA(255; 255; 255; 1)
                           If(
                               IsBlank(Self.Text),
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                         Font: =Font.'Open Sans'
@@ -564,7 +525,7 @@ Screens:
                           =//RGBA(255, 255, 255, 1)
                           If(
                               IsBlank(Self.Text),
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                         Font: =Font.'Open Sans'
@@ -573,7 +534,21 @@ Screens:
                         HoverBorderColor: =RGBA(0, 89, 178, 1)
                         HoverFill: =RGBA(153, 205, 255, 1)
                         OnChange: |-
-                          =Set(
+                          =UpdateContext({
+                              CartaoDuplicado: !IsBlank(
+                                  LookUp(
+                                      Pessoas,
+                                      'Número Cartão' = Value(Self.Text) &&
+                                      (
+                                          Form_Edita_Assistidos.Mode = FormMode.New ||
+                                          'ID Pessoa' <> PessoaSelecionada
+                                      ),
+                                      'ID Pessoa'
+                                  )
+                              )
+                          })
+                          /*
+                          Set(
                               CartaoDuplicado,
                               !IsBlank(
                                   LookUp(
@@ -585,7 +560,7 @@ Screens:
                                       )
                                   )
                               )
-                          )
+                          )*/
                           //false
                         PaddingLeft: =5
                         RadiusBottomLeft: =0
@@ -851,7 +826,7 @@ Screens:
                         DisplayMode: =Parent.DisplayMode
                         Fill: |-
                           =If(Self.Selected.Value = " ",//IsBlank(Self.Selected);
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                           //RGBA(255; 255; 255; 1)
@@ -1053,7 +1028,37 @@ Screens:
             HoverColor: =RGBA(255, 255, 255, 1)
             HoverFill: =ColorFade(RGBA(0, 51, 102, 1), -20%)
             OnSelect: |-
-              =// Versão completa e robusta
+              =Patch(
+                  Logs,
+                  Defaults(Logs),
+                  {
+                      DataeHora: Now(),
+                      DeviceID: DeviceID,
+                      Ação: $"Criado Assistido ID: {IDNovo} e retornado para tela principal"
+                  }
+              );
+              /*
+              If(
+                  !IsBlank(RegistroPessoaSelecionada),
+                  Patch(
+                      Pessoas,
+                      RegistroPessoaSelecionada,
+                      {
+                          'ID Pessoa Texto': Text(UltimoID),
+                          'ID Pessoa': Value(UltimoID)
+                      }
+                  ),
+                  Notify("Registro não encontrado na memória", NotificationType.Error)
+              );*/
+
+              Concurrent(
+                  Set(CriaAssistido, false),
+                  UpdateContext({ PopupInformaNumero: false })
+              );
+
+              Back()
+
+              /*
               Patch(
                   Logs,
                   Defaults(Logs),
@@ -1064,7 +1069,7 @@ Screens:
                   }
               );
 
-              Notify(UltimoID, NotificationType.Information);
+              //Notify(UltimoID, NotificationType.Information);
 
               With(
                   {
@@ -1083,18 +1088,11 @@ Screens:
                       Notify("Registro não encontrado", NotificationType.Error)
                   )
               );
-              /*
-              UpdateIf(
-                  Pessoas,
-                  id = UltimoID,//Form_Edita_Assistidos.LastSubmit.'ID Pessoa';
-                  {
-                      'ID Pessoa Texto': Text(UltimoID),//Text('ID Pessoa')
-                      'ID Pessoa': Int(UltimoID)
-                  }
-              );*/
 
+              Set(CriaAssistido,false);
               UpdateContext({PopupInformaNumero: false});
               Back();
+              */
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color
@@ -1124,10 +1122,30 @@ Screens:
                   {
                       DataeHora: Now(),
                       DeviceID: DeviceID,
-                      Ação: "Criado Pessoa ID:" & Int(Form_Edita_Assistidos.LastSubmit.id) & " e avançado para criar entrevista"
+                      Ação: $"Criado Pessoa ID: {Int(IDNovo)} e avançado para criar entrevista"
                   }
               );
 
+              Concurrent(
+                  UpdateContext({ PopupInformaNumero: false }),
+                  Set(PessoaSelecionada, Int(IDNovo)),
+                  Set(CriaAssistido, false)
+              );
+
+              NewForm(Form_Cria_Entrevista);
+              Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None);
+              //=========================
+              /*
+              Patch(
+                  Logs,
+                  Defaults(Logs),
+                  {
+                      DataeHora: Now(),
+                      DeviceID: DeviceID,
+                      Ação: "Criado Pessoa ID:" & Int(Form_Edita_Assistidos.LastSubmit.id) & " e avançado para criar entrevista"
+                  }
+              );*/
+              /*
               With(
                   {
                       registroParaAtualizar: LookUp(Pessoas, id = UltimoID)
@@ -1145,13 +1163,16 @@ Screens:
                       Notify("Registro não encontrado", NotificationType.Error)
                   )
               );
-
+              */
+              /*
               UpdateContext({PopupInformaNumero: false});
 
               Set(PessoaSelecionada,Int(UltimoID));
 
+              Set(CriaAssistido,false);
+
               NewForm(Form_Cria_Entrevista);
-              Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None);
+              Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None);*/
             PressedBorderColor: =Self.Fill
             PressedColor: =Self.Fill
             PressedFill: =Self.Color

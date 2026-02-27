@@ -155,7 +155,7 @@ Screens:
                   {
                       DataeHora: Now(),
                       DeviceID: DeviceID,
-                      Ação: "Volta Edição Atividades Tarefeiro ID:" & PessoaSelecionada
+                      Ação: $"Voltando da Edição Atividades Tarefeiro ID: {PessoaSelecionada}"
                   }
               );
               Back()
@@ -338,7 +338,7 @@ Screens:
                   {
                       DataeHora: Now(),
                       DeviceID: DeviceID,
-                      Ação: "Atualizando Atividades Tarefeiro ID:" & PessoaSelecionada
+                      Ação: $"Atualizando Atividades Tarefeiro ID: {PessoaSelecionada}"
                   }
               );
             PressedBorderColor: =Self.Fill
@@ -380,7 +380,7 @@ Screens:
                   {
                       DataeHora: Now(),
                       DeviceID: DeviceID,
-                      Ação: "Inserindo Nova Atividade Tarefeiro ID:" & PessoaSelecionada
+                      Ação: $"Inserindo Nova Atividade: {Dropdown_Tarefa.Selected.'Nome Tarefa'} - {Dropdown_Dia_da_Semana.Selected.Value} p/ tarefeiro ID: {PessoaSelecionada}"
                   }
               );
             PressedBorderColor: =Self.Fill
@@ -410,7 +410,7 @@ Screens:
                   {
                       DataeHora: Now(),
                       DeviceID: DeviceID,
-                      Ação: "Apagando Atividade Tarefeiro ID:" & PessoaSelecionada
+                      Ação: $"Apagando Atividade Tarefeiro ID:{PessoaSelecionada}"
                   }
               );
             PressedBorderColor: =Self.Fill

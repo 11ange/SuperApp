@@ -1,7 +1,8 @@
 "Consulta_Todos As screen.'phoneDetailViewLayout_ver3.0'":
     Fill: =RGBA(232, 232, 232, 1)
     OnVisible: |-
-        =UpdateContext({ 
+        =Set(AssistenciaSelecionada, Blank());
+        UpdateContext({ 
             ctxPessoaAtual: LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada) 
         });
 
@@ -43,7 +44,8 @@
         Height: =88
         Icon: =Icon.Edit
         OnSelect: |-
-            =EditForm(Form_Edita_Todos);
+            =ResetForm(Form_Edita_Todos);
+            EditForm(Form_Edita_Todos);
             
             Patch(
                 Logs,

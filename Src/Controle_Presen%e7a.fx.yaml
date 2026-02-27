@@ -2,6 +2,69 @@
     Fill: =RGBA(232, 232, 232, 1)
     OnVisible: |-
         =UpdateContext({ varPisca: false });
+        
+        Concurrent(
+            // Reseta popups
+            UpdateContext({
+                MostraPopUp: false,
+                PopupConfirmaEnvioDialogo: false,
+                PopupConfirmaExcedente: false,
+                PopUpConfirmaPresença: false,
+                PopupDialogoSemanaQueVem: false,
+                PopupDataMesmoDia: false
+            }),
+            
+            // Reseta flags de validação
+            Set(Assist_Encerrada, false),
+            Set(Assist_fora_dia, false),
+            Set(Assist_fora_prazo, false),
+            Set(Assist_mesmo_dia, false),
+            Set(Semana1, false), Set(Semana2, false), Set(Semana3, false), Set(Semana4, false)
+        );
+        
+        // 3. DEFINE VARIÁVEIS BASEADAS NO REGISTRO (Lendo direto da memória)
+        Concurrent(
+            Set(Assist_Encerrada, RegistroAssistenciaSelecionada.Finalizada = "Sim"),
+            Set(Assist_fora_dia, Text(RegistroAssistenciaSelecionada.'Dia Semana') <> DiaComPeriodo),
+            Set(AssistenciaAtual, RegistroAssistenciaSelecionada.'Assistência (cr4f5_assistencia)'),
+            Set(DataEntrevistaAtual, RegistroAssistenciaSelecionada.'Data Entrevista')
+        );
+        
+        // 4. IDENTIFICA A SEMANA ATUAL
+        Switch(true,
+            IsBlank(RegistroAssistenciaSelecionada.'Semana 1'), Set(Semana1, true),
+            IsBlank(RegistroAssistenciaSelecionada.'Semana 2'), Set(Semana2, true),
+            IsBlank(RegistroAssistenciaSelecionada.'Semana 3'), Set(Semana3, true),
+            IsBlank(RegistroAssistenciaSelecionada.'Semana 4'), Set(Semana4, true)
+        );
+        
+        // 5. VALIDAÇÕES DE DATA (Usando a função 'With' para não gastar memória)
+        With(
+            {
+                // Calcula a diferença de dias apenas uma vez na memória
+                diasS1: DateDiff(RegistroAssistenciaSelecionada.'Semana 1', Now(), TimeUnit.Days),
+                diasS2: DateDiff(RegistroAssistenciaSelecionada.'Semana 2', Now(), TimeUnit.Days),
+                diasS3: DateDiff(RegistroAssistenciaSelecionada.'Semana 3', Now(), TimeUnit.Days)
+            },
+            If(
+                Semana1,
+                Set(Assist_fora_prazo, DateDiff(RegistroAssistenciaSelecionada.'Data Entrevista', Now(), TimeUnit.Days) > tolerancia * 7),
+                
+                Semana2,
+                Set(Assist_fora_prazo, diasS1 > tolerancia * 7);
+                Set(Assist_mesmo_dia, diasS1 < 1),
+                
+                Semana3,
+                Set(Assist_fora_prazo, diasS2 > tolerancia * 7);
+                Set(Assist_mesmo_dia, diasS2 < 1),
+                
+                Semana4,
+                Set(Assist_fora_prazo, diasS3 > tolerancia * 7);
+                Set(Assist_mesmo_dia, diasS3 < 1)
+            )
+        );
+        /*
+        UpdateContext({ varPisca: false });
         // 1. BUSCA O REGISTRO APENAS UMA VEZ PELO ID EXATO (Muito mais rápido e seguro)
         UpdateContext({ 
             ctxAssistenciaAtual: LookUp(Assistências, 'ID Assistência' = AssistenciaSelecionada) 
@@ -67,7 +130,7 @@
                 Set(Assist_fora_prazo, diasS3 > tolerancia * 7);
                 Set(Assist_mesmo_dia, diasS3 < 1)
             )
-        );
+        );*/
         /*
         //Variáveis para assistência encerrada, fora do dia, fora do prazo ou mesmo dia
         Set(Assist_Encerrada,  false);
@@ -238,7 +301,7 @@
         DataSource: =Assistências
         Height: ='Numero do Assistido'.Height + Data_Entrevista.Height + 'Dia Semana'.Height + Semana_1.Height + Semana_2.Height + Semana_3.Height + Semana_4.Height + 'Presencas Extras'.Height
         Item: |-
-            =ctxAssistenciaAtual//LookUp(Assistências, 'ID Assistência' = AssistenciaSelecionada)
+            =RegistroAssistenciaSelecionada//LookUp(Assistências, 'ID Assistência' = AssistenciaSelecionada)
             //LookUp(Assistências, 'ID Pessoa' = PessoaSelecionada)
         OnSuccess: =
         Width: =Parent.Width
@@ -1067,12 +1130,12 @@
                 );
                 Patch(
                     Assistências,
-                    ctxAssistenciaAtual, // Usa a variável que já está na memória!
+                    RegistroAssistenciaSelecionada, // Usa a variável que já está na memória!
                     {
-                        'Semana 1': If(Semana1, Today(), ctxAssistenciaAtual.'Semana 1'),
-                        'Semana 2': If(Semana2, Today(), ctxAssistenciaAtual.'Semana 2'),
-                        'Semana 3': If(Semana3, Today(), ctxAssistenciaAtual.'Semana 3'),
-                        'Semana 4': If(Semana4, Today(), ctxAssistenciaAtual.'Semana 4'),
+                        'Semana 1': If(Semana1, Today(), RegistroAssistenciaSelecionada.'Semana 1'),
+                        'Semana 2': If(Semana2, Today(), RegistroAssistenciaSelecionada.'Semana 2'),
+                        'Semana 3': If(Semana3, Today(), RegistroAssistenciaSelecionada.'Semana 3'),
+                        'Semana 4': If(Semana4, Today(), RegistroAssistenciaSelecionada.'Semana 4'),
                         'Ultimo Comparecimento': Today()
                     }
                 );

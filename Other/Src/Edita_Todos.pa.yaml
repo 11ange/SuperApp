@@ -105,34 +105,7 @@ Screens:
             DataSource: =Pessoas
             Height: =Parent.Height - RectQuickActionBar3_7.Height
             Item: =LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)
-            OnSuccess: |-
-              =LogAlteracaoCampos.Run(
-                  Concatenate(
-                      "Nomepessoa:", varRegistroOriginalPessoas.'Nome Pessoa', "|",
-                      "NomeSocial:", varRegistroOriginalPessoas.'Nome Social', "|",
-                      "Idade:", varRegistroOriginalPessoas.Idade, "|",
-                      "Cartao:", varRegistroOriginalPessoas.'Número Cartão', "|",
-                      "Ativo:", varRegistroOriginalPessoas.Ativo, "|",
-                      "EmAssistencia:", varRegistroOriginalPessoas.'Em Assistência', "|",
-                      "Tarefeiro:", varRegistroOriginalPessoas.Tarefeiro
-                  ),
-                  Concatenate(
-                      "Nomepessoa:", Form_Edita_Todos.LastSubmit.'Nome Pessoa', "|",
-                      "NomeSocial:", Form_Edita_Todos.LastSubmit.'Nome Social', "|",
-                      "Idade:", Form_Edita_Todos.LastSubmit.Idade, "|",
-                      "Cartao:", Form_Edita_Todos.LastSubmit.'Número Cartão', "|",
-                      "Ativo:", Form_Edita_Todos.LastSubmit.Ativo, "|",
-                      "EmAssistencia:", Form_Edita_Todos.LastSubmit.'Em Assistência', "|",
-                      "Tarefeiro:", Form_Edita_Todos.LastSubmit.Tarefeiro
-                  ),
-                  PessoaSelecionada,
-                  DeviceID,
-                  "Pessoas"
-              );
-
-              Set(varRegistroOriginalPessoas,Form_Edita_Todos.LastSubmit);
-
-              Back()
+            OnSuccess: "=With(\r\n    {\r\n        // Pega os dados que acabaram de ser salvos (O \"Para\")\r\n        regNovo: Form_Edita_Todos.LastSubmit,\r\n        \r\n        // Pega os dados antigos que estavam na memória (O \"De\")\r\n        regAntigo: RegistroPessoaSelecionada \r\n    },\r\n    \r\n    // 1. Dispara o Fluxo de Log usando Interpolação (Muito mais limpo que Concatenate)\r\n    LogAlteracaoCampos.Run(\r\n        // Como era antes:\r\n        $\"Nomepessoa: {regAntigo.'Nome Pessoa'} | NomeSocial: {regAntigo.'Nome Social'} | Idade: {regAntigo.Idade} | Cartao: {regAntigo.'Número Cartão'} | Ativo: {regAntigo.Ativo} | EmAssistencia: {regAntigo.'Em Assistência'} | Tarefeiro: {regAntigo.Tarefeiro}\",\r\n        \r\n        // Como ficou agora:\r\n        $\"Nomepessoa: {regNovo.'Nome Pessoa'} | NomeSocial: {regNovo.'Nome Social'} | Idade: {regNovo.Idade} | Cartao: {regNovo.'Número Cartão'} | Ativo: {regNovo.Ativo} | EmAssistencia: {regNovo.'Em Assistência'} | Tarefeiro: {regNovo.Tarefeiro}\",\r\n        \r\n        PessoaSelecionada,\r\n        DeviceID,\r\n        \"Pessoas\"\r\n    );\r\n\r\n    Set(RegistroPessoaSelecionada, regNovo);\r\n\r\n    Back()\r\n)\r\n/*\r\nLogAlteracaoCampos.Run(\r\n    Concatenate(\r\n        \"Nomepessoa:\", RegistroPessoaSelecionada.'Nome Pessoa', \"|\",\r\n        \"NomeSocial:\", RegistroPessoaSelecionada.'Nome Social', \"|\",\r\n        \"Idade:\", RegistroPessoaSelecionada.Idade, \"|\",\r\n        \"Cartao:\", RegistroPessoaSelecionada.'Número Cartão', \"|\",\r\n        \"Ativo:\", RegistroPessoaSelecionada.Ativo, \"|\",\r\n        \"EmAssistencia:\", RegistroPessoaSelecionada.'Em Assistência', \"|\",\r\n        \"Tarefeiro:\", RegistroPessoaSelecionada.Tarefeiro\r\n    ),\r\n    Concatenate(\r\n        \"Nomepessoa:\", Form_Edita_Todos.LastSubmit.'Nome Pessoa', \"|\",\r\n        \"NomeSocial:\", Form_Edita_Todos.LastSubmit.'Nome Social', \"|\",\r\n        \"Idade:\", Form_Edita_Todos.LastSubmit.Idade, \"|\",\r\n        \"Cartao:\", Form_Edita_Todos.LastSubmit.'Número Cartão', \"|\",\r\n        \"Ativo:\", Form_Edita_Todos.LastSubmit.Ativo, \"|\",\r\n        \"EmAssistencia:\", Form_Edita_Todos.LastSubmit.'Em Assistência', \"|\",\r\n        \"Tarefeiro:\", Form_Edita_Todos.LastSubmit.Tarefeiro\r\n    ),\r\n    PessoaSelecionada,\r\n    DeviceID,\r\n    \"Pessoas\"\r\n);\r\n\r\nSet(RegistroPessoaSelecionada,Form_Edita_Todos.LastSubmit);\r\n\r\nBack()\r\n*/"
             Width: =Parent.Width
             Y: =RectQuickActionBar3_7.Height
           Children:

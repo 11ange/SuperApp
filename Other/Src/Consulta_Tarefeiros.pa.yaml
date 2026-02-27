@@ -12,7 +12,8 @@ Screens:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
       OnVisible: |-
-        =UpdateContext({ MostraPopUp: false });
+        =//UpdateContext({ MostraPopUp: false });
+        Set(AssistenciaSelecionada, Blank());
         UpdateContext({ 
             ctxPessoaAtual: LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada) 
         });
@@ -57,7 +58,8 @@ Screens:
             Height: =88
             Icon: =Icon.Edit
             OnSelect: |-
-              =EditForm(Form_Edita_Tarefeiros);
+              =ResetForm(Form_Edita_Tarefeiros);
+              EditForm(Form_Edita_Tarefeiros);
 
               Patch(
                   Logs,

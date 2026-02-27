@@ -903,7 +903,7 @@
       "StyleName": "defaultTextStyle",
       "Type": "ControlInfo"
     },
-    "Galeria_Busca_Todos_1": {
+    "Galeria_Busca_Pessoas": {
       "AllowAccessToGlobals": true,
       "ControlPropertyState": [
         {
@@ -967,7 +967,7 @@
       "IsLocked": false,
       "LayoutName": "",
       "MetaDataIDKey": "%BrowseContainer.ID%",
-      "Name": "Galeria_Busca_Todos_1",
+      "Name": "Galeria_Busca_Pessoas",
       "OptimizeForDevices": "Off",
       "ParentIndex": 15,
       "PersistMetaDataIDKey": false,

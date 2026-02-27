@@ -78,6 +78,19 @@ Screens:
             OnSelect: |-
               =//------------------------------------------------------------------------------------------
               If(
+                  // 1ª Validação: O formulário tem erros de preenchimento?
+                  !FormDialogo.Valid,
+                  Notify("Preencha todos os campos obrigatórios!", NotificationType.Error),
+
+                  // 2ª Validação: A resposta foi "Não"? (Só chega aqui se o form for válido)
+                  DataCardValue169.Selected.Value = "Não",
+                  UpdateContext({ MostraPopUp: true, Salvando: true }),
+
+                  // Ação Final: Se passou nas validações e a resposta não é "Não", envia o form!
+                  SubmitForm(FormDialogo)
+              )
+              /*
+              If(
                   FormDialogo.Valid,
                   //SubmitForm(FormDialogo),
                   If(
@@ -89,7 +102,7 @@ Screens:
                       "Preencha todos os campos obrigatórios!",
                       NotificationType.Error
                   )
-              );
+              );*/
             PaddingBottom: =22
             PaddingLeft: =22
             PaddingRight: =22
@@ -125,80 +138,7 @@ Screens:
             OnFailure: |-
               =UpdateContext({Salvando: false})
               //false
-            OnSuccess: |-
-              =//------------------------------------------------------------------------------------------
-              Set(DialogoRealizado, true);
-              Set(DataDialogo_Salvo, FormDialogo.LastSubmit.'Data Diálogo');
-              Set(Dialogador_Salvo, FormDialogo.LastSubmit.Dialogador);
-              Set(AnotacoesDialogo_Salvo, FormDialogo.LastSubmit.'Anotações Diálogo');
-              //Set(EntrevistaNova, "Não");
-              //------------------------------------------------------------------------------------------
-
-              //------------------------------------------------------------------------------------------
-              //Salva na tabela Pessoas a data atual na coluna 'Ultima Assistência' (para poder fazer a
-              //limpeza por tempo que não comparece à assistência.
-              //Atualiza o conhecimento da doutrina na tabela de pessoas
-              Patch(
-                  Pessoas,
-                  LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada),
-                  {
-                      'Ultima Assistência': DateValue(DataDialogo_Salvo),
-                      ConhDoutrina:DataCardValue167.Selected.Value,
-                      'Em Assistência': FormDialogo.LastSubmit.'Continua Tratamento'
-                  }
-              );
-              //------------------------------------------------------------------------------------------
-
-              //------------------------------------------------------------------------------------------
-              // Copia o registro da tabela original para a nova tabela
-              // Carrega uma vez os dados da assistência em uma variável
-              // Copia via flow do power automate
-              EncerrarAssistencia.Run(
-                  RegistroAssistencia.'ID Assistência', // Passa o ID da Assistência
-                  Dialogador_Salvo, // Passa o dialogador
-                  AnotacoesDialogo_Salvo, // Passa as anotações
-                  FormDialogo.LastSubmit.'Continua Tratamento', // Passa se continua tratamento
-                  RegistroAssistencia.'Assistência (cr4f5_assistenciaid)', // Passa o GUID o Flow
-                  Text(DataDialogo_Salvo, "yyyy-mm-dd") // Passa a data como texto (ajuste o formato se necessário)
-                  //DataDialogo_Salvo
-              );
-              //------------------------------------------------------------------------------------------
-
-              //------------------------------------------------------------------------------------------
-              //Log
-              If(FormDialogo.LastSubmit.'Continua Tratamento'="Sim",
-                 Patch(
-                      Logs,
-                      Defaults(Logs),
-                      {
-                          DataeHora: Now(),
-                          DeviceID: DeviceID, 
-                          Ação: "Dialogo Realizado, Assistido continua assistência ID:" & PessoaSelecionada & " AssistenciaID: " & RegistroAssistencia.'ID Assistência'
-                      }
-                  ),
-                  Patch(
-                      Logs,
-                      Defaults(Logs),
-                      {
-                          DataeHora: Now(),
-                          DeviceID: DeviceID,
-                          Ação: "Dialogo Realizado, Assistido finalizou assistência ID:" & PessoaSelecionada & " AssistenciaID: " & RegistroAssistencia.'ID Assistência'
-                      }
-                  )
-              );
-              //------------------------------------------------------------------------------------------
-
-              UpdateContext({Salvando: false});
-
-              //------------------------------------------------------------------------------------------
-              If( FormDialogo.LastSubmit.'Continua Tratamento' = "Sim", // Condição
-                  NewForm(Form_Cria_Entrevista); // Primeira ação
-                  Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None); // Segunda ação
-              , // <-- Este ponto e vírgula separa o bloco "verdadeiro" do bloco "falso" do If
-                  // Ação a ser executada se a condição for FALSA
-                  Navigate(Principal) // Apenas uma ação neste caso
-              )
-              //------------------------------------------------------------------------------------------
+            OnSuccess: "=With(\r\n    {\r\n        regDialogo: FormDialogo.LastSubmit,\r\n        \r\n        continua: FormDialogo.LastSubmit.'Continua Tratamento' = \"Sim\" \r\n    },\r\n    \r\n    Concurrent(\r\n        Set(DialogoRealizado, true),\r\n        Set(Dialogador_Salvo, regDialogo.Dialogador),\r\n        Set(AnotacoesDialogo_Salvo, regDialogo.'Anotações Diálogo'),\r\n        Set(DataDialogo_Salvo, regDialogo.'Data Diálogo'),\r\n        UpdateContext({ Salvando: true })\r\n    );\r\n\r\n    // --- PASSO 2: Atualiza o cadastro da Pessoa ---\r\n    Patch(\r\n        Pessoas,\r\n        LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada), \r\n        {\r\n            'Ultima Assistência': DateValue(regDialogo.'Data Diálogo'),\r\n            ConhDoutrina: DataCardValue167.Selected.Value,\r\n            'Em Assistência': regDialogo.'Continua Tratamento'\r\n        }\r\n    );\r\n\r\n    // --- PASSO 3: Aciona o Flow do Power Automate ---\r\n    EncerrarAssistencia.Run(\r\n        RegistroAssistencia.'ID Assistência', \r\n        regDialogo.Dialogador, \r\n        regDialogo.'Anotações Diálogo', \r\n        regDialogo.'Continua Tratamento', \r\n        RegistroAssistencia.'Assistência (cr4f5_assistenciaid)', \r\n        Text(regDialogo.'Data Diálogo', \"yyyy-mm-dd\") \r\n    );\r\n\r\n    Patch(\r\n        Logs,\r\n        Defaults(Logs),\r\n        {\r\n            DataeHora: Now(),\r\n            DeviceID: DeviceID,\r\n            Ação: $\"Dialogo Realizado, Assistido {If(continua, \"continua\", \"finalizou\")} assistência ID: {PessoaSelecionada} AssistenciaID: {RegistroAssistencia.'ID Assistência'}\"\r\n        }\r\n    );\r\n\r\n    If(\r\n        continua,\r\n        // Se continuar: Reseta o form e vai para a criação\r\n        NewForm(Form_Cria_Entrevista);\r\n        Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None),\r\n        \r\n        // Se NÃO continuar: Volta pro menu principal\r\n        Navigate(Principal, ScreenTransition.None)\r\n    )\r\n)\r\n/*\r\n//------------------------------------------------------------------------------------------\r\nSet(DialogoRealizado, true);\r\nSet(DataDialogo_Salvo, FormDialogo.LastSubmit.'Data Diálogo');\r\nSet(Dialogador_Salvo, FormDialogo.LastSubmit.Dialogador);\r\nSet(AnotacoesDialogo_Salvo, FormDialogo.LastSubmit.'Anotações Diálogo');\r\n//Set(EntrevistaNova, \"Não\");\r\n//------------------------------------------------------------------------------------------\r\n\r\n//------------------------------------------------------------------------------------------\r\n//Salva na tabela Pessoas a data atual na coluna 'Ultima Assistência' (para poder fazer a\r\n//limpeza por tempo que não comparece à assistência.\r\n//Atualiza o conhecimento da doutrina na tabela de pessoas\r\nPatch(\r\n    Pessoas,\r\n    LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada),\r\n    {\r\n        'Ultima Assistência': DateValue(DataDialogo_Salvo),\r\n        ConhDoutrina:DataCardValue167.Selected.Value,\r\n        'Em Assistência': FormDialogo.LastSubmit.'Continua Tratamento'\r\n    }\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\n//------------------------------------------------------------------------------------------\r\n// Copia o registro da tabela original para a nova tabela\r\n// Carrega uma vez os dados da assistência em uma variável\r\n// Copia via flow do power automate\r\nEncerrarAssistencia.Run(\r\n    RegistroAssistencia.'ID Assistência', // Passa o ID da Assistência\r\n    Dialogador_Salvo, // Passa o dialogador\r\n    AnotacoesDialogo_Salvo, // Passa as anotações\r\n    FormDialogo.LastSubmit.'Continua Tratamento', // Passa se continua tratamento\r\n    RegistroAssistencia.'Assistência (cr4f5_assistenciaid)', // Passa o GUID o Flow\r\n    Text(DataDialogo_Salvo, \"yyyy-mm-dd\") // Passa a data como texto (ajuste o formato se necessário)\r\n    //DataDialogo_Salvo\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\n//------------------------------------------------------------------------------------------\r\n//Log\r\nIf(FormDialogo.LastSubmit.'Continua Tratamento'=\"Sim\",\r\n   Patch(\r\n        Logs,\r\n        Defaults(Logs),\r\n        {\r\n            DataeHora: Now(),\r\n            DeviceID: DeviceID, \r\n            Ação: \"Dialogo Realizado, Assistido continua assistência ID:\" & PessoaSelecionada & \" AssistenciaID: \" & RegistroAssistencia.'ID Assistência'\r\n        }\r\n    ),\r\n    Patch(\r\n        Logs,\r\n        Defaults(Logs),\r\n        {\r\n            DataeHora: Now(),\r\n            DeviceID: DeviceID,\r\n            Ação: \"Dialogo Realizado, Assistido finalizou assistência ID:\" & PessoaSelecionada & \" AssistenciaID: \" & RegistroAssistencia.'ID Assistência'\r\n        }\r\n    )\r\n);\r\n//------------------------------------------------------------------------------------------\r\n\r\nUpdateContext({Salvando: false});\r\n\r\n//------------------------------------------------------------------------------------------\r\nIf( FormDialogo.LastSubmit.'Continua Tratamento' = \"Sim\", // Condição\r\n    NewForm(Form_Cria_Entrevista); // Primeira ação\r\n    Navigate(Criacao_Entrevista_Assistido, ScreenTransition.None); // Segunda ação\r\n, // <-- Este ponto e vírgula separa o bloco \"verdadeiro\" do bloco \"falso\" do If\r\n    // Ação a ser executada se a condição for FALSA\r\n    Navigate(Principal) // Apenas uma ação neste caso\r\n)\r\n//------------------------------------------------------------------------------------------\r\n*/"
             Width: =Parent.Width
             Y: =RectQuickActionBar3_2.Y + RectQuickActionBar3_2.Height
           Children:
@@ -241,7 +181,7 @@ Screens:
                         Fill: |-
                           =If(
                               IsBlank(Self.SelectedDate),
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                           //RGBA(255; 255; 255; 1)
@@ -334,7 +274,7 @@ Screens:
                         Fill: |-
                           =If(
                               IsBlank(Self.SelectedText),
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                           //RGBA(255; 255; 255; 1)
@@ -516,13 +456,15 @@ Screens:
                       MetadataKey: FieldValue
                       Properties:
                         BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
-                        Default: =AnotacoesEntrevista //Parent.Default
+                        Default: |-
+                          =RegistroAssistenciaSelecionada.'Anotações Entrevista'
+                          //AnotacoesEntrevista //Parent.Default
                         DelayOutput: =true
                         DisplayMode: =Parent.DisplayMode
                         Fill: |-
                           =If(
                               IsBlank(Self.Text),
-                              RGBA(255, 0.,0, 0.4), // Fundo vermelho transparente se vazio
+                              RGBA(255, 102, 102, 1), // Fundo vermelho transparente se vazio
                               RGBA(255, 255, 255, 1) // Fundo branco se preenchido
                           )
                           //RGBA(255; 255; 255; 1)

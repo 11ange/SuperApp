@@ -72,8 +72,11 @@
         Layout: =Layout.Vertical
         LoadingSpinner: =LoadingSpinner.Data
         OnSelect: |-
-            =Set(PessoaSelecionada, ThisItem.'ID Pessoa');
-            Set(EmAssistencia, ThisItem.'Em Assistência');
+            =Concurrent(
+                Set(PessoaSelecionada, ThisItem.'ID Pessoa'),
+                Set(EmAssistencia, ThisItem.'Em Assistência'),
+                Set(RegistroPessoaSelecionada,ThisItem)
+            );
             Patch(
                 Logs,
                 Defaults(Logs),
@@ -83,8 +86,6 @@
                     Ação: "Visualizando Pessoa ID:" & PessoaSelecionada
                 }
             );
-            
-            Set(varRegistroOriginalPessoas,ThisItem);
             
             Navigate(Consulta_Assistido, ScreenTransition.None)
         ShowScrollbar: =false

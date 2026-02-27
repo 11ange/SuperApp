@@ -20,12 +20,15 @@ Screens:
 
         Reset(Campo_Busca_Pessoas);
 
-        Set(PessoaSelecionada, Blank());
+        Concurrent(
+            Set(PessoaSelecionada, Blank()),
+            Set(RegistroPessoaSelecionada, Blank())
+        );
 
         Set(CriaAssistido,false);
         Set(CriaTarefeiro,false);
 
-        UpdateContext({Cor_Tarefeiro: Color.LightBlue, Cor_Assistido: Color.LightGreen, Cor_Inativo: Color.LightSalmon});
+        UpdateContext({Cor_Tarefeiro: Color.LightBlue, Cor_Assistido: Color.LightGreen, Cor_Inativo: Color.LightPink});
         UpdateContext({ varColunaOrdenacao: "cr4f5_nomepessoa" })
     Children:
       - RectQuickActionBar1_6:
@@ -238,7 +241,7 @@ Screens:
             Text: ="Cria Tarefeiro"
             X: =(App.MinScreenWidth/4)*3 - Self.Width/2
             Y: =Btn_CriaAssistido_1.Y
-      - Galeria_Busca_Todos_1:
+      - Galeria_Busca_Pessoas:
           Control: Gallery@2.15.0
           Variant: BrowseLayout_Vertical_TwoTextVariant_ver5.0
           Properties:
@@ -248,8 +251,12 @@ Screens:
               Parent.Height - Self.Y
             Items: "=SortByColumns(\r\n    If(\r\n        // Verifica se o texto digitado contém APENAS números\r\n        IsMatch(Campo_Busca_Pessoas.Text, \"^[0-9]+$\"),\r\n        \r\n        // SE FOR NÚMERO: Filtra apenas pelo ID (Começando com o número)\r\n        Filter(\r\n            Pessoas,\r\n            StartsWith('ID Pessoa Texto', Campo_Busca_Pessoas.Text)\r\n        ),\r\n        \r\n        // SE FOR TEXTO OU VAZIO: Usa o Search padrão para buscar pelos nomes\r\n        Search(\r\n            Pessoas,\r\n            Campo_Busca_Pessoas.Text,\r\n            'Nome Pessoa',\r\n            'Nome Social'\r\n        )\r\n    ),\r\n    varColunaOrdenacao,\r\n    If(Sort_Todos, SortOrder.Descending, SortOrder.Ascending)\r\n)\r\n/*\r\nSortByColumns(\r\n    Search(\r\n        Pessoas,\r\n        Campo_Busca_Pessoas.Text,\r\n        'ID Pessoa Texto',        \r\n        'Nome Pessoa',\r\n        'Nome Social'\r\n    ),\r\n    \"cr4f5_nomepessoa\",\r\n    If(Sort_Todos, SortOrder.Descending, SortOrder.Ascending)\r\n)\r\n*/\r\n"
             OnSelect: |-
-              =Set(PessoaSelecionada, ThisItem.'ID Pessoa');
-              Set(EmAssistencia, ThisItem.'Em Assistência');
+              =Concurrent(
+                  Set(PessoaSelecionada, ThisItem.'ID Pessoa'),
+                  Set(RegistroPessoaSelecionada, ThisItem),
+                  Set(EmAssistencia, ThisItem.'Em Assistência')
+              );
+
               Patch(
                   Logs,
                   Defaults(Logs),
@@ -262,8 +269,6 @@ Screens:
                       )
                   }
               );
-
-              Set(varRegistroOriginalPessoas,ThisItem);
 
               If(ThisItem.Tarefeiro = "Sim",
                   Navigate(Consulta_Tarefeiros, ScreenTransition.None),

@@ -12,7 +12,8 @@ Screens:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
       OnVisible: |-
-        =UpdateContext({Salvando: false})
+        =UpdateContext({Salvando: false});
+        Reset(DropDiaDiferente_1);
     Children:
       - RectQuickActionBar3_6:
           Control: Rectangle@2.3.0
@@ -42,7 +43,8 @@ Screens:
                   }
               );
 
-              Navigate(Busca_Assistido, Transition.None) //Back()
+              Back()
+              //Navigate(Busca_Assistido, Transition.None) //Back()
             PaddingBottom: =22
             PaddingLeft: =22
             PaddingRight: =22
@@ -63,8 +65,7 @@ Screens:
             Height: =88
             Icon: =Icon.Save
             OnSelect: |
-              =//SubmitForm(Form_Cria_Entrevista);;
-              UpdateContext({ValorDiaSemana: Text(DataCardValue125.Selected.Value)});
+              =UpdateContext({ValorDiaSemana: Text(DataCardValue125.Selected.Value)});
               If(
                   Form_Cria_Entrevista.Valid,
                   SubmitForm(Form_Cria_Entrevista);
@@ -104,75 +105,7 @@ Screens:
             Height: =Parent.Height - RectQuickActionBar3_6.Height
             OnFailure: |-
               =UpdateContext({Salvando: false}); //false
-            OnSuccess: |-
-              =Patch(
-                  Assistências,
-                  Form_Cria_Entrevista.LastSubmit,
-                  {
-                      Extra: 0,
-                      //'Semana 1': Form_Cria_Entrevista.LastSubmit.'Data Entrevista';
-                      'Ultimo Comparecimento': Form_Cria_Entrevista.LastSubmit.'Data Entrevista',
-                      'ID Pessoa Texto': Text(Form_Cria_Entrevista.LastSubmit.'ID Pessoa'),
-                      'ID Assistência': Form_Cria_Entrevista.LastSubmit.ID
-                  }
-              );
-
-              Patch(
-                  Logs,
-                  Defaults(Logs),
-                  {
-                      DataeHora: Now(),
-                      DeviceID: DeviceID,
-                      Ação: "Salvando Entrevista do Assistido ID:" & PessoaSelecionada
-                  }
-              );
-
-              If(
-                  Trim(DropDiaDiferente_1.Selected.Value) <> "",
-                  With(
-                      {
-                          registroAssistencia: LookUp(
-                              Assistências, 
-                              'ID Assistência' = Form_Cria_Entrevista.LastSubmit.ID
-                          )
-                      },
-                      If(
-                          !IsBlank(registroAssistencia),
-                          Patch(
-                              Assistências,
-                              registroAssistencia,
-                              {
-                                  'Dia Semana': DropDiaDiferente_1.Selected.Value
-                              }
-                          ),
-                          Notify("Registro não encontrado", NotificationType.Error)
-                      )
-                  )
-              );
-
-              With(
-                  {
-                      registroAssistencia: LookUp(
-                          Assistências, 
-                          'ID Assistência' = Form_Cria_Entrevista.LastSubmit.ID
-                      )
-                  },
-                  If(
-                      !IsBlank(registroAssistencia),
-                      Patch(
-                          Assistências,
-                          registroAssistencia,
-                          {
-                              'Dia Semana Entrevista': ValorDiaSemana
-                          }
-                      ),
-                      Notify("Registro não encontrado", NotificationType.Error)
-                  )
-              );
-
-              UpdateContext({Salvando: false});
-              Set(DialogoRealizado, false);
-              Navigate(Principal)
+            OnSuccess: "=With(\r\n    {\r\n        // Salva o registro recém-criado na memória para não precisar ficar chamando LastSubmit\r\n        regNovo: Form_Cria_Entrevista.LastSubmit\r\n    },\r\n\r\n    Patch(\r\n        Assistências,\r\n        regNovo,\r\n        // Bloco 1: Campos que sempre são atualizados\r\n        {\r\n            Extra: 0,\r\n            'Ultimo Comparecimento': regNovo.'Data Entrevista',\r\n            'ID Pessoa Texto': Text(regNovo.'ID Pessoa'),\r\n            'ID Assistência': regNovo.ID,\r\n            'Dia Semana Entrevista': ValorDiaSemana\r\n        },\r\n        // Bloco 2: Campo condicional (Só atualiza se o Dropdown não estiver vazio)\r\n        If(\r\n            Trim(DropDiaDiferente_1.Selected.Value) <> \"\",\r\n            { 'Dia Semana': DropDiaDiferente_1.Selected.Value },\r\n            {} // Se estiver vazio, não faz nada neste campo\r\n        )\r\n    );\r\n\r\n    Patch(\r\n        Logs,\r\n        Defaults(Logs),\r\n        {\r\n            DataeHora: Now(),\r\n            DeviceID: DeviceID,\r\n            Ação: $\"Salvando Entrevista do Assistido ID: {PessoaSelecionada}\"\r\n        }\r\n    );\r\n\r\n    Concurrent(\r\n        UpdateContext({ Salvando: false }),\r\n        Set(DialogoRealizado, false)\r\n    );\r\n    \r\n    Navigate(Principal)\r\n)\r\n\r\n/*Patch(\r\n    Assistências,\r\n    Form_Cria_Entrevista.LastSubmit,\r\n    {\r\n        Extra: 0,\r\n        //'Semana 1': Form_Cria_Entrevista.LastSubmit.'Data Entrevista';\r\n        'Ultimo Comparecimento': Form_Cria_Entrevista.LastSubmit.'Data Entrevista',\r\n        'ID Pessoa Texto': Text(Form_Cria_Entrevista.LastSubmit.'ID Pessoa'),\r\n        'ID Assistência': Form_Cria_Entrevista.LastSubmit.ID\r\n    }\r\n);\r\n\r\nPatch(\r\n    Logs,\r\n    Defaults(Logs),\r\n    {\r\n        DataeHora: Now(),\r\n        DeviceID: DeviceID,\r\n        Ação: \"Salvando Entrevista do Assistido ID:\" & PessoaSelecionada\r\n    }\r\n);\r\n\r\nIf(\r\n    Trim(DropDiaDiferente_1.Selected.Value) <> \"\",\r\n    With(\r\n        {\r\n            registroAssistencia: LookUp(\r\n                Assistências, \r\n                'ID Assistência' = Form_Cria_Entrevista.LastSubmit.ID\r\n            )\r\n        },\r\n        If(\r\n            !IsBlank(registroAssistencia),\r\n            Patch(\r\n                Assistências,\r\n                registroAssistencia,\r\n                {\r\n                    'Dia Semana': DropDiaDiferente_1.Selected.Value\r\n                }\r\n            ),\r\n            Notify(\"Registro não encontrado\", NotificationType.Error)\r\n        )\r\n    )\r\n);\r\n\r\nWith(\r\n    {\r\n        registroAssistencia: LookUp(\r\n            Assistências, \r\n            'ID Assistência' = Form_Cria_Entrevista.LastSubmit.ID\r\n        )\r\n    },\r\n    If(\r\n        !IsBlank(registroAssistencia),\r\n        Patch(\r\n            Assistências,\r\n            registroAssistencia,\r\n            {\r\n                'Dia Semana Entrevista': ValorDiaSemana\r\n            }\r\n        ),\r\n        Notify(\"Registro não encontrado\", NotificationType.Error)\r\n    )\r\n);\r\n\r\nUpdateContext({Salvando: false});\r\nSet(DialogoRealizado, false);\r\nNavigate(Principal)\r\n*/"
             Width: =Parent.Width
             Y: =RectQuickActionBar3_6.Height
           Children:
@@ -1505,6 +1438,7 @@ Screens:
             ChevronFill: =RGBA(255, 255, 255, 1)
             ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
             ChevronHoverFill: =RGBA(255, 255, 255, 1)
+            Default: =First(DiasAssistência).Value//"1"
             Font: =Font.'Open Sans'
             HoverFill: =RGBA(153, 205, 255, 1)
             Items: |-

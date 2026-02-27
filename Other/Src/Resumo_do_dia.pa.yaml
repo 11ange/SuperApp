@@ -301,7 +301,7 @@ Screens:
                       'Dia Semana' = Dropdown_Periodo_1.Selected.Value
                   )
               );
-              Set(AguardandoDialogos, CountIf(ColecaoAssistenciasFiltradas, true));
+              //Set(AguardandoDialogos, CountIf(ColecaoAssistenciasFiltradas, true));
               //------
               Clear(ColecaoAssistenciasFiltradas);
 
@@ -379,14 +379,10 @@ Screens:
               Set(So3aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
               //------
 
-              Set(ForaPrazo,
-                  SoEntrevista + So1aSemana + So2aSemana + So3aSemana
-              );
+              Set(ForaPrazo,SoEntrevista + So1aSemana + So2aSemana + So3aSemana);
               //------
 
-              Set(DentroPrazo,
-                  Assistencias - ForaPrazo
-              );
+              Set(DentroPrazo,Assistencias - ForaPrazo);
             PressedColor: =RGBA(255, 255, 255, 1)
             PressedFill: =RGBA(0, 89, 178, 1)
             SelectionColor: =RGBA(255, 255, 255, 1)

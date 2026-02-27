@@ -1,7 +1,8 @@
 "Criacao_Entrevista_Assistido As screen.'phoneDetailEditLayout_ver3.0'":
     Fill: =RGBA(232, 232, 232, 1)
     OnVisible: |-
-        =UpdateContext({Salvando: false})
+        =UpdateContext({Salvando: false});
+        Reset(DropDiaDiferente_1);
 
     RectQuickActionBar3_6 As rectangle:
         BorderColor: =RGBA(0, 89, 178, 1)
@@ -31,7 +32,8 @@
                 }
             );
             
-            Navigate(Busca_Assistido, Transition.None) //Back()
+            Back()
+            //Navigate(Busca_Assistido, Transition.None) //Back()
         PaddingBottom: =22
         PaddingLeft: =22
         PaddingRight: =22
@@ -54,8 +56,7 @@
         Height: =88
         Icon: =Icon.Save
         OnSelect: |
-            =//SubmitForm(Form_Cria_Entrevista);;
-            UpdateContext({ValorDiaSemana: Text(DataCardValue125.Selected.Value)});
+            =UpdateContext({ValorDiaSemana: Text(DataCardValue125.Selected.Value)});
             If(
                 Form_Cria_Entrevista.Valid,
                 SubmitForm(Form_Cria_Entrevista);
@@ -93,7 +94,50 @@
         OnFailure: |-
             =UpdateContext({Salvando: false}); //false
         OnSuccess: |-
-            =Patch(
+            =With(
+                {
+                    // Salva o registro recém-criado na memória para não precisar ficar chamando LastSubmit
+                    regNovo: Form_Cria_Entrevista.LastSubmit
+                },
+            
+                Patch(
+                    Assistências,
+                    regNovo,
+                    // Bloco 1: Campos que sempre são atualizados
+                    {
+                        Extra: 0,
+                        'Ultimo Comparecimento': regNovo.'Data Entrevista',
+                        'ID Pessoa Texto': Text(regNovo.'ID Pessoa'),
+                        'ID Assistência': regNovo.ID,
+                        'Dia Semana Entrevista': ValorDiaSemana
+                    },
+                    // Bloco 2: Campo condicional (Só atualiza se o Dropdown não estiver vazio)
+                    If(
+                        Trim(DropDiaDiferente_1.Selected.Value) <> "",
+                        { 'Dia Semana': DropDiaDiferente_1.Selected.Value },
+                        {} // Se estiver vazio, não faz nada neste campo
+                    )
+                );
+            
+                Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: $"Salvando Entrevista do Assistido ID: {PessoaSelecionada}"
+                    }
+                );
+            
+                Concurrent(
+                    UpdateContext({ Salvando: false }),
+                    Set(DialogoRealizado, false)
+                );
+                
+                Navigate(Principal)
+            )
+            
+            /*Patch(
                 Assistências,
                 Form_Cria_Entrevista.LastSubmit,
                 {
@@ -161,6 +205,7 @@
             UpdateContext({Salvando: false});
             Set(DialogoRealizado, false);
             Navigate(Principal)
+            */
         Width: =Parent.Width
         Y: =RectQuickActionBar3_6.Height
         ZIndex: =5
@@ -1541,6 +1586,7 @@
         ChevronDisabledFill: =RGBA(244, 244, 244, 1)
         ChevronHoverBackground: =ColorFade(RGBA(0, 51, 102, 1), -20%)
         ChevronHoverFill: =RGBA(255, 255, 255, 1)
+        Default: =First(DiasAssistência).Value//"1"
         DisabledBorderColor: =RGBA(166, 166, 166, 1)
         DisabledColor: =RGBA(166, 166, 166, 1)
         DisabledFill: =RGBA(244, 244, 244, 1)

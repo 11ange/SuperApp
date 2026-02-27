@@ -12,7 +12,8 @@ Screens:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
       OnVisible: |-
-        =UpdateContext({ 
+        =Set(AssistenciaSelecionada, Blank());
+        UpdateContext({ 
             ctxPessoaAtual: LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada) 
         });
     Children:
@@ -52,7 +53,8 @@ Screens:
             Height: =88
             Icon: =Icon.Edit
             OnSelect: |-
-              =EditForm(Form_Edita_Todos);
+              =ResetForm(Form_Edita_Todos);
+              EditForm(Form_Edita_Todos);
 
               Patch(
                   Logs,

@@ -9,12 +9,15 @@
         
         Reset(Campo_Busca_Pessoas);
         
-        Set(PessoaSelecionada, Blank());
+        Concurrent(
+            Set(PessoaSelecionada, Blank()),
+            Set(RegistroPessoaSelecionada, Blank())
+        );
         
         Set(CriaAssistido,false);
         Set(CriaTarefeiro,false);
         
-        UpdateContext({Cor_Tarefeiro: Color.LightBlue, Cor_Assistido: Color.LightGreen, Cor_Inativo: Color.LightSalmon});
+        UpdateContext({Cor_Tarefeiro: Color.LightBlue, Cor_Assistido: Color.LightGreen, Cor_Inativo: Color.LightPink});
         UpdateContext({ varColunaOrdenacao: "cr4f5_nomepessoa" })
 
     RectQuickActionBar1_6 As rectangle:
@@ -241,7 +244,7 @@
         Y: =Btn_CriaAssistido_1.Y
         ZIndex: =12
 
-    "Galeria_Busca_Todos_1 As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver5.0'":
+    "Galeria_Busca_Pessoas As gallery.'BrowseLayout_Vertical_TwoTextVariant_ver5.0'":
         '#CopilotOverlayLabel': ="Filtrada"
         BorderColor: =RGBA(0, 89, 178, 1)
         DelayItemLoading: =true
@@ -287,8 +290,12 @@
         Layout: =Layout.Vertical
         LoadingSpinner: =LoadingSpinner.Data
         OnSelect: |-
-            =Set(PessoaSelecionada, ThisItem.'ID Pessoa');
-            Set(EmAssistencia, ThisItem.'Em Assistência');
+            =Concurrent(
+                Set(PessoaSelecionada, ThisItem.'ID Pessoa'),
+                Set(RegistroPessoaSelecionada, ThisItem),
+                Set(EmAssistencia, ThisItem.'Em Assistência')
+            );
+            
             Patch(
                 Logs,
                 Defaults(Logs),
@@ -301,8 +308,6 @@
                     )
                 }
             );
-            
-            Set(varRegistroOriginalPessoas,ThisItem);
             
             If(ThisItem.Tarefeiro = "Sim",
                 Navigate(Consulta_Tarefeiros, ScreenTransition.None),

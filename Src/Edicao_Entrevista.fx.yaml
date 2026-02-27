@@ -111,7 +111,58 @@
                 )
         NumberOfColumns: =1
         OnSuccess: |-
-            =Patch(
+            =With(
+                {
+                    // 1. Variáveis de estado para o Log
+                    regNovo: Form_Edita_Entrevista.LastSubmit,
+                    regAntigo: varRegistroOriginalAssistencia,
+                    
+                    // 2. Faz o LookUp APENAS UMA VEZ na memória
+                    registroAssistencia: LookUp(Assistências, 'ID Assistência' = Form_Edita_Entrevista.LastSubmit.'ID Assistência')
+                },
+                
+                Patch(
+                    Logs,
+                    Defaults(Logs),
+                    {
+                        DataeHora: Now(),
+                        DeviceID: DeviceID,
+                        Ação: $"Salvando Entrevista ID: {AssistenciaSelecionada} - Assistido ID: {PessoaSelecionada}"
+                    }
+                );
+            
+                If(
+                    !IsBlank(registroAssistencia),
+                    Patch(
+                        Assistências,
+                        registroAssistencia,
+                        // Bloco 1: Atualiza sempre
+                        { 'Dia Semana Entrevista': ValorDiaSemana }, 
+                        
+                        // Bloco 2: Atualiza apenas se "Selecionado" for verdadeiro
+                        If(Selecionado, { 'Dia Semana': DropDiaDiferente.Selected.Value }, {}) 
+                    ),
+                    Notify("Registro não encontrado", NotificationType.Error)
+                );
+            
+                // --- PASSO 3: FLUXO DE AUDITORIA (Sem Concatenate) ---
+                LogAlteracaoCampos.Run(
+                    // Como era antes
+                    $"IDpessoa: {regAntigo.'ID Pessoa'} | DataEntrevista: {regAntigo.'Data Entrevista'} | TipoAssistencia: {regAntigo.'Assistência (cr4f5_assistencia)'} | Entrevistador: {regAntigo.Entrevistador} | DiaSemana: {regAntigo.'Dia Semana'} | Semana1: {regAntigo.'Semana 1'} | Semana2: {regAntigo.'Semana 2'} | Semana3: {regAntigo.'Semana 3'} | Semana4: {regAntigo.'Semana 4'} | Finalizada: {regAntigo.Finalizada} | Extra: {regAntigo.Extra} |",
+                    
+                    // Como ficou agora
+                    $"IDpessoa: {regNovo.'ID Pessoa'} | DataEntrevista: {regNovo.'Data Entrevista'} | TipoAssistencia: {regNovo.'Assistência (cr4f5_assistencia)'} | Entrevistador: {regNovo.Entrevistador} | DiaSemana: {regNovo.'Dia Semana'} | Semana1: {regNovo.'Semana 1'} | Semana2: {regNovo.'Semana 2'} | Semana3: {regNovo.'Semana 3'} | Semana4: {regNovo.'Semana 4'} | Finalizada: {regNovo.Finalizada} | Extra: {regNovo.Extra} |",
+                    
+                    AssistenciaSelecionada,
+                    DeviceID,
+                    "Assistencia"
+                );
+            
+                Set(varRegistroOriginalAssistencia, regNovo);
+                Back()
+            )
+            /*
+            Patch(
                 Logs,
                 Defaults(Logs),
                 {
@@ -199,6 +250,7 @@
             Set(varRegistroOriginalAssistencia,Form_Edita_Entrevista.LastSubmit);
             
             Back()
+            */
         Width: =Parent.Width
         Y: =RectQuickActionBar3_9.Height
         ZIndex: =5

@@ -163,7 +163,15 @@ Screens:
               =ResetForm(Form_Edita_Assistidos);
               EditForm(Form_Edita_Assistidos);
 
-              Set(CriaAssistido, false);
+              Patch(
+                  Logs,
+                  Defaults(Logs),
+                  {
+                      DataeHora: Now(),
+                      DeviceID: DeviceID,
+                      Ação: "Editando Assistido ID:" & PessoaSelecionada
+                  }
+              );
 
               Navigate(Edita_Assistido, ScreenTransition.None)
             PaddingBottom: =24
@@ -213,7 +221,7 @@ Screens:
           Properties:
             BorderColor: =RGBA(0, 89, 178, 1)
             DataSource: =Pessoas
-            Height: ='Ultima Assistência_DataCard2'.Y + 'Ultima Assistência_DataCard2'.Height
+            Height: ='Ultima Assistência_DataCard2'.Y + 'Ultima Assistência_DataCard2'.Height + 5
             Item: =ctxPessoaAtual//LookUp(Pessoas, 'ID Pessoa' = PessoaSelecionada)
             Width: =Parent.Width
             Y: =92

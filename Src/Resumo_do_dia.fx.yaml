@@ -438,7 +438,7 @@ Resumo_do_dia As screen:
                     'Dia Semana' = Dropdown_Periodo_1.Selected.Value
                 )
             );
-            Set(AguardandoDialogos, CountIf(ColecaoAssistenciasFiltradas, true));
+            //Set(AguardandoDialogos, CountIf(ColecaoAssistenciasFiltradas, true));
             //------
             Clear(ColecaoAssistenciasFiltradas);
             
@@ -516,14 +516,10 @@ Resumo_do_dia As screen:
             Set(So3aSemana, CountIf(ColecaoAssistenciasFiltradas, true));
             //------
             
-            Set(ForaPrazo,
-                SoEntrevista + So1aSemana + So2aSemana + So3aSemana
-            );
+            Set(ForaPrazo,SoEntrevista + So1aSemana + So2aSemana + So3aSemana);
             //------
             
-            Set(DentroPrazo,
-                Assistencias - ForaPrazo
-            );
+            Set(DentroPrazo,Assistencias - ForaPrazo);
         PressedColor: =RGBA(255, 255, 255, 1)
         PressedFill: =RGBA(0, 89, 178, 1)
         SelectionFill: =RGBA(0, 51, 102, 1)

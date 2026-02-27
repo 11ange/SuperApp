@@ -1,13 +1,22 @@
 App As appinfo:
     BackEnabled: =false
     ConfirmExitMessage: =
-    Formulas: =
+    Formulas: |-
+        =/*SimNao = [" ","Sim","Não"];
+        
+        DiasAssistência = [" ","Terça_Noite","Quarta_Noite","Quinta_Tarde","Quinta_Noite","Sábado_Tarde","Domingo_Manhã"];
+        
+        // Se alterar algum valor precisa alterar também na tela de presença pois na confirmação da presença
+        // é usada o tipo de assistência para computar na tabela 'Presença'
+        TiposAssistências = [" ","A1","A2","A3","A2-D","A3-D","A2-Casa","C1","C2","C3","C2-D","C3-D","A3/A2-Casa", "A3/A2", "C3/C2", "A3/A1", "C3/C1", "Orientação"];
+        
+        ConhecDoutrina = [" ","Não","Pouco","Estudo Incompleto","Estudo Completo","Outra Casa","Evangelização"];*/
     MinScreenHeight: =1446
     MinScreenWidth: =720
     OnStart: |
         =Set(DeviceID, Text(RandBetween(1,999999))); // GUID() & "-" & Text(RandBetween(1;999999)));;
         
-        Set(AppVersaoAtual, "1.1.2");
+        Set(AppVersaoAtual, "1.1.4");
         Set(
             UltimaVersaoPublicada,
             LookUp(ControleVersoes, AppNome = "SuperApp", VersaoPublicada)

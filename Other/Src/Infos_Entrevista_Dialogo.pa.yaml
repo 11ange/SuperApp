@@ -12,7 +12,7 @@ Screens:
       Fill: =RGBA(232, 232, 232, 1)
       LoadingSpinnerColor: =RGBA(0, 51, 102, 1)
       OnVisible: |+
-        =Set(AnotacoesEntrevista,LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada).'Anotações Entrevista');
+        =//Set(AnotacoesEntrevista,LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada).'Anotações Entrevista');
         Set(Assistencia_Salvo,LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada).'Assistência (cr4f5_assistencia)');
         Set(DiaSemana_Salvo, LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada).'Dia Semana');
         Set(TratMedico_Salvo, LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada).'Tratamento Médico');
@@ -34,7 +34,10 @@ Screens:
             Color: =RGBA(255, 255, 255, 1)
             Height: =88
             Icon: =Icon.CancelBadge
-            OnSelect: =ResetForm(Infos_Entrevista);ResetForm(Infos_Assisitido_Dialogo); Back(); //Navigate(Tela_Busca_Dialogos;ScreenTransition.None);; //Navigate(Tela_Principal;ScreenTransition.None)
+            OnSelect: |-
+              =ResetForm(Infos_Entrevista);
+              ResetForm(Infos_Assisitido_Dialogo); 
+              Back();
             PaddingBottom: =22
             PaddingLeft: =22
             PaddingRight: =22
@@ -84,7 +87,7 @@ Screens:
             DataSource: =Assistências
             DefaultMode: =FormMode.View
             Height: =Btn_Realiza_Dialogo.Y - Self.Y - 60
-            Item: =LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada)
+            Item: =RegistroAssistenciaSelecionada//LookUp(Assistências,'ID Assistência'=AssistenciaSelecionada)
             OnSuccess: =Back()
             Width: =Parent.Width
             Y: =Infos_Assisitido_Dialogo.Y + Infos_Assisitido_Dialogo.Height + Linha_Divisoria.Height

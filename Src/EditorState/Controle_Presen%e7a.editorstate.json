@@ -332,7 +332,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Confirma_Assistência",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 4,
+      "ParentIndex": 31,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -618,7 +618,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Confirma_Envio_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 5,
+      "ParentIndex": 32,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -890,7 +890,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Nao_Confirma_Envio_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 26,
+      "ParentIndex": 21,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1162,7 +1162,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Nao_Confirma_Excedente",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 27,
+      "ParentIndex": 22,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1434,7 +1434,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Nao_Confirma_Presença",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 28,
+      "ParentIndex": 23,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1706,7 +1706,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Ok_Dialogo_Semana_que_vem",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 32,
+      "ParentIndex": 27,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1990,7 +1990,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Ok_Mesmo_Dia",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 33,
+      "ParentIndex": 29,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2336,7 +2336,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Registra_Excedente",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 6,
+      "ParentIndex": 33,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2608,7 +2608,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Sim_Confirma_Envio_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 29,
+      "ParentIndex": 24,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2880,7 +2880,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Sim_Confirma_Excedente",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 30,
+      "ParentIndex": 25,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3152,7 +3152,7 @@
       "MetaDataIDKey": "",
       "Name": "Btn_Sim_Confirma_Presença",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 31,
+      "ParentIndex": 26,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3850,7 +3850,7 @@
       "MetaDataIDKey": "",
       "Name": "DataCardKey108",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 1,
+      "ParentIndex": 0,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -6249,7 +6249,7 @@
       "MetaDataIDKey": "",
       "Name": "DataCardValue81",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 0,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -9165,7 +9165,7 @@
       "MetaDataIDKey": "",
       "Name": "Form_Controle",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 10,
+      "ParentIndex": 5,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -9296,7 +9296,7 @@
       "MetaDataIDKey": "",
       "Name": "Fundo_Popup",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 8,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -9493,7 +9493,7 @@
       "MetaDataIDKey": "",
       "Name": "HTML_Assistencia",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 9,
+      "ParentIndex": 28,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -9909,7 +9909,7 @@
       "MetaDataIDKey": "%TemplatePhoneIconAccept.ID%",
       "Name": "Icone_Salva_Controle",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 2,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -10193,7 +10193,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Aviso_popup_Confirma_Envio_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 12,
+      "ParentIndex": 7,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -10510,7 +10510,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Aviso_popup_Confirma_Envio_Dialogo_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 14,
+      "ParentIndex": 9,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -10834,7 +10834,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Aviso_popup_Confirma_Presença",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 17,
+      "ParentIndex": 12,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -11151,7 +11151,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Aviso_popup_Dialogo_Semana_que_vem",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 18,
+      "ParentIndex": 13,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -11436,7 +11436,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Aviso_popup_Mesmo_Dia",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 20,
+      "ParentIndex": 15,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -11801,7 +11801,7 @@
       "MetaDataIDKey": "",
       "Name": "Lbl_Mensagem",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 3,
+      "ParentIndex": 30,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -12094,7 +12094,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Texto_popup_Confirma_Envio_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 21,
+      "ParentIndex": 16,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -12390,7 +12390,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Texto_popup_Confirma_Envio_Dialogo_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 22,
+      "ParentIndex": 17,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -12693,7 +12693,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Texto_popup_Confirma_Presença",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 24,
+      "ParentIndex": 19,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -12989,7 +12989,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Texto_popup_Dialogo_Semana_que_vem",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 23,
+      "ParentIndex": 18,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -13281,7 +13281,7 @@
       "MetaDataIDKey": "",
       "Name": "lbl_Texto_popup_Mesmo_Dia",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 25,
+      "ParentIndex": 20,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -13605,7 +13605,7 @@
       "MetaDataIDKey": "%TemplatePhoneLblAppName.ID%",
       "Name": "LblAppName3_3",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 7,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -14455,7 +14455,7 @@
       "MetaDataIDKey": "",
       "Name": "Retangulo_Popup_Confirma_Envio_Dialogo",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 11,
+      "ParentIndex": 6,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -14600,7 +14600,7 @@
       "MetaDataIDKey": "",
       "Name": "Retangulo_Popup_Confirma_Envio_Dialogo_1",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 13,
+      "ParentIndex": 8,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -14745,7 +14745,7 @@
       "MetaDataIDKey": "",
       "Name": "Retangulo_Popup_Confirma_Presença",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 16,
+      "ParentIndex": 11,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -14890,7 +14890,7 @@
       "MetaDataIDKey": "",
       "Name": "Retangulo_Popup_Dialogo_Semana_que_vem",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 15,
+      "ParentIndex": 10,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -15037,7 +15037,7 @@
       "MetaDataIDKey": "",
       "Name": "Retangulo_Popup_Mesmo_Dia",
       "OptimizeForDevices": "Off",
-      "ParentIndex": 19,
+      "ParentIndex": 14,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {

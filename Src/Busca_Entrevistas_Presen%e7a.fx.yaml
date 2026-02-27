@@ -3,6 +3,12 @@
     OnVisible: |-
         =Refresh(Assistências);
         
+        Concurrent(
+            Set(AssistenciaSelecionada, Blank()),
+            Set(PessoaSelecionada, Blank()),
+            Set(RegistroAssistenciaSelecionada, Blank())
+        );
+        
         Reset(Campo_Busca_Entrevista_Presença)
 
     RectQuickActionBar1 As rectangle:
@@ -56,7 +62,8 @@
         OnSelect: |-
             =Concurrent(
                 Set(AssistenciaSelecionada, ThisItem.'ID Assistência'),
-                Set(PessoaSelecionada, ThisItem.'ID Pessoa')
+                Set(PessoaSelecionada, ThisItem.'ID Pessoa'),
+                Set(RegistroAssistenciaSelecionada, ThisItem)
             );
             
             If(ThisItem.Finalizada = "Não",
